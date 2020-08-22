@@ -13,17 +13,17 @@
 
 ## 스터디 진행 방식
 1. 스프링 이론
-    1.1 [Spring.io](https://docs.spring.io/spring-batch/docs/current/reference/html/index.html)
+    1) [Spring.io](https://docs.spring.io/spring-batch/docs/current/reference/html/index.html)
 
 2. 스프링 배치 실습 아이디어
-    2.1 도서관 데이터 -> csv 파일
-    2.2 LoL 데이터
-    2.3 코로나 데이터
+    1) 도서관 데이터 -> csv 파일
+    2) LoL 데이터
+    3) 코로나 데이터
 
 3. 스프링 배치 관리
-    3.1 Retry 방법?
-    3.2 Jenkins
-    3.3 Transaction 처리
+    1) Retry 전략
+    2) Jenkins 를 통한 schedule
+    3) Transaction 처리 방법
 
 4. 참고 사이트
     4.2 [기억보다 기록을](https://jojoldu.tistory.com/category/Spring%20Batch)
