@@ -1,6 +1,5 @@
 package com.batch.config.db;
 
-import com.zaxxer.hikari.HikariDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -11,7 +10,6 @@ import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -25,50 +23,45 @@ import javax.sql.DataSource;
 @EnableTransactionManagement
 /* Jpa 구성 시 Repository package 경로 */
 @EnableJpaRepositories(
-        basePackages = {"com.batch.domain.batch"}
+        basePackages = {""}
 )
-public class BatchDBConfig {
+public class MySQLDBConfig {
 
-    /* Spring Batch가 실행되기 위한 DataSource 우선순위 설정 */
-    @Primary
-    @Bean(name = "dataSource")
-    @ConfigurationProperties(prefix = "spring.datasource.batch")
+    @Bean(name = "mysqlDataSource")
+    @ConfigurationProperties(prefix = "spring.datasource.domain")
     public DataSource dataSource() {
-        return DataSourceBuilder.create().type(HikariDataSource.class).build();
+        return DataSourceBuilder.create().build();
     }
 
-    /* MyBatis 사용을 위한 */
-    @Primary
-    @Bean(name = "sqlSessionFactory")
-    public SqlSessionFactory sqlSessionFactory(@Qualifier("dataSource") DataSource dataSource, ApplicationContext applicationContext) throws Exception {
+    /* Mybatis MySQL SessionFactory */
+    @Bean(name = "mysqlSqlSessionFactory")
+    public SqlSessionFactory sessionFactory(@Qualifier("mysqlDataSource") DataSource dataSource, ApplicationContext applicationContext) throws Exception {
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
         sqlSessionFactoryBean.setDataSource(dataSource);
         /* Mapper 경로 설정 */
         sqlSessionFactoryBean.setMapperLocations(
-                applicationContext.getResources("classPath:mappers/batch/*.xml")
+                applicationContext.getResources("classPath:mappers/mysql/*.xml")
         );
         return sqlSessionFactoryBean.getObject();
     }
 
-    @Primary
-    @Bean(name = "sqlSessionTemplate")
-    public SqlSessionTemplate sqlSessionTemplate(@Qualifier("sqlSessionFactory") SqlSessionFactory sqlSessionFactory) {
+    /* Mybatis MySQL SessionTemplate */
+    @Bean(name = "mysqlSqlSessionTemplate")
+    public SqlSessionTemplate sqlSessionTemplate(@Qualifier("mysqlSqlSessionFactory") SqlSessionFactory sqlSessionFactory) {
         return new SqlSessionTemplate(sqlSessionFactory);
     }
 
-    @Primary
-    @Bean(name = "entityManagerFactory")
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory(EntityManagerFactoryBuilder builder, @Qualifier("dataSource") DataSource dataSource) {
+    @Bean(name = "mysqlEntityManagerFactory")
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(EntityManagerFactoryBuilder builder, @Qualifier("mysqlDataSource") DataSource userDataSource) {
         return builder
-                .dataSource(dataSource)
-                .packages("com.batch.domain.batch")
-                .persistenceUnit("batch")
+                .dataSource(userDataSource)
+                .packages("com.sample.domain.user")
+                .persistenceUnit("user")
                 .build();
     }
 
-    @Primary
-    @Bean(name = "transactionManager")
-    public PlatformTransactionManager transactionManager(@Qualifier("entityManagerFactory") EntityManagerFactory entityManagerFactory) {
-        return new JpaTransactionManager(entityManagerFactory);
+    @Bean(name = "mysqlTransactionManager")
+    public PlatformTransactionManager transactionManager(@Qualifier("mysqlEntityManagerFactory")EntityManagerFactory userEntityManagerFactory) {
+        return new JpaTransactionManager(userEntityManagerFactory);
     }
 }
