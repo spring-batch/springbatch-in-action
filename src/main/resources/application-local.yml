@@ -1,0 +1,20 @@
+spring.profiles: local
+spring.profiles.include: db_oracle, db_mysql, batch
+
+spring:
+  jpa:
+    # spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+    open-in-view: false
+
+logging:
+  level:
+    root: info
+    org:
+      springframework: info
+      hibernate:
+        type:
+          descriptor:
+            sql: debug
+
+server:
+  port: 8081
