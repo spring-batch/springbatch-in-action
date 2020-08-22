@@ -23,9 +23,9 @@ import javax.sql.DataSource;
 
 @Configuration
 @EnableTransactionManagement
-/* Jpa 구성 시 Repository package 경로 */
+/* Jpa 구성 시 Repository package 경로 추가 필요 */
 @EnableJpaRepositories(
-        basePackages = {"com.batch.domain.batch"}
+        basePackages = {""}
 )
 public class BatchDBConfig {
 

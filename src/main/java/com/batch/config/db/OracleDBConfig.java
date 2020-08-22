@@ -4,6 +4,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
@@ -22,9 +23,13 @@ import javax.sql.DataSource;
 
 @Configuration
 @EnableTransactionManagement
-/* Jpa 구성 시 Repository package 경로 */
+/* Jpa 구성 시 Repository package 경로 추가 필요 */
 @EnableJpaRepositories(
         basePackages = {""}
+)
+@MapperScan(
+        value = "",
+        sqlSessionFactoryRef = "oracleSqlSessionFactory"
 )
 public class OracleDBConfig {
 

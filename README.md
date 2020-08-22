@@ -29,6 +29,7 @@
     1) [기억보다 기록을](https://jojoldu.tistory.com/category/Spring%20Batch)
     2) [quartz](https://blog.kingbbode.com/posts/spring-batch-quartz)
     3) [Jenkins로 배치](https://jojoldu.tistory.com/313)
+    4) [MyBatis 설정의 SpringBatch](http://mybatis.org/spring/ko/batch.html)
 
 ## 스터디 회의록
 1. [주제 정하기](docs/README.md)
@@ -40,7 +41,6 @@
 |library|version|
 |:-----|:-----|
 |spring-boot-starter-batch|2.1.9|
-|spring-boot-starter-data-jpa|2.1.9|
 
 - Excel
 
@@ -56,6 +56,13 @@
 |h2|1.4.119|
 |ojdbc8-production|19.7.0.0|
 |mysql-connector-java|8.0.17|
+
+- ORM Framework
+
+|library|version|
+|:-----|:-----|
+|spring-boot-starter-batch|2.1.9|
+|mybatis-spring-boot-starter|2.1.1|
 
 ### 해당 프로젝스 설정 시 db_mysql, db_oracle 내용
 - MySQL
