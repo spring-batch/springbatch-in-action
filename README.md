@@ -34,6 +34,29 @@
 1. [주제 정하기](docs/README.md)
 
 
+## 프로젝트 Spec
+- SpringFramework
+
+|library|version|
+|:-----|:-----|
+|spring-boot-starter-batch|2.1.9|
+|spring-boot-starter-data-jpa|2.1.9|
+
+- Excel
+
+|library|version|
+|:-----|:-----|
+|poi-ooxml|4.1.2|
+|poi|4.1.2|
+
+- DBMS
+
+|library|version|
+|:-----|:-----|
+|h2|1.4.119|
+|ojdbc8-production|19.7.0.0|
+|mysql-connector-java|8.0.17|
+
 ### 해당 프로젝스 설정 시 db_mysql, db_oracle 내용
 - MySQL
 ```yaml
