@@ -26,9 +26,9 @@
     3) Transaction 처리 방법
 
 4. 참고 사이트
-    4.2 [기억보다 기록을](https://jojoldu.tistory.com/category/Spring%20Batch)
-    4.3 [quartz](https://blog.kingbbode.com/posts/spring-batch-quartz)
-    4.4 [Jenkins로 배치](https://jojoldu.tistory.com/313)
+    1) [기억보다 기록을](https://jojoldu.tistory.com/category/Spring%20Batch)
+    2) [quartz](https://blog.kingbbode.com/posts/spring-batch-quartz)
+    3) [Jenkins로 배치](https://jojoldu.tistory.com/313)
 
 ## 스터디 회의록
 1. [주제 정하기](docs/README.md)
