@@ -5,9 +5,9 @@
 - 장소: 홍대입구역 ['셀스스터디'](https://hd.sels.co.kr/)
 - 인원: 6명
 
-## 적용 사례
-1. 통계 테이블 구성 (파티셔닝) DB                      DB
-2. 검색 데이터 통합 테이블    FILE                    FILE        ->      DB
+## 배치 관련 업무 공유
+1. 통계 테이블 구성 (파티셔닝)
+2. 검색 데이터 통합 테이블
 3. 정산
 4. 데이터 집계
 
@@ -30,25 +30,63 @@
     4.3 [quartz](https://blog.kingbbode.com/posts/spring-batch-quartz)
     4.4 [Jenkins로 배치](https://jojoldu.tistory.com/313)
 
-## 2020.08.22 스터디 정리
-1. 차주 목표
-    1.1 도메인 정하기 -> 도서관
-    1.2 CSV 파일 읽기 -> 임시 테이블 데이터 적재
-        (File To DB)
-    1.3 임시(Tmp) 테이블 데이터 적재 -> 데이터 정규화 테이블 적재
-        (DB To DB)
-    1.4 데이터 정규화 테이블 적재 -> 리포트 파일 작성
-        (DB To File)
+## 스터디 회의록
+1. [주제 정하기](docs/README.md)
 
-2. 기술 구성
-    2.1 ItemReader
-        2.1.1 JpaPaging
-        2.1.2 JdbcCursor, JdbcPaging
-        2.1.3 HibernateCursor, HibernatePaging
-        2.1.4 Repository
-        2.1.5 AbstractPagingItemReader(Custom)
-            2.1.5.1 Querydsl
-            
-    2.2 ItemWriter
-        2.2.1 ItemStreamWriter
-        2.2.2 ItemWriter
+
+### 해당 프로젝스 설정 시 db_mysql, db_oracle 내용
+- MySQL
+```yaml
+spring:
+
+  # JPA 설정
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+#    generate-ddl: true
+    show_sql: true
+    properties:
+      hibernate:
+        format_sql: true
+#        ddl-auto: update
+        ddl-auto: none # 실행하지 않음
+#       ddl-auto: create-drop
+#        ddl-auto: create
+#       ddl-auto: validate
+
+  # MySQL DataSource
+  datasource:
+    # Spring Batch Schema MySQL
+    batch:
+      jdbc-url: jdbc:mysql://{ip}:{port}/{schema}
+      username: {db_username}
+      password: {db_password}
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      sql-script-encoding: UTF-8
+
+    # Domain DB
+    domain:
+      jdbc-url: jdbc:mysql://{ip}:{port}/{schema}
+      username: 
+      password: 
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      sql-script-encoding: UTF-8
+```
+
+- Oracle
+```yaml
+spring:
+  # JPA 설정
+  jpa:
+    database-platform: org.hibernate.dialect.Oracle10gDialect
+
+  # Oracle DataSource
+  datasource:
+    # DB Tuning Schema
+    oracle:
+      jdbc-url: jdbc:oracle:thin:@//{ip}:{port}/{sid}
+      username: {db_username}
+      password: {db_password}
+      driver-class-name: oracle.jdbc.OracleDriver
+      sql-script-encoding: UTF-8
+
+```
