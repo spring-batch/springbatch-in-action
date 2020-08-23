@@ -1,17 +1,14 @@
 package com.batch.sample;
 
-import com.batch.listener.CustomStepListener;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
-import org.springframework.batch.item.ItemReader;
+import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.Map;
 
 /**
  * 간단하게 사용하기 위한 Batch Job <br />
@@ -39,13 +36,10 @@ public class BasicJobBuilder {
     @Bean
     public Step basicStep() {
         return this.stepBuilderFactory.get(JOB_NAME + "_STEP")
-                .listener(new CustomStepListener())
-                .<Map<String, Object>, Map<String, Object>>chunk(10)
-                .reader(basicReader())
+                .tasklet((contribution, chunkContext) -> {
+                    log.info("Step Tasklet");
+                    return RepeatStatus.FINISHED;
+                })
                 .build();
-    }
-
-    private ItemReader<? extends Map<String, Object>> basicReader() {
-        return null;
     }
 }
