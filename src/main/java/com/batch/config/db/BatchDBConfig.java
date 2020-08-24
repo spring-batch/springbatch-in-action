@@ -12,6 +12,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -25,7 +26,7 @@ import javax.sql.DataSource;
 @EnableTransactionManagement
 /* Jpa 구성 시 Repository package 경로 추가 필요 */
 @EnableJpaRepositories(
-        basePackages = {""}
+        basePackages = {"com.batch.domain.mysql"}
 )
 public class BatchDBConfig {
 
@@ -45,7 +46,8 @@ public class BatchDBConfig {
         sqlSessionFactoryBean.setDataSource(dataSource);
         /* Mapper 경로 설정 */
         sqlSessionFactoryBean.setMapperLocations(
-                applicationContext.getResources("classPath:mappers/batch/*.xml")
+                new PathMatchingResourcePatternResolver().getResources("classpath:mappers/batch/*.xml")
+                //applicationContext.getResources("classpath:/resources/main/mapper/batch/*.xml")
         );
         return sqlSessionFactoryBean.getObject();
     }
