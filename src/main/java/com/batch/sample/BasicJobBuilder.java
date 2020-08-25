@@ -1,6 +1,8 @@
 package com.batch.sample;
 
 import com.batch.domain.Record;
+import com.batch.domain.LibraryEntity;
+import com.batch.listener.CustomStepListener;
 import com.batch.mapper.LibraryMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,22 +12,26 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.ItemWriter;
+import org.springframework.batch.item.database.JdbcBatchItemWriter;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import sun.nio.cs.ext.EUC_KR;
 
+import javax.annotation.Resource;
+import javax.sql.DataSource;
 import java.nio.file.Paths;
 
 /**
  * 간단하게 사용하기 위한 Batch Job <br />
- *      1. Job
- *      2. Step
- *          2.1 tasklet
- *              - 데이테 조회 및 출력
+ * 1. Job
+ * 2. Step
+ * 2.1 tasklet
+ * - 데이테 조회 및 출력
  */
 @Slf4j
 @Configuration
@@ -36,8 +42,11 @@ public class BasicJobBuilder {
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
 
+    @Resource(name = "oracleDataSource")
+    private DataSource oracleDataSource;
+
     @Bean
-    public Job basicJob() {
+    public Job basicJob() throws Exception {
         return this.jobBuilderFactory.get(JOB_NAME)
                 .incrementer(new RunIdIncrementer())
                 .start(basicStep())
@@ -46,61 +55,140 @@ public class BasicJobBuilder {
 
     /**
      * FlatFileReader example
-     * @return
      */
     @Bean
-    public Step basicStep() {
+    public Step basicStep() throws Exception {
         return this.stepBuilderFactory.get(JOB_NAME + "_STEP")
-                .<Record, Record>chunk(100)
-                .reader(new FlatFileItemReader<Record>() {{
-                    setEncoding(new EUC_KR().historicalName());
-                    setResource(new FileSystemResource(Paths.get("src","main", "resources", "files", "전국도서관표준데이터.csv")));
-                    setLineMapper(new DefaultLineMapper<Record>() {{
-                        setLineTokenizer(new DelimitedLineTokenizer(",") {{
-                            setNames(
-                                    "도서관명",
-                                    "시도명",
-                                    "시군구명",
-                                    "도서관유형",
-                                    "휴관일",
-                                    "평일운영시작시각",
-                                    "평일운영종료시각",
-                                    "토요일운영시작시각",
-                                    "토요일운영종료시각",
-                                    "공휴일운영시작시각",
-                                    "공휴일운영종료시각",
-                                    "열람좌석수",
-                                    "자료수(도서)",
-                                    "자료수(연속간행물)",
-                                    "자료수(비도서)",
-                                    "대출가능권수",
-                                    "대출가능일수",
-                                    "소재지도로명주소",
-                                    "운영기관명",
-                                    "도서관전화번호",
-                                    "부지면적",
-                                    "건물면적",
-                                    "홈페이지주소",
-                                    "위도",
-                                    "경도",
-                                    "데이터기준일자",
-                                    "제공기관코드",
-                                    "제공기관명"
-                            );
-                            setFieldSetMapper(new LibraryMapper());
-                        }});
-                    }});
-                }})
-                .writer(writer())
+                .<LibraryEntity, LibraryEntity>chunk(1000)
+                /* Reader -> FlatFileItemReader */
+                .reader(flatReader())
+                .writer(jdbcItemWriter())
+                /* Custom Step Listener */
+                .listener(new CustomStepListener())
                 .build();
     }
 
+    /**
+     * FlatFileItemReader Custom
+     *
+     * @return FlatFileItemReader
+     */
     @Bean
-    public ItemWriter<? super Record> writer(){
+    public FlatFileItemReader<LibraryEntity> flatReader() throws Exception {
+        return new FlatFileItemReader<LibraryEntity>() {{
+
+            /* 파일 인코딩 문제로 EUC-KR로 설정 */
+            setEncoding(new EUC_KR().historicalName());
+            /* 파일 경로 읽기 Resource 설정 (추후 외부 경로를 파라미터로 받는 방법으로 변경하기) */
+            setResource(new FileSystemResource(Paths.get("src", "main", "resources", "files", "전국도서관표준데이터.csv")));
+
+            /* LineMapper 설정하기 (FlatFileItemReader의 필수 설정 값) */
+            setLineMapper(new DefaultLineMapper<LibraryEntity>() {{
+
+                /* LineTokenizer로 데이터 Mapping */
+                setLineTokenizer(new DelimitedLineTokenizer(",") {{
+
+                    /* line tokenizer 에 설정한 names 와 includeFields 가 읽어온 line 의 tokens 와 정확하게 일치해야 함 */
+                    setStrict(true);
+                    setLinesToSkip(1);
+                    /*  LibraryEntitys의 key 값 매핑을 위한 Name 설정 */
+                    setNames(LibraryEntity.CSVFields.getFieldNmArrays());
+
+                    /* Contents 부분 Mapper */
+                    setFieldSetMapper(new LibraryMapper());
+                    /* 필수값 체크 (delimiter) */
+                    afterPropertiesSet();
+                }});
+                /* 필수값 체크 (tokenizer, fieldSetMapper) */
+                afterPropertiesSet();
+            }});
+            /* 필수값 체크 (lineMapper) */
+            afterPropertiesSet();
+        }};
+    }
+
+    @Bean
+    public ItemWriter<? super Record> writer() {
         return (ItemWriter<Record>) items -> {
-            for(Record item : items) {
+            for (Record item : items) {
                 log.info("item : {}", item);
             }
         };
+    }
+
+    private static final String QUERT_INSERT_RECORD =
+                    "INSERT INTO CSV_TABLE " +
+                    "(" +
+                    "LBRRY_CODE, " +
+                    "LBRRY_NM, " +
+                    "CTPRVN_NM, " +
+                    "SIGNGU_NM, " +
+                    "LBRRY_SE, " +
+                    "CLOSE_DAY, " +
+                    "WEEKDAY_OPER_OPEN_HHMM, " +
+                    "WEEKDAY_OPER_CLOSE_HHMM, " +
+                    "SAT_OPER_OPEN_HHMM, " +
+                    "SAT_OPER_CLOSE_HHMM, " +
+                    "HOLIDAY_OPER_OPEN_HHMM, " +
+                    "HOLIDAY_OPER_CLOSE_HHMM, " +
+                    "SEAT_CO, " +
+                    "BOOK_CO, " +
+                    "PBLICTN_CO, " +
+                    "NONEBOOK_CO, " +
+                    "LON_CO, " +
+                    "LONDAY_CO, " +
+                    "RDNM_ADR, " +
+                    "OPERINSTITUTION_NM, " +
+                    "LBRRY_PHONENUMBER, " +
+                    "PLOT_AR, " +
+                    "BULD_AR, " +
+                    "HOMEPAGEURL, " +
+                    "LATITUDE, " +
+                    "LONGITUDE, " +
+                    "REFERENCE_DATE, " +
+                    "INSTT_CODE, " +
+                    "INSTT_NM " +
+                    ")" +
+                    "VALUES " +
+                    "(" +
+                    "CSV_TABLE_SEQ.nextval, " +
+                    ":lbrryNm, " +
+                    ":ctprvnNm, " +
+                    ":signguNm, " +
+                    ":lbrrySe, " +
+                    ":closeDay, " +
+                    ":weekdayOperOpenHhmm, " +
+                    ":weekdayOperCloseHhmm, " +
+                    ":satOperOperOpenHhmm, " +
+                    ":satOperCloseHhmm, " +
+                    ":holidayOperOpenHhmm, " +
+                    ":holidayCloseOpenHhmm, " +
+                    ":seatCo, " +
+                    ":bookCo, " +
+                    ":pblictnCo, " +
+                    ":noneBookCo, " +
+                    ":lonCo, " +
+                    ":lonDaycnt, " +
+                    ":rdnmadr, " +
+                    ":operInstitutionNm, " +
+                    ":phoneNumber, " +
+                    ":plotAr, " +
+                    ":buldAr, " +
+                    ":homepageUrl, " +
+                    ":latitude, " +
+                    ":longitude, " +
+                    ":referenceDate, " +
+                    ":insttCode, " +
+                    ":insttNm " +
+                    ")";
+    @Bean
+    public JdbcBatchItemWriter<LibraryEntity> jdbcItemWriter() {
+        return new JdbcBatchItemWriter<LibraryEntity>() {{
+
+            setItemSqlParameterSourceProvider(BeanPropertySqlParameterSource::new);
+            setDataSource(oracleDataSource);
+            setSql(QUERT_INSERT_RECORD);
+            afterPropertiesSet();
+        }};
     }
 }
