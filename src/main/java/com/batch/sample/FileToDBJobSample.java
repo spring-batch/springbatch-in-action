@@ -10,36 +10,38 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
+import org.springframework.batch.item.database.BeanPropertyItemSqlParameterSourceProvider;
 import org.springframework.batch.item.database.JdbcBatchItemWriter;
-import org.springframework.batch.item.database.JpaItemWriter;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import sun.nio.cs.ext.EUC_KR;
 
 import javax.annotation.Resource;
-import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.nio.file.Paths;
 
 /**
- * 간단하게 사용하기 위한 Batch Job <br />
+ * <pre>
+ * 간단하게 Batch 사용하기 <br />
  * 1. Job
  * 2. Step
- * 2.1 tasklet
- * - 데이테 조회 및 출력
+ * 2.1 FlatFileItemReader
+ *      - Excel 타입의 데이터를 읽기
+ * 2.2 JdbcBatchItemWriter
+ *      - 단순한 DB 쓰기
+ * </pre>
  */
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
 public class FileToDBJobSample {
 
-    private static final String JOB_NAME = "basicJob";
+    private static final String JOB_NAME = "fileToDbJob";
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
 
@@ -50,16 +52,13 @@ public class FileToDBJobSample {
     private DataSource oracleDataSource;
 
     /**
-     * JPA 용 EntityManagerFactory
+     * FlatFile -> JdbcBatch Job
      */
-    @Resource(name = "oracleEntityManagerFactory")
-    private EntityManagerFactory oracleEntityManagerFactory;
-
     @Bean
-    public Job basicJob() throws Exception {
+    public Job fileToDbJob() throws Exception {
         return this.jobBuilderFactory.get(JOB_NAME)
                 .incrementer(new RunIdIncrementer())
-                .start(basicStep())
+                .start(fileToDbStep())
                 .build();
     }
 
@@ -67,16 +66,15 @@ public class FileToDBJobSample {
      * FlatFileReader example
      */
     @Bean
-    public Step basicStep() throws Exception {
+    public Step fileToDbStep() throws Exception {
         return this.stepBuilderFactory.get(JOB_NAME + "_STEP")
-                /* Jpa 적용 시 TransactionalManager 필요 */
-//                .transactionManager(new JpaTransactionManager() {{
-//                    setEntityManagerFactory(oracleEntityManagerFactory);
-//                }})
                 .<LibraryEntity, LibraryEntity>chunk(1000)
+
                 /* Reader -> FlatFileItemReader */
-                .reader(flatReader())
+                .reader(flatFileReader())
+                /* JdbcBatchItemWriter 로 구현한 버전 */
                 .writer(jdbcItemWriter())
+
                 /* Custom Step Listener */
                 .listener(new CustomStepListener())
                 .build();
@@ -88,7 +86,7 @@ public class FileToDBJobSample {
      * @return FlatFileItemReader
      */
     @Bean
-    public FlatFileItemReader<LibraryEntity> flatReader() throws Exception {
+    public FlatFileItemReader<LibraryEntity> flatFileReader() throws Exception {
         return new FlatFileItemReader<LibraryEntity>() {{
 
             /* 파일 인코딩 문제로 EUC-KR로 설정 */
@@ -101,13 +99,12 @@ public class FileToDBJobSample {
 
                 /* LineTokenizer로 데이터 Mapping */
                 setLineTokenizer(new DelimitedLineTokenizer(",") {{
-
+                    /* excel 헤더 첫 번째 row Skip */
+                    setLinesToSkip(1);
                     /* line tokenizer 에 설정한 names 와 includeFields 가 읽어온 line 의 tokens 와 정확하게 일치해야 함 */
                     setStrict(true);
-                    setLinesToSkip(1);
                     /*  LibraryEntitys의 key 값 매핑을 위한 Name 설정 */
                     setNames(LibraryEntity.CSVFields.getFieldNmArrays());
-
                     /* Contents 부분 Mapper */
                     setFieldSetMapper(new LibraryMapper());
                     /* 필수값 체크 (delimiter) */
@@ -122,7 +119,7 @@ public class FileToDBJobSample {
     }
 
     private static final String QUERT_INSERT_RECORD =
-                    "INSERT INTO CSV_TABLE " +
+            "INSERT INTO CSV_TABLE " +
                     "(" +
                     "LBRRY_CODE, " +
                     "LBRRY_NM, " +
@@ -186,20 +183,17 @@ public class FileToDBJobSample {
                     ":insttCode, " +
                     ":insttNm " +
                     ")";
+
     @Bean
     public JdbcBatchItemWriter<LibraryEntity> jdbcItemWriter() {
         return new JdbcBatchItemWriter<LibraryEntity>() {{
+            /* Template ? */
             setJdbcTemplate(new NamedParameterJdbcTemplate(oracleDataSource));
-            setItemSqlParameterSourceProvider(BeanPropertySqlParameterSource::new);
+            /* */
+            setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>());
+            /* Query */
             setSql(QUERT_INSERT_RECORD);
             afterPropertiesSet();
-        }};
-    }
-
-    @Bean
-    public JpaItemWriter<LibraryEntity> jpaItemWriter() {
-        return new JpaItemWriter<LibraryEntity>() {{
-            setEntityManagerFactory(oracleEntityManagerFactory);
         }};
     }
 }

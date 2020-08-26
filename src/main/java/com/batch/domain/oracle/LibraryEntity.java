@@ -1,6 +1,6 @@
 package com.batch.domain.oracle;
 
-import com.batch.domain.Record;
+import com.batch.domain.file.Record;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;

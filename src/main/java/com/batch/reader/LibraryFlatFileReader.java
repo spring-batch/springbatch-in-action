@@ -1,6 +1,6 @@
 package com.batch.reader;
 
-import com.batch.domain.Record;
+import com.batch.domain.file.Record;
 import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;
@@ -10,6 +10,10 @@ import sun.nio.cs.ext.EUC_KR;
 
 import java.nio.file.Path;
 
+/**
+ * CSV File Reader
+ *
+ */
 public class LibraryFlatFileReader extends FlatFileItemReader<Record> {
 
     public LibraryFlatFileReader(Path path) {
