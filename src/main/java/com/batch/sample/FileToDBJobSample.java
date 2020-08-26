@@ -1,7 +1,6 @@
 package com.batch.sample;
 
-import com.batch.domain.Record;
-import com.batch.domain.LibraryEntity;
+import com.batch.domain.oracle.LibraryEntity;
 import com.batch.listener.CustomStepListener;
 import com.batch.mapper.LibraryMapper;
 import lombok.RequiredArgsConstructor;
@@ -11,8 +10,8 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
-import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.JdbcBatchItemWriter;
+import org.springframework.batch.item.database.JpaItemWriter;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
@@ -20,9 +19,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import sun.nio.cs.ext.EUC_KR;
 
 import javax.annotation.Resource;
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.nio.file.Paths;
 
@@ -36,14 +37,23 @@ import java.nio.file.Paths;
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-public class BasicJobBuilder {
+public class FileToDBJobSample {
 
     private static final String JOB_NAME = "basicJob";
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
 
+    /**
+     * JDBC 용 DataSource
+     */
     @Resource(name = "oracleDataSource")
     private DataSource oracleDataSource;
+
+    /**
+     * JPA 용 EntityManagerFactory
+     */
+    @Resource(name = "oracleEntityManagerFactory")
+    private EntityManagerFactory oracleEntityManagerFactory;
 
     @Bean
     public Job basicJob() throws Exception {
@@ -59,6 +69,10 @@ public class BasicJobBuilder {
     @Bean
     public Step basicStep() throws Exception {
         return this.stepBuilderFactory.get(JOB_NAME + "_STEP")
+                /* Jpa 적용 시 TransactionalManager 필요 */
+//                .transactionManager(new JpaTransactionManager() {{
+//                    setEntityManagerFactory(oracleEntityManagerFactory);
+//                }})
                 .<LibraryEntity, LibraryEntity>chunk(1000)
                 /* Reader -> FlatFileItemReader */
                 .reader(flatReader())
@@ -107,15 +121,6 @@ public class BasicJobBuilder {
         }};
     }
 
-    @Bean
-    public ItemWriter<? super Record> writer() {
-        return (ItemWriter<Record>) items -> {
-            for (Record item : items) {
-                log.info("item : {}", item);
-            }
-        };
-    }
-
     private static final String QUERT_INSERT_RECORD =
                     "INSERT INTO CSV_TABLE " +
                     "(" +
@@ -136,7 +141,7 @@ public class BasicJobBuilder {
                     "PBLICTN_CO, " +
                     "NONEBOOK_CO, " +
                     "LON_CO, " +
-                    "LONDAY_CO, " +
+                    "LONDAY_CNT, " +
                     "RDNM_ADR, " +
                     "OPERINSTITUTION_NM, " +
                     "LBRRY_PHONENUMBER, " +
@@ -159,10 +164,10 @@ public class BasicJobBuilder {
                     ":closeDay, " +
                     ":weekdayOperOpenHhmm, " +
                     ":weekdayOperCloseHhmm, " +
-                    ":satOperOperOpenHhmm, " +
+                    ":satOperOpenHhmm, " +
                     ":satOperCloseHhmm, " +
                     ":holidayOperOpenHhmm, " +
-                    ":holidayCloseOpenHhmm, " +
+                    ":holidayOperCloseHhmm, " +
                     ":seatCo, " +
                     ":bookCo, " +
                     ":pblictnCo, " +
@@ -171,7 +176,7 @@ public class BasicJobBuilder {
                     ":lonDaycnt, " +
                     ":rdnmadr, " +
                     ":operInstitutionNm, " +
-                    ":phoneNumber, " +
+                    ":lbrryPhoneNumber, " +
                     ":plotAr, " +
                     ":buldAr, " +
                     ":homepageUrl, " +
@@ -184,11 +189,17 @@ public class BasicJobBuilder {
     @Bean
     public JdbcBatchItemWriter<LibraryEntity> jdbcItemWriter() {
         return new JdbcBatchItemWriter<LibraryEntity>() {{
-
+            setJdbcTemplate(new NamedParameterJdbcTemplate(oracleDataSource));
             setItemSqlParameterSourceProvider(BeanPropertySqlParameterSource::new);
-            setDataSource(oracleDataSource);
             setSql(QUERT_INSERT_RECORD);
             afterPropertiesSet();
+        }};
+    }
+
+    @Bean
+    public JpaItemWriter<LibraryEntity> jpaItemWriter() {
+        return new JpaItemWriter<LibraryEntity>() {{
+            setEntityManagerFactory(oracleEntityManagerFactory);
         }};
     }
 }

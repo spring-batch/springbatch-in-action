@@ -1,16 +1,18 @@
 package com.batch.mapper;
 
-import com.batch.domain.LibraryEntity;
+import com.batch.domain.oracle.LibraryEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.file.mapping.FieldSetMapper;
 import org.springframework.batch.item.file.transform.FieldSet;
-import org.springframework.validation.BindException;
 
+/**
+ * 도서관 데이터 CSV -> Memory 로 올리기 위한 Mapper
+ */
 @Slf4j
 public class LibraryMapper implements FieldSetMapper<LibraryEntity> {
 
     @Override
-    public LibraryEntity mapFieldSet(FieldSet fieldSet) throws BindException {
+    public LibraryEntity mapFieldSet(FieldSet fieldSet) {
         if(fieldSet == null) {
             return null;
         }
@@ -22,10 +24,10 @@ public class LibraryMapper implements FieldSetMapper<LibraryEntity> {
         library.setCloseDay(fieldSet.readString("휴관일"));
         library.setWeekdayOperOpenHhmm(fieldSet.readString("평일운영시작시각"));
         library.setWeekdayOperCloseHhmm(fieldSet.readString("평일운영종료시각"));
-        library.setSatOperOperOpenHhmm(fieldSet.readString("토요일운영시작시각"));
+        library.setSatOperOpenHhmm(fieldSet.readString("토요일운영시작시각"));
         library.setSatOperCloseHhmm(fieldSet.readString("토요일운영종료시각"));
         library.setHolidayOperOpenHhmm(fieldSet.readString("공휴일운영시작시각"));
-        library.setHolidayCloseOpenHhmm(fieldSet.readString("공휴일운영종료시각"));
+        library.setHolidayOperCloseHhmm(fieldSet.readString("공휴일운영종료시각"));
         library.setSeatCo(fieldSet.readString("열람좌석수"));
         library.setBookCo(fieldSet.readString("자료수(도서)"));
         library.setPblictnCo(fieldSet.readString("자료수(연속간행물)"));
@@ -34,7 +36,7 @@ public class LibraryMapper implements FieldSetMapper<LibraryEntity> {
         library.setLonDaycnt(fieldSet.readString("대출가능일수"));
         library.setRdnmadr(fieldSet.readString("소재지도로명주소"));
         library.setOperInstitutionNm(fieldSet.readString("운영기관명"));
-        library.setPhoneNumber(fieldSet.readString("도서관전화번호"));
+        library.setLbrryPhoneNumber(fieldSet.readString("도서관전화번호"));
         library.setPlotAr(fieldSet.readString("부지면적"));
         library.setBuldAr(fieldSet.readString("건물면적"));
         library.setHomepageUrl(fieldSet.readString("홈페이지주소"));

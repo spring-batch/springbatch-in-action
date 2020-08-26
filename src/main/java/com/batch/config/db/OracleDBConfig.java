@@ -63,7 +63,7 @@ public class OracleDBConfig {
         return builder
                 .dataSource(dataSource)
                 .packages("com.batch.domain.oracle")
-                .persistenceUnit("oracle")
+                .persistenceUnit("LibraryEntity")
                 .build();
     }
 
