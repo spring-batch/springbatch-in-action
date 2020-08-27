@@ -48,5 +48,4 @@ public class LibraryFlatFileReader extends FlatFileItemReader<Record> {
 
         return reader;
     }
-
 }

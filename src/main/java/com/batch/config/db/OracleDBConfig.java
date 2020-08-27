@@ -1,6 +1,7 @@
 package com.batch.config.db;
 
 import com.zaxxer.hikari.HikariDataSource;
+import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -55,18 +56,24 @@ public class OracleDBConfig {
     /* Mybatis Oracle SessionTemplate */
     @Bean(name = "oracleSqlSessionTemplate")
     public SqlSessionTemplate sqlSessionTemplate(@Qualifier("oracleSqlSessionFactory") SqlSessionFactory sqlSessionFactory) {
-        return new SqlSessionTemplate(sqlSessionFactory);
+        return new SqlSessionTemplate(sqlSessionFactory, ExecutorType.BATCH);
     }
 
+    /**
+     * JPA 용 EntityManagerFactory
+     */
     @Bean(name = "oracleEntityManagerFactory")
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(EntityManagerFactoryBuilder builder, @Qualifier("oracleDataSource") DataSource dataSource) {
         return builder
                 .dataSource(dataSource)
                 .packages("com.batch.domain.oracle")
-                .persistenceUnit("LibraryEntity")
+                .persistenceUnit("*")
                 .build();
     }
 
+    /**
+     * JPA 용 EntityManagerFactory
+     */
     @Bean(name = "oracleTransactionManager")
     public PlatformTransactionManager transactionManager(@Qualifier("oracleEntityManagerFactory") EntityManagerFactory entityManagerFactory) {
         return new JpaTransactionManager(entityManagerFactory);

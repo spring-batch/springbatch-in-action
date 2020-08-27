@@ -5,16 +5,9 @@ spring:
       # None으로 설정 하는 이유는 파라미터로 어떠한 값이 없는 경우 None을 설정하여 어떠한 배치도 실행하지 않게끔 하기 위한 설정
       names: ${job.name:None}
 
-
   main:
     allow-bean-definition-overriding: true
 
 # 배치의 모니터링이 필요 없는 경우 해당 프로젝트가 실행될 때 Tomcat 실행을 하지않기 위한 설정
 #main:
 #  web-application-type: none
-
-logging:
-  level:
-    org:
-      springframework:
-        batch: debug

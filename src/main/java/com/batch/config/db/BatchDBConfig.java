@@ -1,6 +1,5 @@
 package com.batch.config.db;
 
-import com.zaxxer.hikari.HikariDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -8,12 +7,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -24,10 +21,6 @@ import javax.sql.DataSource;
 
 @Configuration
 @EnableTransactionManagement
-/* Jpa 구성 시 Repository package 경로 추가 필요 */
-@EnableJpaRepositories(
-        basePackages = {"com.batch.domain.mysql"}
-)
 public class BatchDBConfig {
 
     /* Spring Batch가 실행되기 위한 DataSource 우선순위 설정 */
@@ -35,13 +28,13 @@ public class BatchDBConfig {
     @Bean(name = "dataSource")
     @ConfigurationProperties(prefix = "spring.datasource.batch")
     public DataSource dataSource() {
-        return DataSourceBuilder.create().type(HikariDataSource.class).build();
+        return DataSourceBuilder.create().build();
     }
 
     /* MyBatis 사용을 위한 */
     @Primary
     @Bean(name = "sqlSessionFactory")
-    public SqlSessionFactory sqlSessionFactory(@Qualifier("dataSource") DataSource dataSource, ApplicationContext applicationContext) throws Exception {
+    public SqlSessionFactory sqlSessionFactory(@Qualifier("dataSource") DataSource dataSource) throws Exception {
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
         sqlSessionFactoryBean.setDataSource(dataSource);
         /* Mapper 경로 설정 */

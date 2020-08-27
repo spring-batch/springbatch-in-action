@@ -9,7 +9,7 @@ import org.springframework.batch.item.file.transform.FieldSet;
  * 도서관 데이터 CSV -> Memory 로 올리기 위한 Mapper
  */
 @Slf4j
-public class LibraryMapper implements FieldSetMapper<LibraryEntity> {
+public class LibraryFileToDBMapper implements FieldSetMapper<LibraryEntity> {
 
     @Override
     public LibraryEntity mapFieldSet(FieldSet fieldSet) {

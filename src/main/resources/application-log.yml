@@ -1,0 +1,20 @@
+# Batch log
+logging.level.org.springframework.batch: info
+
+
+logging:
+  level:
+    root: info
+    org:
+
+      # SpringFramework Logging
+      springframework: info
+      hibernate:
+        type:
+          descriptor:
+
+            # DB Query Logging
+            sql: debug
+
+
+

@@ -2,7 +2,7 @@ package com.batch.sample;
 
 import com.batch.domain.oracle.LibraryEntity;
 import com.batch.listener.CustomStepListener;
-import com.batch.mapper.LibraryMapper;
+import com.batch.mapper.LibraryFileToDBMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -106,7 +106,7 @@ public class FileToDBJobSample {
                     /*  LibraryEntitys의 key 값 매핑을 위한 Name 설정 */
                     setNames(LibraryEntity.CSVFields.getFieldNmArrays());
                     /* Contents 부분 Mapper */
-                    setFieldSetMapper(new LibraryMapper());
+                    setFieldSetMapper(new LibraryFileToDBMapper());
                     /* 필수값 체크 (delimiter) */
                     afterPropertiesSet();
                 }});
@@ -114,6 +114,19 @@ public class FileToDBJobSample {
                 afterPropertiesSet();
             }});
             /* 필수값 체크 (lineMapper) */
+            afterPropertiesSet();
+        }};
+    }
+
+    @Bean
+    public JdbcBatchItemWriter<LibraryEntity> jdbcItemWriter() {
+        return new JdbcBatchItemWriter<LibraryEntity>() {{
+            /* Template ? */
+            setJdbcTemplate(new NamedParameterJdbcTemplate(oracleDataSource));
+            /* */
+            setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>());
+            /* Query */
+            setSql(QUERT_INSERT_RECORD);
             afterPropertiesSet();
         }};
     }
@@ -183,17 +196,4 @@ public class FileToDBJobSample {
                     ":insttCode, " +
                     ":insttNm " +
                     ")";
-
-    @Bean
-    public JdbcBatchItemWriter<LibraryEntity> jdbcItemWriter() {
-        return new JdbcBatchItemWriter<LibraryEntity>() {{
-            /* Template ? */
-            setJdbcTemplate(new NamedParameterJdbcTemplate(oracleDataSource));
-            /* */
-            setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>());
-            /* Query */
-            setSql(QUERT_INSERT_RECORD);
-            afterPropertiesSet();
-        }};
-    }
 }
