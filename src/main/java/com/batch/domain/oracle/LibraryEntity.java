@@ -1,6 +1,5 @@
 package com.batch.domain.oracle;
 
-import com.batch.domain.file.Record;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -54,8 +53,8 @@ public class LibraryEntity {
         private int columnIdx;
 
         public static String[] getFieldNmArrays() {
-            return Arrays.stream(Record.RecordFields.values())
-                    .map(Record.RecordFields::getFieldsNm)
+            return Arrays.stream(CSVFields.values())
+                    .map(CSVFields::getFieldsNm)
                     .toArray(String[]::new);
         }
     }

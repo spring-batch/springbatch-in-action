@@ -1,4 +1,4 @@
-package com.batch.sample;
+package com.batch.demo.library;
 
 import com.batch.domain.oracle.LibraryEntity;
 import com.batch.listener.CustomStepListener;
@@ -17,13 +17,14 @@ import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import sun.nio.cs.ext.EUC_KR;
 
 import javax.annotation.Resource;
 import javax.sql.DataSource;
-import java.nio.file.Paths;
+
+import static org.springframework.batch.item.file.transform.DelimitedLineTokenizer.DELIMITER_COMMA;
 
 /**
  * <pre>
@@ -39,7 +40,7 @@ import java.nio.file.Paths;
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-public class FileToDBJobSample {
+public class LibraryFileToTmpDBJobDemo {
 
     private static final String JOB_NAME = "fileToDbJob";
     private final JobBuilderFactory jobBuilderFactory;
@@ -92,14 +93,14 @@ public class FileToDBJobSample {
             /* 파일 인코딩 문제로 EUC-KR로 설정 */
             setEncoding(new EUC_KR().historicalName());
             /* 파일 경로 읽기 Resource 설정 (추후 외부 경로를 파라미터로 받는 방법으로 변경하기) */
-            setResource(new FileSystemResource(Paths.get("src", "main", "resources", "files", "전국도서관표준데이터.csv")));
+            setResource(new ClassPathResource("files/전국도서관표준데이터.csv"));
 
             /* LineMapper 설정하기 (FlatFileItemReader의 필수 설정 값) */
             setLineMapper(new DefaultLineMapper<LibraryEntity>() {{
 
                 /* LineTokenizer로 데이터 Mapping */
-                setLineTokenizer(new DelimitedLineTokenizer(",") {{
-                    /* excel 헤더 첫 번째 row Skip */
+                setLineTokenizer(new DelimitedLineTokenizer(DELIMITER_COMMA) {{
+                    /* excel 헤더 첫 번째 row Skip :: TODO 애초에 Line 1 row를 Skip 해도 됨 */
                     setLinesToSkip(1);
                     /* line tokenizer 에 설정한 names 와 includeFields 가 읽어온 line 의 tokens 와 정확하게 일치해야 함 */
                     setStrict(true);

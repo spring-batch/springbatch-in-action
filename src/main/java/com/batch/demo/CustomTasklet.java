@@ -1,4 +1,4 @@
-package com.batch.sample;
+package com.batch.demo;
 
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepContribution;
@@ -26,7 +26,7 @@ public class CustomTasklet implements Tasklet {
     }
 
     @Override
-    public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
+    public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) {
         /* Tasklet 작업의 메인이 되는 메서드 */
         return null;
     }

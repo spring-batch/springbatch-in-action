@@ -3,16 +3,17 @@ package com.batch.reader;
 import com.batch.domain.file.Record;
 import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.item.file.FlatFileItemReader;
+import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
-import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.ClassPathResource;
 import sun.nio.cs.ext.EUC_KR;
 
 import java.nio.file.Path;
 
 /**
  * CSV File Reader
- *
+ * TODO 공통 클래스 작성 필요
  */
 public class LibraryFlatFileReader extends FlatFileItemReader<Record> {
 
@@ -38,11 +39,13 @@ public class LibraryFlatFileReader extends FlatFileItemReader<Record> {
     public FlatFileItemReader<Record> itemReader(Path path) {
         FlatFileItemReader<Record> reader = new FlatFileItemReader<>();
         reader.setEncoding(new EUC_KR().historicalName());
-        reader.setResource(new FileSystemResource(path.toString()));
+        reader.setResource(new ClassPathResource(path.toString()));
         reader.setLineMapper(new DefaultLineMapper<Record>() {{
             setLineTokenizer(new DelimitedLineTokenizer(",") {{
                 setNames(Record.RecordFields.getFieldNmArrays());
-//                setFieldSetMapper(new LibraryMapper());
+            }});
+            setFieldSetMapper(new BeanWrapperFieldSetMapper<Record>() {{
+                setTargetType(Record.class);
             }});
         }});
 

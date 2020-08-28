@@ -11,7 +11,6 @@ import java.util.List;
  */
 public class CustomItemWriter<T> implements ItemWriter<T> {
     @Override
-    public void write(List items) throws Exception {
-
+    public void write(List items) {
     }
 }
