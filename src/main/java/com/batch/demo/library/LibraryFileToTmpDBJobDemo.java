@@ -128,6 +128,7 @@ public class LibraryFileToTmpDBJobDemo {
             setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>());
             /* Query */
             setSql(QUERT_INSERT_RECORD);
+
             afterPropertiesSet();
         }};
     }

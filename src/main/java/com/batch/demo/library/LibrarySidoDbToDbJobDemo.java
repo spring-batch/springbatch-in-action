@@ -1,8 +1,6 @@
 package com.batch.demo.library;
 
 import com.batch.domain.region.Sido;
-import com.batch.domain.region.Signgu;
-import com.batch.writer.ConsoleItemWriter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -28,7 +26,7 @@ import java.util.Map;
 @Configuration
 @RequiredArgsConstructor
 public class LibrarySidoDbToDbJobDemo {
-    private static final String JOB_NAME = "SidoDbToDbJob";
+    private static final String JOB_NAME = "sidoDbToDbJob";
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
 
@@ -43,7 +41,6 @@ public class LibrarySidoDbToDbJobDemo {
         return this.jobBuilderFactory.get(JOB_NAME)
                 .incrementer(new RunIdIncrementer())
                 .start(sidoDbToDbStep())
-                .next(signguDbToDbStep())
                 .build();
     }
 
@@ -58,59 +55,16 @@ public class LibrarySidoDbToDbJobDemo {
     }
 
     @Bean
-    public Step signguDbToDbStep() {
-        return stepBuilderFactory.get(JOB_NAME + "_signgu_step")
-                .<Signgu, Signgu>chunk(1000)
-                .reader(extractLibraryToSigngu())
-                .writer(new ConsoleItemWriter<>())
-                .build();
-
-    }
-
-    @Bean
-    public JdbcPagingItemReader<? extends Signgu> extractLibraryToSigngu() {
-        return new JdbcPagingItemReader<Signgu>() {{
-            setFetchSize(1000);
-            setDataSource(oracleDataSource);
-            setQueryProvider(libraryToSignguProvider());
-            setRowMapper(new BeanPropertyRowMapper<>(Signgu.class));
-            setName(JOB_NAME + "_signgu_reader");
-        }};
-    }
-
-    private OraclePagingQueryProvider libraryToSignguProvider() {
-        String selectClause =
-                        "    A.SIGNGU_NM,\n" +
-                        "    A.CTPRVN_CODE AS SIDO_CD\n";
-        String fromClause =
-                "FROM (\n" +
-                        "    SELECT\n" +
-                        "        C.SIGNGU_NM,\n" +
-                        "        SIDO.CTPRVN_CODE\n" +
-                        "    FROM CSV_TABLE C\n" +
-                        "    JOIN TB_SIDO SIDO\n" +
-                        "    ON C.CTPRVN_NM = SIDO.CTPRVN_NM\n" +
-                        "    GROUP BY C.SIGNGU_NM, SIDO.CTPRVN_CODE\n" +
-                        ") A";
-
-        Map<String, Order> sortKeys = new HashMap<>(1);
-        sortKeys.put("SIDO_CD", Order.ASCENDING);
-
-        return new OraclePagingQueryProvider() {{
-            setSelectClause(selectClause);
-            setFromClause(fromClause);
-            setSortKeys(sortKeys);
-        }};
-    }
-
-    @Bean
     public JdbcPagingItemReader<? extends Sido> extractLibraryToSido() throws Exception {
         return new JdbcPagingItemReader<Sido>() {{
             setFetchSize(1000);
+
             setDataSource(oracleDataSource);
             setQueryProvider(libraryToSidoProvider());
             setRowMapper(new BeanPropertyRowMapper<>(Sido.class));
             setName(JOB_NAME + "_sido_reader");
+
+            afterPropertiesSet();
         }};
     }
 
