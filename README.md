@@ -16,9 +16,10 @@
     1) [Spring.io](https://docs.spring.io/spring-batch/docs/current/reference/html/index.html)
 
 2. 스프링 배치 실습 아이디어
-    1) 도서관 데이터 -> csv 파일
-    2) LoL 데이터
-    3) 코로나 데이터
+    1) 도서관 데이터 
+        - '특정' 도서관 데이터 csv 기반 파일을 정규화된 테이블에 적재
+  
+    2) 미정
 
 3. 스프링 배치 관리
     1) Retry 전략
@@ -32,8 +33,8 @@
     4) [MyBatis 설정의 SpringBatch](http://mybatis.org/spring/ko/batch.html)
 
 ## 스터디 회의록
-1. [주제 정하기](docs/README.md)
-
+1. [1주차 주제 정하기](docs/README.md)
+2. [2주차 개발 진행 사항 확인 및 정리](docs/README.md)
 
 ## 프로젝트 Spec
 - SpringFramework
