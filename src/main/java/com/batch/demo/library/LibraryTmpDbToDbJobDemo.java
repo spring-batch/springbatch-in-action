@@ -2,7 +2,6 @@ package com.batch.demo.library;
 
 import com.batch.domain.oracle.Library;
 import com.batch.domain.oracle.LibraryTmp;
-import com.batch.listener.CustomItemReadListener;
 import com.batch.listener.CustomJobListener;
 import com.batch.writer.ConsoleItemWriter;
 import lombok.RequiredArgsConstructor;
@@ -58,7 +57,6 @@ public class LibraryTmpDbToDbJobDemo {
                 .<LibraryTmp, Library>chunk(1000)
                 .reader(tmpToLibReader())
                 .writer(new ConsoleItemWriter<>())
-                .listener(new CustomItemReadListener())
                 .build();
     }
 
