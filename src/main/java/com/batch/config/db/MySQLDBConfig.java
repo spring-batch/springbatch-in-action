@@ -8,16 +8,11 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
-import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.orm.jpa.JpaTransactionManager;
-import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 @Configuration
@@ -47,18 +42,18 @@ public class MySQLDBConfig {
     public SqlSessionTemplate sqlSessionTemplate(@Qualifier("mysqlSqlSessionFactory") SqlSessionFactory sqlSessionFactory) {
         return new SqlSessionTemplate(sqlSessionFactory, ExecutorType.BATCH);
     }
-
-    @Bean(name = "mysqlEntityManagerFactory")
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory(EntityManagerFactoryBuilder builder, @Qualifier("mysqlDataSource") DataSource userDataSource) {
-        return builder
-                .dataSource(userDataSource)
-                .packages("com.sample.domain")
-                .persistenceUnit("*")
-                .build();
-    }
-
-    @Bean(name = "mysqlTransactionManager")
-    public PlatformTransactionManager transactionManager(@Qualifier("mysqlEntityManagerFactory")EntityManagerFactory userEntityManagerFactory) {
-        return new JpaTransactionManager(userEntityManagerFactory);
-    }
+//
+//    @Bean(name = "mysqlEntityManagerFactory")
+//    public LocalContainerEntityManagerFactoryBean entityManagerFactory(EntityManagerFactoryBuilder builder, @Qualifier("mysqlDataSource") DataSource userDataSource) {
+//        return builder
+//                .dataSource(userDataSource)
+//                .packages("com.sample.domain")
+//                .persistenceUnit("*")
+//                .build();
+//    }
+//
+//    @Bean(name = "mysqlTransactionManager")
+//    public PlatformTransactionManager transactionManager(@Qualifier("mysqlEntityManagerFactory")EntityManagerFactory userEntityManagerFactory) {
+//        return new JpaTransactionManager(userEntityManagerFactory);
+//    }
 }

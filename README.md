@@ -42,20 +42,20 @@
 ## 프로젝트 Spec
 - SpringFramework
 
-|library|version|
+|libraryTmp|version|
 |:-----|:-----|
 |spring-boot-starter-batch|2.1.9|
 
 - Excel
 
-|library|version|
+|libraryTmp|version|
 |:-----|:-----|
 |poi-ooxml|4.1.2|
 |poi|4.1.2|
 
 - DBMS
 
-|library|version|
+|libraryTmp|version|
 |:-----|:-----|
 |h2|1.4.119|
 |ojdbc8-production|19.7.0.0|
@@ -63,7 +63,7 @@
 
 - ORM Framework
 
-|library|version|
+|libraryTmp|version|
 |:-----|:-----|
 |spring-boot-starter-batch|2.1.9|
 |mybatis-spring-boot-starter|2.1.1|

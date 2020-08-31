@@ -1,6 +1,7 @@
 package com.batch.demo.library;
 
 import com.batch.domain.region.Sido;
+import com.batch.writer.ConsoleItemWriter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -25,7 +26,7 @@ import java.util.Map;
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-public class LibrarySidoDbToDbJobDemo {
+public class LibrarySidoTmpDbToDbJobDemo {
     private static final String JOB_NAME = "sidoDbToDbJob";
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
@@ -50,7 +51,7 @@ public class LibrarySidoDbToDbJobDemo {
                 .<Sido, Sido>chunk(1000)
                 .reader(extractLibraryToSido())
                 /* JdbcBatchItemWriter 로 구현한 버전 */
-                .writer(sidoDbWriter())
+                .writer(new ConsoleItemWriter<>())
                 .build();
     }
 

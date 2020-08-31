@@ -14,16 +14,16 @@ public class CustomItemReadListener //implements ItemReadListener<T>
 
     @BeforeRead
     public void beforeRead() {
-
+        log.info("[LOG] [READER] ==> ");
     }
 
     @AfterRead
     public void afterRead(T item) {
-
+        log.info("[LOG] [READER] [AFTER] ==> ");
     }
 
     @OnReadError
     public void onReadError(Exception ex) {
-
+        log.info("[LOG] [READER] [ERROR] ==> ");
     }
 }

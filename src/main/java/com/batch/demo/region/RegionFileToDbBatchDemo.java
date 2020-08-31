@@ -31,7 +31,7 @@ import static org.springframework.batch.item.file.transform.DelimitedLineTokeniz
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-public class RegionFileToDbBatchConfiguration {
+public class RegionFileToDbBatchDemo {
 
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;

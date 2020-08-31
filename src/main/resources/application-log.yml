@@ -8,7 +8,7 @@ logging:
     org:
 
       # SpringFramework Logging
-      springframework: info
+      springframework: debug
       hibernate:
         type:
           descriptor:

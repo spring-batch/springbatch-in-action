@@ -1,6 +1,7 @@
 package com.batch.demo.library;
 
 import com.batch.domain.region.Signgu;
+import com.batch.listener.CustomItemReadListener;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -26,7 +27,7 @@ import java.util.Map;
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-public class LibrarySignguDbToDbJobDemo {
+public class LibrarySignguTmpDbToDbJobDemo {
 
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
@@ -40,7 +41,7 @@ public class LibrarySignguDbToDbJobDemo {
     private DataSource oracleDataSource;
 
     @Bean
-    public Job sidoDbToDbJob() throws Exception {
+    public Job signguDbToDbJob() {
         return this.jobBuilderFactory.get(JOB_NAME)
                 .incrementer(new RunIdIncrementer())
                 .start(signguDbToDbStep())
@@ -51,23 +52,24 @@ public class LibrarySignguDbToDbJobDemo {
     public Step signguDbToDbStep() {
         return stepBuilderFactory.get(JOB_NAME + "_signgu_step")
                 .<Signgu, Signgu>chunk(1000)
-                .reader(extractLibraryToSigngu())
+                .reader(libraryReader())
+                .listener(new CustomItemReadListener())
                 .writer(signguWriter())
                 .build();
     }
 
     @Bean
-    public JdbcPagingItemReader<? extends Signgu> extractLibraryToSigngu() {
+    public JdbcPagingItemReader<? extends Signgu> libraryReader() {
         return new JdbcPagingItemReader<Signgu>() {{
             setFetchSize(1000);
             setDataSource(oracleDataSource);
-            setQueryProvider(libraryToSignguProvider());
+            setQueryProvider(libraryQueryProvider());
             setRowMapper(new BeanPropertyRowMapper<>(Signgu.class));
             setName(JOB_NAME + "_signgu_reader");
         }};
     }
 
-    private OraclePagingQueryProvider libraryToSignguProvider() {
+    private OraclePagingQueryProvider libraryQueryProvider() {
         String selectClause =
                 "    A.SIGNGU_NM,\n" +
                         "    A.SIDO_CD\n";
