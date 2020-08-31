@@ -1,6 +1,6 @@
 package com.batch.mapper;
 
-import com.batch.domain.oracle.LibraryEntity;
+import com.batch.domain.oracle.Library;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.file.mapping.FieldSetMapper;
 import org.springframework.batch.item.file.transform.FieldSet;
@@ -9,14 +9,14 @@ import org.springframework.batch.item.file.transform.FieldSet;
  * 도서관 데이터 CSV -> Memory 로 올리기 위한 Mapper
  */
 @Slf4j
-public class LibraryFileToDBMapper implements FieldSetMapper<LibraryEntity> {
+public class LibraryFileToDBMapper implements FieldSetMapper<Library> {
 
     @Override
-    public LibraryEntity mapFieldSet(FieldSet fieldSet) {
+    public Library mapFieldSet(FieldSet fieldSet) {
         if(fieldSet == null) {
             return null;
         }
-        LibraryEntity library = new LibraryEntity();
+        Library library = new Library();
         library.setLbrryNm(fieldSet.readString("도서관명"));
         library.setCtprvnNm(fieldSet.readString("시도명"));
         library.setSignguNm(fieldSet.readString("시군구명"));
@@ -34,7 +34,7 @@ public class LibraryFileToDBMapper implements FieldSetMapper<LibraryEntity> {
         library.setNoneBookCo(fieldSet.readString("자료수(비도서)"));
         library.setLonCo(fieldSet.readString("대출가능권수"));
         library.setLonDaycnt(fieldSet.readString("대출가능일수"));
-        library.setRdnmadr(fieldSet.readString("소재지도로명주소"));
+        library.setRdnmAdr(fieldSet.readString("소재지도로명주소"));
         library.setOperInstitutionNm(fieldSet.readString("운영기관명"));
         library.setLbrryPhoneNumber(fieldSet.readString("도서관전화번호"));
         library.setPlotAr(fieldSet.readString("부지면적"));

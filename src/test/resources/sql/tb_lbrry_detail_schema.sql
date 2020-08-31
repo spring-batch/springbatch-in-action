@@ -1,0 +1,40 @@
+CREATE TABLE dbmsexpert.TB_LBRRY_DETAIL
+(
+    LBRRY_CODE        INT               NOT NULL,
+    PLOT_AR           NUMERIC(10, 2)    NULL,
+    BULD_AR           NUMERIC(10, 2)    NULL,
+    LATITUDE          DECIMAL(13,10)    NULL,
+    LONGITUDE         DECIMAL(13,10)    NULL,
+    REFERENCE_DATE    DATE              NULL,
+    INSTT_CODE        INT               NULL,
+    INSTT_NM          VARCHAR2(50)      NULL,
+    CONSTRAINT TB_LBRRY_DETAIL_PK PRIMARY KEY (LBRRY_CODE)
+)
+/
+
+COMMENT ON TABLE dbmsexpert.TB_LBRRY_DETAIL IS 'library_detail_table'
+/
+
+COMMENT ON COLUMN dbmsexpert.TB_LBRRY_DETAIL.LBRRY_CODE IS '도서관 코드'
+/
+
+COMMENT ON COLUMN dbmsexpert.TB_LBRRY_DETAIL.PLOT_AR IS '부지 면적'
+/
+
+COMMENT ON COLUMN dbmsexpert.TB_LBRRY_DETAIL.BULD_AR IS '건물 면적'
+/
+
+COMMENT ON COLUMN dbmsexpert.TB_LBRRY_DETAIL.LATITUDE IS '위도'
+/
+
+COMMENT ON COLUMN dbmsexpert.TB_LBRRY_DETAIL.LONGITUDE IS '경도'
+/
+
+COMMENT ON COLUMN dbmsexpert.TB_LBRRY_DETAIL.REFERENCE_DATE IS '데이터기준 일자'
+/
+
+COMMENT ON COLUMN dbmsexpert.TB_LBRRY_DETAIL.INSTT_CODE IS '제공기관 코드'
+/
+
+COMMENT ON COLUMN dbmsexpert.TB_LBRRY_DETAIL.INSTT_NM IS '제공기관 명'
+/

@@ -1,0 +1,16 @@
+CREATE TABLE dbmsexpert.TB_SIDO
+(
+    CTPRVN_CODE    INT             NOT NULL,
+    CTPRVN_NM      VARCHAR2(30)    NOT NULL,
+    CONSTRAINT TB_SIDO_PK PRIMARY KEY (CTPRVN_CODE)
+)
+/
+
+COMMENT ON TABLE dbmsexpert.TB_SIDO IS '시도 데이터 관리 테이블'
+/
+
+COMMENT ON COLUMN dbmsexpert.TB_SIDO.CTPRVN_CODE IS '시도 코드'
+/
+
+COMMENT ON COLUMN dbmsexpert.TB_SIDO.CTPRVN_NM IS '시도 명'
+/
