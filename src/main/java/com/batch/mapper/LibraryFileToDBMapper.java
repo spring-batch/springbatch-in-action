@@ -31,12 +31,12 @@ public class LibraryFileToDBMapper implements FieldSetMapper<LibraryTmp> {
         libraryTmp.setSeatCo(fieldSet.readString("열람좌석수"));
         libraryTmp.setBookCo(fieldSet.readString("자료수(도서)"));
         libraryTmp.setPblictnCo(fieldSet.readString("자료수(연속간행물)"));
-        libraryTmp.setNonebookCo(fieldSet.readString("자료수(비도서)"));
+        libraryTmp.setNoneBookCo(fieldSet.readString("자료수(비도서)"));
         libraryTmp.setLonCo(fieldSet.readString("대출가능권수"));
-        libraryTmp.setLondayCnt(fieldSet.readString("대출가능일수"));
+        libraryTmp.setLonDayCnt(fieldSet.readString("대출가능일수"));
         libraryTmp.setRdnmAdr(fieldSet.readString("소재지도로명주소"));
-        libraryTmp.setOperinstitutionNm(fieldSet.readString("운영기관명"));
-        libraryTmp.setLbrryPhonenumber(fieldSet.readString("도서관전화번호"));
+        libraryTmp.setOperInstitutionNm(fieldSet.readString("운영기관명"));
+        libraryTmp.setLbrryPhoneNumber(fieldSet.readString("도서관전화번호"));
         libraryTmp.setPlotAr(fieldSet.readString("부지면적"));
         libraryTmp.setBuldAr(fieldSet.readString("건물면적"));
         libraryTmp.setHomepageUrl(fieldSet.readString("홈페이지주소"));

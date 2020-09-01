@@ -19,7 +19,7 @@ public class CustomItemReadListener //implements ItemReadListener<T>
 
     @AfterRead
     public void afterRead(T item) {
-        log.info("[LOG] [READER] [AFTER] ==> ");
+        log.info("[LOG] [READER] [AFTER] ==> {} ", item);
     }
 
     @OnReadError

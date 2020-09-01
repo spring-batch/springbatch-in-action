@@ -113,12 +113,12 @@ public class LibraryTmp {
 
     @Column(name = "lbrry_nm")
     private String lbrryNm;                     /* 도서관명         */
-    @Column(name = "CTPRVN_CODE", nullable = false)
+    @Column(name = "CTPRVN_CODE")
     private Long ctprvnCode;
     @Column(name = "ctprvn_nm")
     private String ctprvnNm;                    /* 시도명          */
 
-    @Column(name = "SIGNGU_CODE", nullable = false)
+    @Column(name = "SIGNGU_CODE")
     private Long signguCode;
     @Column(name = "signgu_nm")
     private String signguNm;                    /* 시군구명         */
@@ -145,17 +145,17 @@ public class LibraryTmp {
     @Column(name = "pblictn_co")
     private String pblictnCo;                  /* 자료수(연속간행물)   */
     @Column(name = "nonebook_co")
-    private String nonebookCo;                 /* 자료수(비도서)     */
+    private String noneBookCo;                 /* 자료수(비도서)     */
     @Column(name = "lon_co")
     private String lonCo;                      /* 대출가능권수       */
     @Column(name = "londay_cnt")
-    private String londayCnt;                  /* 대출가능일수       */
+    private String lonDayCnt;                  /* 대출가능일수       */
     @Column(name = "rdnm_adr")
     private String rdnmAdr;                     /* 소재지도로명주소     */
     @Column(name = "operinstitution_nm")
-    private String operinstitutionNm;           /* 운영기관명        */
+    private String operInstitutionNm;           /* 운영기관명        */
     @Column(name = "lbrry_phonenumber")
-    private String lbrryPhonenumber;            /* 도서관전화번호      */
+    private String lbrryPhoneNumber;            /* 도서관전화번호      */
     @Column(name = "plot_ar")
     private String plotAr;                      /* 부지면적         */
     @Column(name = "buld_ar")

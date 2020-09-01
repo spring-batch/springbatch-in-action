@@ -18,9 +18,9 @@ public class Signgu {
     @NoArgsConstructor
     public enum SignguFields {
 
-        시군구코드(0, "시군구코드", "signgu_cd"),
+        시군구코드(0, "시군구코드", "signgu_code"),
         시군구명(1, "시군구명", "signgu_nm"),
-        시도코드(2, "시도코드", "sidoCd");
+        시도코드(2, "시도코드", "ctprvn_code");
 
         private int fieldIdx;
         private String fieldNm;
@@ -40,6 +40,6 @@ public class Signgu {
 
     private Integer signguCd;
     private String signguNm;
-    private Integer sidoCd;
+    private Integer ctprvnCode;
 
 }

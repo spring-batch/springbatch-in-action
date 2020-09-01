@@ -131,7 +131,7 @@ public class LibraryDbToMultiDbJobDemo {
         }};
     }
 
-    public JdbcBatchItemWriter<LibraryTmp> sidoWriter() {
+    public JdbcBatchItemWriter<LibraryTmp> sidoMultiWriter() {
         return new JdbcBatchItemWriter<LibraryTmp>() {{
             setJdbcTemplate(new NamedParameterJdbcTemplate(oracleDataSource));
             setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>());
@@ -141,7 +141,7 @@ public class LibraryDbToMultiDbJobDemo {
         }};
     }
 
-    public JdbcBatchItemWriter<LibraryTmp> signguWriter() {
+    public JdbcBatchItemWriter<LibraryTmp> signguMultiWriter() {
         return new JdbcBatchItemWriter<LibraryTmp>() {{
             setJdbcTemplate(new NamedParameterJdbcTemplate(oracleDataSource));
 
@@ -150,7 +150,7 @@ public class LibraryDbToMultiDbJobDemo {
         }};
     }
 
-    public JdbcBatchItemWriter<LibraryTmp> eupMyeonDongWriter() {
+    public JdbcBatchItemWriter<LibraryTmp> eupMyeonDongMultiWriter() {
         return new JdbcBatchItemWriter<LibraryTmp>() {{
             setJdbcTemplate(new NamedParameterJdbcTemplate(oracleDataSource));
             setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>());
@@ -165,8 +165,8 @@ public class LibraryDbToMultiDbJobDemo {
      */
     public CompositeItemWriter<LibraryTmp> multiDbWriter() throws Exception {
         List<ItemWriter<? super LibraryTmp>> writers = new ArrayList<>();
-        writers.add(sidoWriter());
-        writers.add(signguWriter());
+        writers.add(sidoMultiWriter());
+        writers.add(signguMultiWriter());
 //        writers.add(eupMyeonDongWriter());
 
         return new CompositeItemWriter<LibraryTmp>() {{
