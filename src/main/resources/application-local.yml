@@ -1,5 +1,5 @@
 spring.profiles: local
-spring.profiles.include: log, db_oracle, db_mysql, batch
+spring.profiles.include: log, db, batch
 
 spring:
   jpa:

@@ -9,12 +9,3 @@ logging:
 
       # SpringFramework Logging
       springframework: info
-      hibernate:
-        type:
-          descriptor:
-
-            # DB Query Logging
-            sql: debug
-
-
-

@@ -1,9 +1,11 @@
 package com.batch.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
+@Slf4j
+@Configuration
 /**
  * Enable Spring Batch features and provide a base configuration
  * JobRepository
@@ -15,8 +17,6 @@ import org.springframework.context.annotation.Configuration;
  * JobBuilderFactory
  */
 @EnableBatchProcessing
-/* Default DataSource를 안쓰고 Custom으로 Multi DataSource를 사용하기 위한 설정 */
-@ComponentScan(basePackageClasses = CustomBatchConfigurer.class)
-@Configuration
-public class BatchCommonConfig {
+//@ComponentScan(basePackageClasses = BatchConfigurer.class)
+public class BatchConfig {
 }
