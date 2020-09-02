@@ -1,6 +1,7 @@
 package com.batch.demo;
 
 import com.batch.domain.batch.LbrryTmpMappedEntity;
+import com.batch.domain.batch.LibraryCSV;
 import com.batch.domain.batch.LibraryTmp;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -47,7 +48,7 @@ public class LibraryFileToDbJobDemo {
     @Bean(name = "libraryFileToDbStep")
     public Step libraryFileToDbStep() {
         return stepBuilderFactory.get("libraryFileToDbStep")
-                .<LibraryTmp, LibraryTmp>chunk(CHUNK_SIZE)
+                .<LibraryCSV, LibraryTmp>chunk(CHUNK_SIZE)
                 .reader(flatFileReader())
                 .processor(fileToDbProcessor())
                 .writer(jpaItemWriter())
@@ -61,8 +62,8 @@ public class LibraryFileToDbJobDemo {
      */
     @StepScope
     @Bean(name = "libraryFileReader")
-    public FlatFileItemReader<LibraryTmp> flatFileReader() {
-        return new FlatFileItemReader<LibraryTmp>() {{
+    public FlatFileItemReader<LibraryCSV> flatFileReader() {
+        return new FlatFileItemReader<LibraryCSV>() {{
 
             /* 파일 경로 읽기 Resource 설정 (추후 외부 경로를 파라미터로 받는 방법으로 변경하기) */
             setResource(new ClassPathResource("files/전국도서관표준데이터.csv"));
@@ -72,7 +73,7 @@ public class LibraryFileToDbJobDemo {
             setLinesToSkip(1);
 
             /* [FlatFileReader 필수 설정] LineMapper 설정하기 */
-            setLineMapper(new DefaultLineMapper<LibraryTmp>() {{
+            setLineMapper(new DefaultLineMapper<LibraryCSV>() {{
 
                 /* [LineMapper 필수 설정] LineTokenizer로 데이터 Mapping */
                 setLineTokenizer(
@@ -85,9 +86,9 @@ public class LibraryFileToDbJobDemo {
                     setNames(LbrryTmpMappedEntity.getDBFieldArrays());
                 }});
                 /* [LineMapper 필수 설정]  FieldSet을 Entity와 매핑 설정*/
-                setFieldSetMapper(new BeanWrapperFieldSetMapper<LibraryTmp>() {{
+                setFieldSetMapper(new BeanWrapperFieldSetMapper<LibraryCSV>() {{
                     /* CSV 파일의 값 부분을 Vo로 매핑 하기 위한 설정 */
-                    setTargetType(LibraryTmp.class);
+                    setTargetType(LibraryCSV.class);
                 }});
             }});
             log.info("[LOG] [ITEM] [{}]", getCurrentItemCount());
@@ -96,12 +97,8 @@ public class LibraryFileToDbJobDemo {
 
     @Bean
     @StepScope
-    public ItemProcessor<? super LibraryTmp,? extends LibraryTmp> fileToDbProcessor() {
-        return item -> {
-            /* 데이터 처리 영역 */
-            log.info("[LOG] [DATA] [{}] [{}]", item.getClass(), item);
-            return item;
-        };
+    public ItemProcessor<? super LibraryCSV,? extends LibraryTmp> fileToDbProcessor() {
+        return LibraryCSV::toEntity;
     }
 
     @Bean
