@@ -13,7 +13,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class LibraryTmp {
+public class LibraryTmpEntity {
 
     @Id
     @Column(name = "lbrry_nm", nullable = false)

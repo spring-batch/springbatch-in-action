@@ -9,12 +9,9 @@ import java.util.Arrays;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public enum LbrryTmpMappedEntity {
-//    lbrryCode("lbrryCode","LBRRY_CODE"),
+public enum LibraryTmpEntityFields {
     lbrryNm("lbrryNm", "LBRRY_NM"),                     /* 도서관명 */
-//    ctprvnCode("ctprvnCode", "CTPRVN_CODE"),            /* 시도 코드  */
     ctprvnNm("ctprvnNm", "CTPRVN_NM"),
-//    signguCode("signguCode", "SIGNGU_CODE"),            /* 시군구 코드 */
     signguNm("signguNm", "SIGNGU_NM"),
     lbrrySe("lbrrySe", "LBRRY_SE"),                     /* 도서관유형    */
     closeDay("closeDay", "CLOSE_DAY"),                  /* 휴관일      */
@@ -47,13 +44,13 @@ public enum LbrryTmpMappedEntity {
     private String dbFieldNm;
 
     public static String[] getClassFieldArrays() {
-        return Arrays.stream(LbrryTmpMappedEntity.values())
-                .map(LbrryTmpMappedEntity::getClassFieldNm)
+        return Arrays.stream(LibraryTmpEntityFields.values())
+                .map(LibraryTmpEntityFields::getClassFieldNm)
                 .toArray(String[]::new);
     }
     public static String[] getDBFieldArrays() {
-        return Arrays.stream(LbrryTmpMappedEntity.values())
-                .map(LbrryTmpMappedEntity::getDbFieldNm)
+        return Arrays.stream(LibraryTmpEntityFields.values())
+                .map(LibraryTmpEntityFields::getDbFieldNm)
                 .toArray(String[]::new);
     }
 }

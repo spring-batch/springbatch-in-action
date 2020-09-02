@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class LibraryCSV {
+public class LibraryDTO {
 
     private String lbrryNm;                     /* 도서관명         */
     private String ctprvnNm;                    /* 시도명          */
@@ -41,8 +41,8 @@ public class LibraryCSV {
     private String insttNm;                     /* 제공기관명        */
 
     @Builder
-    public LibraryTmp toEntity () {
-        return LibraryTmp.builder()
+    public LibraryTmpEntity toEntity () {
+        return LibraryTmpEntity.builder()
                 .lbrryNm(lbrryNm)
                 .ctprvnNm(ctprvnNm)
                 .signguNm(signguNm)

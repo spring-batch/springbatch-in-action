@@ -10,7 +10,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public enum LibraryCSVField {
+public enum LibraryDTOFields {
     도서관명(0, "도서관명"),
     시도명(1, "시도명"),
     시군구명(2, "시군구명"),
@@ -44,8 +44,8 @@ public enum LibraryCSVField {
     private String fieldsNm;
 
     public static String[] getFieldNmArrays() {
-        return Arrays.stream(LibraryCSVField.values())
-                .map(LibraryCSVField::getFieldsNm)
+        return Arrays.stream(LibraryDTOFields.values())
+                .map(LibraryDTOFields::getFieldsNm)
                 .toArray(String[]::new);
     }
 }

@@ -1,8 +1,9 @@
 package com.batch.demo;
 
-import com.batch.domain.batch.LbrryTmpMappedEntity;
-import com.batch.domain.batch.LibraryCSV;
-import com.batch.domain.batch.LibraryTmp;
+import com.batch.domain.batch.LibraryDTO;
+import com.batch.domain.batch.LibraryTmpEntity;
+import com.batch.domain.batch.LibraryTmpEntityFields;
+import com.batch.listener.ItemReaderListener;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -45,11 +46,12 @@ public class LibraryFileToDbJobDemo {
                 .build();
     }
 
-    @Bean(name = "libraryFileToDbStep")
+    @Bean(name = "library_file_to_db_step")
     public Step libraryFileToDbStep() {
-        return stepBuilderFactory.get("libraryFileToDbStep")
-                .<LibraryCSV, LibraryTmp>chunk(CHUNK_SIZE)
+        return stepBuilderFactory.get("library_file_to_db_step")
+                .<LibraryDTO, LibraryTmpEntity>chunk(CHUNK_SIZE)
                 .reader(flatFileReader())
+                .listener(new ItemReaderListener())
                 .processor(fileToDbProcessor())
                 .writer(jpaItemWriter())
                 .build();
@@ -61,9 +63,9 @@ public class LibraryFileToDbJobDemo {
      * @return FlatFileItemReader
      */
     @StepScope
-    @Bean(name = "libraryFileReader")
-    public FlatFileItemReader<LibraryCSV> flatFileReader() {
-        return new FlatFileItemReader<LibraryCSV>() {{
+    @Bean(name = "library_file_reader")
+    public FlatFileItemReader<LibraryDTO> flatFileReader() {
+        return new FlatFileItemReader<LibraryDTO>() {{
 
             /* 파일 경로 읽기 Resource 설정 (추후 외부 경로를 파라미터로 받는 방법으로 변경하기) */
             setResource(new ClassPathResource("files/전국도서관표준데이터.csv"));
@@ -73,38 +75,34 @@ public class LibraryFileToDbJobDemo {
             setLinesToSkip(1);
 
             /* [FlatFileReader 필수 설정] LineMapper 설정하기 */
-            setLineMapper(new DefaultLineMapper<LibraryCSV>() {{
+            setLineMapper(new DefaultLineMapper<LibraryDTO>() {{
 
                 /* [LineMapper 필수 설정] LineTokenizer로 데이터 Mapping */
                 setLineTokenizer(
                         /* [DelimitedLineTokenizer 클래스의 필수 값] delimiter 설정 */
                         new DelimitedLineTokenizer(DELIMITER_COMMA) {{
-
-//                    /* line tokenizer 에 설정한 names 와 includeFields 가 읽어온 line 의 tokens 와 정확하게 일치해야 함 */
-//                    setStrict(true);
                     /*  LibraryEntitys의 key 값 매핑을 위한 Name 설정 */
-                    setNames(LbrryTmpMappedEntity.getDBFieldArrays());
+                    setNames(LibraryTmpEntityFields.getDBFieldArrays());
                 }});
                 /* [LineMapper 필수 설정]  FieldSet을 Entity와 매핑 설정*/
-                setFieldSetMapper(new BeanWrapperFieldSetMapper<LibraryCSV>() {{
+                setFieldSetMapper(new BeanWrapperFieldSetMapper<LibraryDTO>() {{
                     /* CSV 파일의 값 부분을 Vo로 매핑 하기 위한 설정 */
-                    setTargetType(LibraryCSV.class);
+                    setTargetType(LibraryDTO.class);
                 }});
             }});
-            log.info("[LOG] [ITEM] [{}]", getCurrentItemCount());
         }};
     }
 
-    @Bean
+    @Bean(name = "library_dto_to_entity_processor")
     @StepScope
-    public ItemProcessor<? super LibraryCSV,? extends LibraryTmp> fileToDbProcessor() {
-        return LibraryCSV::toEntity;
+    public ItemProcessor<? super LibraryDTO, ? extends LibraryTmpEntity> fileToDbProcessor() {
+        return LibraryDTO::toEntity;
     }
 
-    @Bean
+    @Bean(name = "library_entity_writer")
     @StepScope
-    public JpaItemWriter<LibraryTmp> jpaItemWriter() {
-        JpaItemWriter<LibraryTmp> jpaItemWriter = new JpaItemWriter<>();
+    public JpaItemWriter<LibraryTmpEntity> jpaItemWriter() {
+        JpaItemWriter<LibraryTmpEntity> jpaItemWriter = new JpaItemWriter<>();
         jpaItemWriter.setEntityManagerFactory(entityManagerFactory);
         return jpaItemWriter;
     }
