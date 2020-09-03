@@ -1,20 +1,18 @@
 package com.batch.listener;
 
-import com.batch.domain.batch.LibraryDTO;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.batch.core.ItemReadListener;
-import org.springframework.stereotype.Component;
 
 @Slf4j
-@Component
-public class ItemReaderListener implements ItemReadListener<LibraryDTO> {
+public class CustomItemReaderListener implements ItemReadListener<T> {
     @Override
     public void beforeRead() {
         log.info("[LOG] [READER] [BEFORE]");
     }
 
     @Override
-    public void afterRead(LibraryDTO item) {
+    public void afterRead(T item) {
         log.info("[LOG] [READER] [DATA] [{}]", item);
     }
 

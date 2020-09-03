@@ -19,7 +19,7 @@ import javax.sql.DataSource;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(
-        basePackages = {"com.batch.domain.batch"}
+        basePackages = {"com.batch.domain.repository"}
 )
 public class BatchDBConfig {
 
@@ -36,7 +36,7 @@ public class BatchDBConfig {
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(EntityManagerFactoryBuilder builder, @Qualifier("dataSource") DataSource dataSource) {
         return builder
                 .dataSource(dataSource)
-                .packages("com.batch.domain.batch")
+                .packages("com.batch.domain")
                 .persistenceUnit("batch")
                 .build();
     }

@@ -3,7 +3,8 @@ package com.batch.demo;
 import com.batch.domain.batch.LibraryDTO;
 import com.batch.domain.batch.LibraryTmpEntity;
 import com.batch.domain.batch.LibraryTmpEntityFields;
-import com.batch.listener.ItemReaderListener;
+import com.batch.domain.repository.LibraryTmpEntityRepository;
+import com.batch.listener.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -36,6 +37,8 @@ public class LibraryFileToDbJobDemo {
     private final StepBuilderFactory stepBuilderFactory;
     private final EntityManagerFactory entityManagerFactory;
 
+    private final LibraryTmpEntityRepository libraryTmpEntityRepository;
+
     private static final int CHUNK_SIZE = 1000;
 
     @Bean(name = "libraryFileToDbJob")
@@ -43,6 +46,7 @@ public class LibraryFileToDbJobDemo {
         return jobBuilderFactory.get("libraryFileToDbJob")
                 .incrementer(new RunIdIncrementer())
                 .start(libraryFileToDbStep())
+                .listener(new LibraryJobListener(libraryTmpEntityRepository))
                 .build();
     }
 
@@ -50,10 +54,18 @@ public class LibraryFileToDbJobDemo {
     public Step libraryFileToDbStep() {
         return stepBuilderFactory.get("library_file_to_db_step")
                 .<LibraryDTO, LibraryTmpEntity>chunk(CHUNK_SIZE)
+
+                .listener(new CustomItemReaderListener())
                 .reader(flatFileReader())
-                .listener(new ItemReaderListener())
+
+                .listener(new CustomItemProcessorListener<>())
                 .processor(fileToDbProcessor())
+
+                .listener(new CustomItemWriterListener<>())
                 .writer(jpaItemWriter())
+
+                /* Step Listener */
+                .listener(new CustomStepListener())
                 .build();
     }
 

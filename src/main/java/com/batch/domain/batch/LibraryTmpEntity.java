@@ -16,11 +16,11 @@ import javax.persistence.*;
 public class LibraryTmpEntity {
 
     @Id
-    @Column(name = "lbrry_nm", nullable = false)
+    @Column(name = "lbrry_nm")
     private String lbrryNm;                     /* 도서관명         */
-    @Column(name = "ctprvn_nm", nullable = false)
+    @Column(name = "ctprvn_nm")
     private String ctprvnNm;                    /* 시도명          */
-    @Column(name = "signgu_nm", nullable = false)
+    @Column(name = "signgu_nm")
     private String signguNm;                    /* 시군구명         */
     @Column(name = "lbrry_se")
     private String lbrrySe;                     /* 도서관유형        */
@@ -70,10 +70,14 @@ public class LibraryTmpEntity {
     @Column(name = "instt_nm")
     private String insttNm;                     /* 제공기관명        */
 
+    public Sido toSido() {
+        Integer code = 0;
+        for(Sido.SidoCodeFields nm : Sido.SidoCodeFields.values())
+            if(nm.getFieldNm().equals(ctprvnNm)) code = nm.getFieldCode();
 
-//    @Column(name = "CTPRVN_CODE")
-//    private Long ctprvnCode;
-//    @Column(name = "SIGNGU_CODE")
-//    private Long signguCode;
-
+        return Sido.builder()
+                .ctprvnCd(code)
+                .ctprvnNm(ctprvnNm)
+                .build();
+    }
 }
