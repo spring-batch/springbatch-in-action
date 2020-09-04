@@ -1,9 +1,7 @@
-package com.batch.demo;
+package com.batch.demo.library;
 
 import com.batch.domain.batch.LibraryTmpEntity;
 import com.batch.domain.batch.Sido;
-import com.batch.domain.repository.LibraryTmpEntityRepository;
-import com.batch.domain.repository.SidoRepository;
 import com.batch.listener.CustomItemProcessorListener;
 import com.batch.listener.CustomItemReaderListener;
 import com.batch.listener.CustomStepListener;
@@ -32,68 +30,50 @@ import java.util.Map;
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-public class LibraryTmpDbToOriginDbJobDemo {
+public class LibraryTmpDbToSidoDbJobDemo {
 
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
-
-    private final DataSource dataSource;
     private final EntityManagerFactory entityManagerFactory;
+    private final DataSource dataSource;
 
-    private final LibraryTmpEntityRepository libraryTmpEntityRepository;
-
-    private final SidoRepository sidoRepository;
-
+    private static final String JOB_NAME = "LIBRARY_TMP_TO_SIDO_JOB";
     private static final int CHUNK_SIZE = 1000;
 
-    @Bean(name = "library_tmpdb_to_origindb_job")
-    public Job libraryTmpDbToOriginDbJob() throws Exception {
-        return jobBuilderFactory.get("library_tmpdb_to_origindb_job")
+    @Bean(name = JOB_NAME)
+    public Job libraryTmpDbToOriginDbJob() {
+        return jobBuilderFactory.get(JOB_NAME)
                 .incrementer(new RunIdIncrementer())
-                .start(libraryTmpDbToOriginDbStep())
+                .start(libraryTmpDbToSidoDbStep())
                 .build();
     }
 
-    @Bean(name = "library_tmpdb_to_origindb_step")
-    public Step libraryTmpDbToOriginDbStep() throws Exception {
-        return stepBuilderFactory.get("library_tmpdb_to_origindb_step")
+    @Bean(name = JOB_NAME + "_STEP")
+    public Step libraryTmpDbToSidoDbStep() {
+        return stepBuilderFactory.get(JOB_NAME + "_STEP")
                 .<LibraryTmpEntity, Sido>chunk(CHUNK_SIZE)
 
                 .listener(new CustomItemReaderListener())
-                .reader(tmpDbReader())
+                .reader(libraryTmpDbToSidoDbReader())
 
                 .listener(new CustomItemProcessorListener<>())
-                .processor(tmpDbToSidoDbProcessor())
+                .processor(libraryTmpDbToSidoDbProcessor())
 
-                .writer(sidoDbWriter())
+                .writer(libraryTmpDbToSidoDbWriter())
 
                 .listener(new CustomStepListener())
                 .build();
     }
 
     @Bean(name = "sidoDb_writer")
-    public JpaItemWriter<Sido> sidoDbWriter() {
+    public JpaItemWriter<Sido> libraryTmpDbToSidoDbWriter() {
         return new JpaItemWriter<Sido>() {{
            setEntityManagerFactory(entityManagerFactory);
         }};
     }
 
-    @Bean
-    @StepScope
-    public ItemProcessor<? super LibraryTmpEntity, Sido> tmpDbToSidoDbProcessor() {
-        return new ItemProcessor<LibraryTmpEntity, Sido>() {
-            @Override
-            public Sido process(LibraryTmpEntity item) throws Exception {
-                log.info("[PROCESSOR] [ITEM] [{}]", item);
-                /* 없으면 code 매핑해서 저장 */
-                return item.toSido();
-            }
-        };
-    }
-
     @Bean(name = "tmpDb_reader")
-    @StepScope
-    public JdbcPagingItemReader<? extends LibraryTmpEntity> tmpDbReader() throws Exception {
+    public JdbcPagingItemReader<? extends LibraryTmpEntity> libraryTmpDbToSidoDbReader() {
         return new JdbcPagingItemReader<LibraryTmpEntity>() {{
             setName("tmpDbReader");
             setFetchSize(1000);
@@ -147,5 +127,12 @@ public class LibraryTmpDbToOriginDbJobDemo {
             setFromClause(fromClause.toString());
             setSortKeys(sortKeys);
         }};
+    }
+
+    @Bean
+    @StepScope
+    public ItemProcessor<? super LibraryTmpEntity, Sido> libraryTmpDbToSidoDbProcessor() {
+        /* 없으면 code 매핑해서 저장 */
+        return (ItemProcessor<LibraryTmpEntity, Sido>) LibraryTmpEntity::toSido;
     }
 }

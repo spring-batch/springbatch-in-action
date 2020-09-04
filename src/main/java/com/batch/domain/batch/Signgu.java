@@ -1,15 +1,16 @@
 package com.batch.domain.batch;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import javax.persistence.*;
 import java.util.Arrays;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
+@Entity
+@Table(name = "TB_SIGNGU")
 public class Signgu {
 
     @SuppressWarnings("NonAsciiCharacters")
@@ -38,8 +39,12 @@ public class Signgu {
         }
     }
 
+    @Id
+    @Column(name = "signgu_code")
     private Integer signguCd;
+    @Column(name = "signgu_nm")
     private String signguNm;
-    private Integer ctprvnCode;
+    @Column(name = "ctprvn_code")
+    private Integer ctprvnCd;
 
 }

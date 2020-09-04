@@ -1,4 +1,4 @@
-package com.batch.demo;
+package com.batch.demo.library;
 
 import com.batch.domain.batch.LibraryDTO;
 import com.batch.domain.batch.LibraryTmpEntity;
@@ -114,8 +114,8 @@ public class LibraryFileToDbJobDemo {
     @Bean(name = "library_entity_writer")
     @StepScope
     public JpaItemWriter<LibraryTmpEntity> jpaItemWriter() {
-        JpaItemWriter<LibraryTmpEntity> jpaItemWriter = new JpaItemWriter<>();
-        jpaItemWriter.setEntityManagerFactory(entityManagerFactory);
-        return jpaItemWriter;
+        return new JpaItemWriter<LibraryTmpEntity>() {{
+            setEntityManagerFactory(entityManagerFactory);
+        }};
     }
 }
