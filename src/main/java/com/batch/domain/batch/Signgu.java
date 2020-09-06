@@ -21,7 +21,9 @@ public class Signgu {
 
         시군구코드(0, "시군구코드", "signgu_code"),
         시군구명(1, "시군구명", "signgu_nm"),
-        시도코드(2, "시도코드", "ctprvn_code");
+        시도코드(2, "시도코드", "ctprvn_code"),
+        읍면동코드(3, "읍면동코드", "eupmyeondong_code"),
+        읍면동명(4, "읍면동명", "eupmyeondong_nm");
 
         private int fieldIdx;
         private String fieldNm;
@@ -40,11 +42,16 @@ public class Signgu {
     }
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "signgu_code")
-    private Integer signguCd;
+    private Integer signguCode;
+
     @Column(name = "signgu_nm")
     private String signguNm;
     @Column(name = "ctprvn_code")
-    private Integer ctprvnCd;
-
+    private Integer ctprvnCode;
+    @Column(name = "eupmyeondong_code")
+    private Integer eupMyeonDongCode;
+    @Column(name = "eupmyeondong_nm")
+    private String eupMyeonDongNm;
 }

@@ -39,20 +39,21 @@ public class LibraryFileToDbJobDemo {
 
     private final LibraryTmpEntityRepository libraryTmpEntityRepository;
 
+    private static final String JOB_NAME = "LIBRARY_FILE_TO_TMP_JOB";
     private static final int CHUNK_SIZE = 1000;
 
-    @Bean(name = "libraryFileToDbJob")
+    @Bean(name = JOB_NAME)
     public Job libraryFileToDbJob() {
-        return jobBuilderFactory.get("libraryFileToDbJob")
+        return jobBuilderFactory.get(JOB_NAME)
                 .incrementer(new RunIdIncrementer())
                 .start(libraryFileToDbStep())
                 .listener(new LibraryJobListener(libraryTmpEntityRepository))
                 .build();
     }
 
-    @Bean(name = "library_file_to_db_step")
+    @Bean(name = JOB_NAME + "_STEP")
     public Step libraryFileToDbStep() {
-        return stepBuilderFactory.get("library_file_to_db_step")
+        return stepBuilderFactory.get(JOB_NAME + "_STEP")
                 .<LibraryDTO, LibraryTmpEntity>chunk(CHUNK_SIZE)
 
                 .listener(new CustomItemReaderListener())
@@ -75,7 +76,7 @@ public class LibraryFileToDbJobDemo {
      * @return FlatFileItemReader
      */
     @StepScope
-    @Bean(name = "library_file_reader")
+    @Bean(name = "LIBRARY_FILE_READER")
     public FlatFileItemReader<LibraryDTO> flatFileReader() {
         return new FlatFileItemReader<LibraryDTO>() {{
 
@@ -105,13 +106,13 @@ public class LibraryFileToDbJobDemo {
         }};
     }
 
-    @Bean(name = "library_dto_to_entity_processor")
+    @Bean(name = "LIBRARY_DTO_TO_ENTITY_PROCESSOR")
     @StepScope
     public ItemProcessor<? super LibraryDTO, ? extends LibraryTmpEntity> fileToDbProcessor() {
         return LibraryDTO::toEntity;
     }
 
-    @Bean(name = "library_entity_writer")
+    @Bean(name = "LIBRARY_ENTITY_WRITER")
     @StepScope
     public JpaItemWriter<LibraryTmpEntity> jpaItemWriter() {
         return new JpaItemWriter<LibraryTmpEntity>() {{

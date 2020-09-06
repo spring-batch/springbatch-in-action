@@ -51,9 +51,11 @@ public class SignguCSV {
 
     public Signgu toEntity() {
         return Signgu.builder()
-                .ctprvnCd(largeClass)
-                .signguCd(smallClass)
-                .signguNm(signguNm + " " + eupMyeonDongNm)
+                .signguCode(midClass)
+                .signguNm(signguNm)
+                .ctprvnCode(largeClass)
+                .eupMyeonDongCode(smallClass)
+                .eupMyeonDongNm(eupMyeonDongNm)
                 .build();
     }
 }

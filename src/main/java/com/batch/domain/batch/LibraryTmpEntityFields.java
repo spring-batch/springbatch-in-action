@@ -30,10 +30,10 @@ public enum LibraryTmpEntityFields {
     rdnmAdr("rdnmAdr", "RDNM_ADR"),                                             /* */
     operInstitutionNm("operInstitutionNm", "OPERINSTITUTION_NM"),               /* */
     lbrryPhoneNumber("lbrryPhoneNumber", "LBRRY_PHONENUMBER"),                  /* */
-    homepageUrl("homepageUrl", "HOMEPAGEURL"),                                  /* */
-
     plotAr("plotAr", "PLOT_AR"),
     buldAr("buldAr", "BULD_AR"),
+    homepageUrl("homepageUrl", "HOMEPAGEURL"),                                  /* */
+
     latitude("latitude", "LATITUDE"),
     longitude("longitude", "LONGITUDE"),
     referenceDate("referenceDate", "REFERENCE_DATE"),

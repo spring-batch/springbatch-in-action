@@ -1,5 +1,5 @@
 spring.profiles: db
-spring.profiles.include: db_mysql, db_oracle
+spring.profiles.include: db_mysql #, db_oracle
 
 spring:
   h2:
@@ -15,4 +15,4 @@ logging:
           descriptor:
 
             # DB Query Logging
-            sql: info
+            sql: debug

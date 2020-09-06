@@ -14,7 +14,7 @@ public class ConsoleItemWriter<T> implements ItemWriter<T> {
     @Override
     public void write(List<? extends T> items) {
         for(T item : items) {
-//            log.info("[LOG] Console Writer : {}", item);
+            log.info("[LOG] Console Writer : {}", item);
         }
     }
 }

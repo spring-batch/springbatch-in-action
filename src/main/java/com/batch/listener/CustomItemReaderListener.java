@@ -3,8 +3,10 @@ package com.batch.listener;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.formula.functions.T;
 import org.springframework.batch.core.ItemReadListener;
+import org.springframework.stereotype.Component;
 
 @Slf4j
+@Component
 public class CustomItemReaderListener implements ItemReadListener<T> {
     @Override
     public void beforeRead() {

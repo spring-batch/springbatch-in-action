@@ -15,11 +15,12 @@ public class CustomItemProcessorListener<T, S> implements ItemProcessListener<T,
 
     @Override
     public void afterProcess(T item, S result) {
-        log.info("[LOG] [PROCESSOR] [AFTER] [{}] [{}]", item, result);
+        log.info("[LOG] [PROCESSOR] [AFTER] [ITEM] [{}]", item);
+        log.info("[LOG] [PROCESSOR] [AFTER] [RESULT] [{}]", result);
     }
 
     @Override
     public void onProcessError(T item, Exception e) {
-        log.info("[LOG] [PROCESSOR] [ERROR] [{}] [{}]", item, e.getMessage());
+        log.info("[LOG] [PROCESSOR] [ERROR] [{}] [{}]", item, e.getStackTrace());
     }
 }

@@ -1,30 +1,29 @@
 package com.batch.domain.batch;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
-@Table(name = "CSV_TABLE")
+@Table(name = "TB_LBRRY")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class LibraryTmpEntity {
+public class LibraryEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "lbrry_code")
+    private Integer lbrryCode;                     /* 도서관명         */
+
     @Column(name = "lbrry_nm")
     private String lbrryNm;                     /* 도서관명         */
-    @Column(name = "ctprvn_nm")
-    private String ctprvnNm;                    /* 시도명          */
-    @Column(name = "signgu_nm")
-    private String signguNm;                    /* 시군구명         */
+    @Column(name = "ctprvn_code")
+    private Integer ctprvnCode;                    /* 시도명          */
+    @Column(name = "signgu_code")
+    private Integer signguCode;                    /* 시군구명         */
+
     @Column(name = "lbrry_se")
     private String lbrrySe;                     /* 도서관유형        */
     @Column(name = "close_day")
@@ -59,28 +58,45 @@ public class LibraryTmpEntity {
     private String operinstitutionNm;           /* 운영기관명        */
     @Column(name = "lbrry_phonenumber")
     private String lbrryPhonenumber;            /* 도서관전화번호      */
-    @Column(name = "plot_ar")
-    private String plotAr;                      /* 부지면적         */
-    @Column(name = "buld_ar")
-    private String buldAr;                      /* 건물면적         */
     private String homepageUrl;                 /* 홈페이지주소       */
-    private String latitude;                /* 위도           */
-    private String longitude;               /* 경도           */
-    @Column(name = "reference_date")
-    private String referenceDate;        /* 데이터기준일자      */
-    @Column(name = "instt_code")
-    private String insttCode;                   /* 제공기관코드       */
-    @Column(name = "instt_nm")
-    private String insttNm;                     /* 제공기관명        */
 
-    public Sido toSido() {
-        Integer code = 0;
-        for(Sido.SidoCodeFields nm : Sido.SidoCodeFields.values())
-            if(nm.getFieldNm().equals(ctprvnNm)) code = nm.getFieldCode();
+    public LibraryTotalEntity toEntity(Sido sido, Signgu signgu, LibraryDetailEntity libraryDetailEntity) {
+        return LibraryTotalEntity.builder()
+                .lbrryCode(lbrryCode)
 
-        return Sido.builder()
-                .ctprvnCode(code)
-                .ctprvnNm(ctprvnNm)
+                .ctprvnCode(ctprvnCode)
+                .ctprvnNm(sido.getCtprvnNm())
+                .signguCode(signguCode)
+                .signguNm(signgu.getSignguNm())
+
+                .closeDay(closeDay)
+                .weekdayOperCloseHhmm(weekdayOperCloseHhmm)
+                .weekdayOperOpenHhmm(weekdayOperOpenHhmm)
+                .satOperCloseHhmm(satOperCloseHhmm)
+                .satOperOpenHhmm(satOperOpenHhmm)
+                .holidayOperCloseHhmm(holidayOperCloseHhmm)
+                .holidayOperOpenHhmm(holidayOperOpenHhmm)
+                .homepageUrl(homepageUrl)
+                .lbrryNm(lbrryNm)
+                .lbrryPhonenumber(lbrryPhonenumber)
+                .lbrrySe(lbrrySe)
+                .lonCo(lonCo)
+                .londayCnt(londayCnt)
+                .pblictnCo(pblictnCo)
+                .rdnmAdr(rdnmAdr)
+                .seatCo(seatCo)
+                .bookCo(bookCo)
+                .nonebookCo(nonebookCo)
+                .operinstitutionNm(operinstitutionNm)
+
+                .referenceDate(libraryDetailEntity.getReferenceDate())
+                .plotAr(libraryDetailEntity.getPlotAr())
+                .buldAr(libraryDetailEntity.getBuldAr())
+                .latitude(libraryDetailEntity.getLatitude())
+                .longitude(libraryDetailEntity.getLongitude())
+
+                .insttCode(libraryDetailEntity.getInsttCode())
+                .insttNm(libraryDetailEntity.getInsttNm())
                 .build();
     }
 }

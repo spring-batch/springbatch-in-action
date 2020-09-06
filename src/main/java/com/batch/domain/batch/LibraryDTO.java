@@ -40,6 +40,9 @@ public class LibraryDTO {
     private String insttCode;                   /* 제공기관코드       */
     private String insttNm;                     /* 제공기관명        */
 
+    private String ctprvnCode;                    /* 시도코드         */
+    private String signguCode;                    /* 시군구코드          */
+
     @Builder
     public LibraryTmpEntity toEntity () {
         return LibraryTmpEntity.builder()
@@ -49,15 +52,15 @@ public class LibraryDTO {
                 .lbrrySe(lbrrySe)
                 .closeDay(closeDay)
                 .homepageUrl(homepageUrl)
-                .lbrryPhoneNumber(lbrryPhoneNumber)
+                .lbrryPhonenumber(lbrryPhoneNumber)
                 .bookCo(bookCo)
                 .lonCo(lonCo)
-                .lonDayCnt(lonDayCnt)
-                .noneBookCo(noneBookCo)
+                .londayCnt(lonDayCnt)
+                .nonebookCo(noneBookCo)
                 .pblictnCo(pblictnCo)
                 .seatCo(seatCo)
                 .rdnmAdr(rdnmAdr)
-                .operInstitutionNm(operInstitutionNm)
+                .operinstitutionNm(operInstitutionNm)
                 .weekdayOperCloseHhmm(weekdayOperCloseHhmm)
                 .weekdayOperOpenHhmm(weekdayOperOpenHhmm)
                 .satOperCloseHhmm(satOperCloseHhmm)

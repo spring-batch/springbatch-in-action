@@ -33,7 +33,7 @@ dependencies {
     /* DB */
     runtimeOnly("com.h2database:h2")
     runtimeOnly('mysql:mysql-connector-java')
-    runtimeOnly("com.oracle.database.jdbc:ojdbc8-production:19.7.0.0")
+//    runtimeOnly("com.oracle.database.jdbc:ojdbc8-production:19.7.0.0")
 
     /* Excel*/
     implementation("org.apache.poi:poi:4.1.2")          // .xlsx

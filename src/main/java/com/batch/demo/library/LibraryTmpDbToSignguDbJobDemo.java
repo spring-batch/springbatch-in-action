@@ -2,9 +2,12 @@ package com.batch.demo.library;
 
 import com.batch.domain.batch.LibraryTmpEntity;
 import com.batch.domain.batch.Sido;
+import com.batch.domain.batch.Signgu;
+import com.batch.domain.repository.SidoEntityRepository;
+import com.batch.listener.CustomItemProcessorListener;
 import com.batch.listener.CustomItemReaderListener;
+import com.batch.listener.CustomItemWriterListener;
 import com.batch.listener.CustomStepListener;
-import com.batch.writer.ConsoleItemWriter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -13,7 +16,10 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
+import org.springframework.batch.item.ItemProcessor;
+import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.JdbcPagingItemReader;
+import org.springframework.batch.item.database.JpaItemWriter;
 import org.springframework.batch.item.database.Order;
 import org.springframework.batch.item.database.support.MySqlPagingQueryProvider;
 import org.springframework.context.annotation.Bean;
@@ -34,8 +40,10 @@ public class LibraryTmpDbToSignguDbJobDemo {
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
 
-    private final DataSource dataSource;
+    private final SidoEntityRepository sidoEntityRepository;
+
     private final EntityManagerFactory entityManagerFactory;
+    private final DataSource dataSource;
 
     private static final int CHUNK_SIZE = 1000;
 
@@ -50,22 +58,49 @@ public class LibraryTmpDbToSignguDbJobDemo {
     @Bean(name = JOB_NAME + "_STEP")
     public Step libraryTmpDbToSignguDbStep() {
         return stepBuilderFactory.get(JOB_NAME + "_STEP")
-                .<LibraryTmpEntity, Sido>chunk(CHUNK_SIZE)
+                .<LibraryTmpEntity, Signgu>chunk(CHUNK_SIZE)
 
                 .listener(new CustomItemReaderListener())
-                .reader(tmpDbToSidoReader())
+                .reader(tmpDbToSignguReader())
 
-                .writer(new ConsoleItemWriter<>())
+                .listener(new CustomItemProcessorListener<>())
+                .processor(tmpDbToSignguDbProcessor())
+
+                .listener(new CustomItemWriterListener<>())
+                .writer(signguDbWriter())
 
                 .listener(new CustomStepListener())
                 .build();
     }
 
-    @Bean(name = "tmpDb_reader")
+
+    @Bean(name = "SIGNGU_DB_WRITER")
     @StepScope
-    public JdbcPagingItemReader<? extends LibraryTmpEntity> tmpDbToSidoReader() {
+    public ItemWriter<? super Signgu> signguDbWriter() {
+        return new JpaItemWriter<Signgu>() {{
+            setEntityManagerFactory(entityManagerFactory);
+        }};
+    }
+
+    @StepScope
+    public ItemProcessor<? super LibraryTmpEntity,? extends Signgu> tmpDbToSignguDbProcessor() {
+        return item -> {
+            Sido sido = sidoEntityRepository.findByCtprvnNm(item.getCtprvnNm());
+            return Signgu.builder()
+                    .signguNm(item.getSignguNm())
+                    .ctprvnCode(sido.getCtprvnCode())
+                    .eupMyeonDongNm(null)
+                    .eupMyeonDongCode(null)
+                    .build();
+        };
+    }
+
+    @Bean(name = "LIBRARY_TMP_TO_SIGNGU_READER")
+    @StepScope
+    public JdbcPagingItemReader<? extends LibraryTmpEntity> tmpDbToSignguReader() {
         return new JdbcPagingItemReader<LibraryTmpEntity>() {{
-            setName("tmpDbReader");
+            setName("LIBRARY_TMP_TO_SIGNGU_READER");
+            setPageSize(1000);
             setFetchSize(1000);
             setDataSource(dataSource);
             setQueryProvider(dbToDbProvider());
@@ -78,45 +113,21 @@ public class LibraryTmpDbToSignguDbJobDemo {
         StringBuffer selectClause = new StringBuffer();
         StringBuffer fromClause = new StringBuffer();
 
-        selectClause.append("	A.LBRRY_NM,");
-        selectClause.append("	A.CTPRVN_NM,");
-        selectClause.append("	A.SIGNGU_NM,");
-        selectClause.append("	A.LBRRY_SE,");
-        selectClause.append("	A.CLOSE_DAY,");
-        selectClause.append("	A.WEEKDAY_OPER_OPEN_HHMM,");
-        selectClause.append("	A.WEEKDAY_OPER_CLOSE_HHMM,");
-        selectClause.append("	A.SAT_OPER_OPEN_HHMM,");
-        selectClause.append("	A.SAT_OPER_CLOSE_HHMM,");
-        selectClause.append("	A.HOLIDAY_OPER_OPEN_HHMM,");
-        selectClause.append("	A.HOLIDAY_OPER_CLOSE_HHMM,");
-        selectClause.append("	A.SEAT_CO,");
-        selectClause.append("	A.BOOK_CO,");
-        selectClause.append("	A.PBLICTN_CO,");
-        selectClause.append("	A.NONEBOOK_CO,");
-        selectClause.append("	A.LON_CO,");
-        selectClause.append("	A.LONDAY_CNT,");
-        selectClause.append("	A.RDNM_ADR,");
-        selectClause.append("	A.OPERINSTITUTION_NM,");
-        selectClause.append("	A.LBRRY_PHONENUMBER,");
-        selectClause.append("	A.PLOT_AR,");
-        selectClause.append("	A.BULD_AR,");
-        selectClause.append("	A.HOMEPAGEURL,");
-        selectClause.append("	A.LATITUDE,");
-        selectClause.append("	A.LONGITUDE,");
-        selectClause.append("	A.REFERENCE_DATE,");
-        selectClause.append("	A.INSTT_CODE,");
-        selectClause.append("	A.INSTT_NM");
+        selectClause.append("CTPRVN_NM,");
+        selectClause.append("SIGNGU_NM ");
 
-        fromClause.append("FROM CSV_TABLE A ");
-        fromClause.append("JOIN TB_SIDO B ");
-        fromClause.append("ON A.CTPRVN_NM = B.CTPRVN_NM ");
+        fromClause.append("CSV_TABLE");
+
+        StringBuffer groupByClause = new StringBuffer();
+        groupByClause.append("CTPRVN_NM, SIGNGU_NM");
 
         Map<String, Order> sortKeys = new HashMap<>(1);
-        sortKeys.put("A.LBRRY_NM", Order.DESCENDING);
+        sortKeys.put("CTPRVN_NM", Order.DESCENDING);
 
         return new MySqlPagingQueryProvider() {{
             setSelectClause(selectClause.toString());
             setFromClause(fromClause.toString());
+            setGroupClause(groupByClause.toString());
             setSortKeys(sortKeys);
         }};
     }

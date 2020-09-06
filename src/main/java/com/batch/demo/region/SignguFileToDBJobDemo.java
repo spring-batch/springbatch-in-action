@@ -11,7 +11,6 @@ import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
-import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
@@ -64,7 +63,6 @@ public class SignguFileToDBJobDemo {
     }
 
     @Bean
-    @StepScope
     public ItemReader<? extends SignguCSV> signguFileReader() {
         return new FlatFileItemReader<SignguCSV>() {{
             setResource(new ClassPathResource("files/행정구역분류표.csv"));
@@ -81,22 +79,17 @@ public class SignguFileToDBJobDemo {
     }
 
     @Bean
-    @StepScope
     public ItemProcessor<? super SignguCSV,? extends Signgu> fileToDbProcessor() {
         return signguCSV -> {
-            if(signguCSV.getSmallClass() != null) {
-                return signguCSV.toEntity();
-            }
+            if(signguCSV.getMidClass() != null) return signguCSV.toEntity();
             return null;
         };
     }
 
     @Bean
-    @StepScope
     public JpaItemWriter<Signgu> signguDbWriter() {
         return new JpaItemWriter<Signgu>() {{
             setEntityManagerFactory(entityManagerFactory);
         }};
     }
-
 }

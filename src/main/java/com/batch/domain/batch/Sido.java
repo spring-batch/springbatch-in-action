@@ -83,7 +83,7 @@ public class Sido {
 
     @Id
     @Column(name = "ctprvn_code")
-    private Integer ctprvnCd;
+    private Integer ctprvnCode;
     @Column(name = "ctprvn_nm")
     private String ctprvnNm;
 }

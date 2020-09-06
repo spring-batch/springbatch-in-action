@@ -17,6 +17,5 @@ import org.springframework.context.annotation.Configuration;
  * JobBuilderFactory
  */
 @EnableBatchProcessing
-//@ComponentScan(basePackageClasses = BatchConfigurer.class)
 public class BatchConfig {
 }
