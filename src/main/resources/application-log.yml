@@ -4,7 +4,7 @@ logging.level.org.springframework.batch: debug
 
 logging:
   level:
-    root: info
+    root: DEBUG
     org:
 
       # SpringFramework Logging

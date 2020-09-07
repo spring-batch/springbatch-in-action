@@ -1,20 +1,21 @@
 package com.batch.demo.library;
 
+import com.batch.common.listener.CustomItemProcessorListener;
+import com.batch.common.listener.CustomItemReaderListener;
+import com.batch.common.listener.CustomItemWriterListener;
 import com.batch.demo.library.domain.LibraryEntity;
 import com.batch.demo.library.domain.LibraryTmpEntity;
 import com.batch.demo.library.domain.Sido;
 import com.batch.demo.library.domain.Signgu;
 import com.batch.demo.library.repository.SidoEntityRepository;
 import com.batch.demo.library.repository.SignguEntityRepository;
-import com.batch.common.listener.CustomItemProcessorListener;
-import com.batch.common.listener.CustomItemReaderListener;
-import com.batch.common.listener.CustomItemWriterListener;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.database.JdbcPagingItemReader;
@@ -55,6 +56,7 @@ public class LibraryTmpDbToLibraryDbJobDemo {
                 .build();
     }
 
+    @StepScope
     @Bean(name = JOB_NAME + "_STEP")
     public Step libraryTmpToLibraryStep() {
         return stepBuilderFactory.get(JOB_NAME + "_STEP")
@@ -73,6 +75,7 @@ public class LibraryTmpDbToLibraryDbJobDemo {
     }
 
     @Bean
+    @StepScope
     public JdbcPagingItemReader<? extends LibraryTmpEntity> tmpToLibraryReader() {
         return new JdbcPagingItemReader<LibraryTmpEntity>() {{
             setName("LIBRARY_TMP_TO_LIBRARY_READER");
@@ -130,7 +133,9 @@ public class LibraryTmpDbToLibraryDbJobDemo {
         }};
     }
 
-    private ItemProcessor<? super LibraryTmpEntity,? extends LibraryEntity> tmpProcessor() {
+    @Bean(name = JOB_NAME + "_PROCESSOR")
+    @StepScope
+    public ItemProcessor<? super LibraryTmpEntity,? extends LibraryEntity> tmpProcessor() {
         return item -> {
             Sido sido = sidoEntityRepository.findByCtprvnNm(item.getCtprvnNm());
             Signgu signgu = signguEntityRepository.findBySignguNmAndCtprvnCode(item.getSignguNm(), sido.getCtprvnCode());
@@ -166,6 +171,7 @@ public class LibraryTmpDbToLibraryDbJobDemo {
     }
 
     @Bean(name = "LIBRARY_WRITER")
+    @StepScope
     public JpaItemWriter<LibraryEntity> libraryEntityJpaItemWriter() {
         return new JpaItemWriter<LibraryEntity>() {{
             setEntityManagerFactory(entityManagerFactory);

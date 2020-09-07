@@ -18,6 +18,8 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import static com.batch.common.utils.StringUtils.NVL;
+
 /**
  * Custom ItemStreamWriter
  *
@@ -129,10 +131,10 @@ public class CustomExcelItemWriter implements ItemStreamWriter<LibraryTotalEntit
             createCell(sxssfRow, libraryTotalEntity.getOperinstitutionNm(), 21, HorizontalAlignment.CENTER, VerticalAlignment.CENTER);
             createCell(sxssfRow, libraryTotalEntity.getLbrryPhonenumber(), 22, HorizontalAlignment.CENTER, VerticalAlignment.CENTER);
             createCell(sxssfRow, libraryTotalEntity.getHomepageUrl(), 23, HorizontalAlignment.CENTER, VerticalAlignment.CENTER);
-            createCell(sxssfRow, String.valueOf(libraryTotalEntity.getPlotAr()), 24, HorizontalAlignment.CENTER, VerticalAlignment.CENTER);
-            createCell(sxssfRow, String.valueOf(libraryTotalEntity.getBuldAr()), 25, HorizontalAlignment.CENTER, VerticalAlignment.CENTER);
-            createCell(sxssfRow, String.valueOf(libraryTotalEntity.getLatitude()), 26, HorizontalAlignment.CENTER, VerticalAlignment.CENTER);
-            createCell(sxssfRow, String.valueOf(libraryTotalEntity.getLongitude()), 27, HorizontalAlignment.CENTER, VerticalAlignment.CENTER);
+            createCell(sxssfRow, NVL(String.valueOf(libraryTotalEntity.getPlotAr()), ""), 24, HorizontalAlignment.CENTER, VerticalAlignment.CENTER);
+            createCell(sxssfRow, NVL(String.valueOf(libraryTotalEntity.getBuldAr()), ""), 25, HorizontalAlignment.CENTER, VerticalAlignment.CENTER);
+            createCell(sxssfRow, NVL(String.valueOf(libraryTotalEntity.getLatitude()), ""), 26, HorizontalAlignment.CENTER, VerticalAlignment.CENTER);
+            createCell(sxssfRow, NVL(String.valueOf(libraryTotalEntity.getLongitude()), ""), 27, HorizontalAlignment.CENTER, VerticalAlignment.CENTER);
             createCell(sxssfRow, libraryTotalEntity.getReferenceDate(), 28, HorizontalAlignment.CENTER, VerticalAlignment.CENTER);
             createCell(sxssfRow, libraryTotalEntity.getInsttCode(), 29, HorizontalAlignment.CENTER, VerticalAlignment.CENTER);
             createCell(sxssfRow, libraryTotalEntity.getInsttNm(), 30, HorizontalAlignment.CENTER, VerticalAlignment.CENTER);

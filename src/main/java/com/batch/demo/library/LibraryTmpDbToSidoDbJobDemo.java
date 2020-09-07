@@ -69,6 +69,7 @@ public class LibraryTmpDbToSidoDbJobDemo {
                 .build();
     }
 
+    @StepScope
     @Bean(name = "sidoDb_writer")
     public JpaItemWriter<Sido> libraryTmpDbToSidoDbWriter() {
         return new JpaItemWriter<Sido>() {{
@@ -76,6 +77,7 @@ public class LibraryTmpDbToSidoDbJobDemo {
         }};
     }
 
+    @StepScope
     @Bean(name = "tmpDb_reader")
     public JdbcPagingItemReader<? extends LibraryTmpEntity> libraryTmpDbToSidoDbReader() {
         return new JdbcPagingItemReader<LibraryTmpEntity>() {{

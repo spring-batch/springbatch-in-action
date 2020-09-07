@@ -1,7 +1,5 @@
 package com.batch.demo.library;
 
-import com.batch.common.listener.CustomItemReaderListener;
-import com.batch.common.listener.CustomItemWriterListener;
 import com.batch.demo.library.domain.*;
 import com.batch.demo.library.repository.LibraryDetailEntityRepository;
 import com.batch.demo.library.repository.SidoEntityRepository;
@@ -13,6 +11,7 @@ import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.database.JdbcPagingItemReader;
@@ -57,18 +56,14 @@ public class LibraryToReportFileJobDemo {
         return stepBuilderFactory.get(JOB_NAME + "_STEP")
                 .<LibraryEntity, LibraryTotalEntity>chunk(CHUNK_SIZE)
 
-                .listener(new CustomItemReaderListener())
                 .reader(libraryTotalReader())
-
-//                .listener(new CustomItemProcessorListener<>())
                 .processor(libraryToLibraryTotalProcessor())
-
-                .listener(new CustomItemWriterListener<>())
                 .writer(new CustomExcelItemWriter())
 
                 .build();
     }
 
+    @StepScope
     @Bean(name = JOB_NAME + "_READER")
     public JdbcPagingItemReader<? extends LibraryEntity> libraryTotalReader() {
         return new JdbcPagingItemReader<LibraryEntity>() {{
@@ -118,6 +113,7 @@ public class LibraryToReportFileJobDemo {
             }};
     }
 
+    @StepScope
     @Bean(name = JOB_NAME + "_PROCESSOR")
     public ItemProcessor<? super LibraryEntity,? extends LibraryTotalEntity> libraryToLibraryTotalProcessor() {
         return item -> {
