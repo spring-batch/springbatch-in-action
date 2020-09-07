@@ -1,12 +1,12 @@
 package com.batch.demo.library;
 
-import com.batch.domain.batch.*;
-import com.batch.domain.repository.LibraryDetailEntityRepository;
-import com.batch.domain.repository.SidoEntityRepository;
-import com.batch.domain.repository.SignguEntityRepository;
-import com.batch.listener.CustomItemReaderListener;
-import com.batch.listener.CustomItemWriterListener;
-import com.batch.writer.CustomWriterExcel;
+import com.batch.demo.library.domain.*;
+import com.batch.demo.library.repository.LibraryDetailEntityRepository;
+import com.batch.demo.library.repository.SidoEntityRepository;
+import com.batch.demo.library.repository.SignguEntityRepository;
+import com.batch.common.listener.CustomItemReaderListener;
+import com.batch.common.listener.CustomItemWriterListener;
+import com.batch.demo.library.writer.CustomExcelItemWriter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -36,9 +36,9 @@ public class LibraryTotalToReportFileJobDemo {
     private final StepBuilderFactory stepBuilderFactory;
 
     private final DataSource dataSource;
-    private final SidoEntityRepository sidoEntityRepository;
-    private final SignguEntityRepository signguEntityRepository;
-    private final LibraryDetailEntityRepository libraryDetailEntityRepository;
+    private SidoEntityRepository sidoEntityRepository;
+    private SignguEntityRepository signguEntityRepository;
+    private LibraryDetailEntityRepository libraryDetailEntityRepository;
 
     private static final Integer CHUNK_SIZE = 1000;
 
@@ -63,7 +63,7 @@ public class LibraryTotalToReportFileJobDemo {
                 .processor(libraryToLibraryTotalProcessor())
 
                 .listener(new CustomItemWriterListener<>())
-                .writer(new CustomWriterExcel())
+                .writer(new CustomExcelItemWriter())
 
                 .build();
     }

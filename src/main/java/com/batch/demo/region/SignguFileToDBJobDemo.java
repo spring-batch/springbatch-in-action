@@ -1,10 +1,10 @@
 package com.batch.demo.region;
 
-import com.batch.domain.batch.Signgu;
-import com.batch.domain.batch.SignguCSV;
-import com.batch.listener.CustomItemProcessorListener;
-import com.batch.listener.CustomItemReaderListener;
-import com.batch.listener.CustomItemWriterListener;
+import com.batch.demo.library.domain.Signgu;
+import com.batch.demo.region.domain.SignguCSV;
+import com.batch.common.listener.CustomItemProcessorListener;
+import com.batch.common.listener.CustomItemReaderListener;
+import com.batch.common.listener.CustomItemWriterListener;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;

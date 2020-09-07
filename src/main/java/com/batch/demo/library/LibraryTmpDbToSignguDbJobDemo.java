@@ -1,13 +1,15 @@
 package com.batch.demo.library;
 
-import com.batch.domain.batch.LibraryTmpEntity;
-import com.batch.domain.batch.Sido;
-import com.batch.domain.batch.Signgu;
-import com.batch.domain.repository.SidoEntityRepository;
-import com.batch.listener.CustomItemProcessorListener;
-import com.batch.listener.CustomItemReaderListener;
-import com.batch.listener.CustomItemWriterListener;
-import com.batch.listener.CustomStepListener;
+import com.batch.demo.library.domain.LibraryTmpEntity;
+import com.batch.demo.library.domain.Sido;
+import com.batch.demo.library.domain.Signgu;
+import com.batch.demo.library.listener.CustomSignguJobListener;
+import com.batch.demo.library.repository.SidoEntityRepository;
+import com.batch.common.listener.CustomItemProcessorListener;
+import com.batch.common.listener.CustomItemReaderListener;
+import com.batch.common.listener.CustomItemWriterListener;
+import com.batch.common.listener.CustomStepListener;
+import com.batch.demo.library.repository.SignguEntityRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -41,6 +43,7 @@ public class LibraryTmpDbToSignguDbJobDemo {
     private final StepBuilderFactory stepBuilderFactory;
 
     private final SidoEntityRepository sidoEntityRepository;
+    private final SignguEntityRepository signguEntityRepository;
 
     private final EntityManagerFactory entityManagerFactory;
     private final DataSource dataSource;
@@ -52,6 +55,7 @@ public class LibraryTmpDbToSignguDbJobDemo {
         return jobBuilderFactory.get(JOB_NAME)
                 .incrementer(new RunIdIncrementer())
                 .start(libraryTmpDbToSignguDbStep())
+                .listener(new CustomSignguJobListener(signguEntityRepository))
                 .build();
     }
 

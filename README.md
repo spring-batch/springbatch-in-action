@@ -37,7 +37,7 @@
 2. [2주차 개발 진행 사항 확인 및 정리](docs/README.md)
 
 ## 스프링 배치 문서 정리
-1. [intro](docs/batchDocs/1.introduction.md)
+1. [intro](docs/batch/1.introduction.md)
 
 ## 프로젝트 Spec
 - SpringFramework

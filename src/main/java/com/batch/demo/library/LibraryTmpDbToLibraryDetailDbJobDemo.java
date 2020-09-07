@@ -1,12 +1,12 @@
 package com.batch.demo.library;
 
-import com.batch.domain.batch.*;
-import com.batch.domain.repository.LibraryEntityRepository;
-import com.batch.domain.repository.SidoEntityRepository;
-import com.batch.domain.repository.SignguEntityRepository;
-import com.batch.listener.CustomItemProcessorListener;
-import com.batch.listener.CustomItemReaderListener;
-import com.batch.listener.CustomItemWriterListener;
+import com.batch.demo.library.domain.*;
+import com.batch.demo.library.repository.LibraryEntityRepository;
+import com.batch.demo.library.repository.SidoEntityRepository;
+import com.batch.demo.library.repository.SignguEntityRepository;
+import com.batch.common.listener.CustomItemProcessorListener;
+import com.batch.common.listener.CustomItemReaderListener;
+import com.batch.common.listener.CustomItemWriterListener;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -44,6 +44,7 @@ public class LibraryTmpDbToLibraryDetailDbJobDemo {
     private final LibraryEntityRepository libraryEntityRepository;
     private final SidoEntityRepository sidoEntityRepository;
     private final SignguEntityRepository signguEntityRepository;
+
     private static final int CHUNK_SIZE = 1000;
 
     @Bean(name = JOB_NAME)

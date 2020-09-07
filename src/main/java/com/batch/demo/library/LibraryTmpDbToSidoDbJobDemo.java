@@ -1,10 +1,12 @@
 package com.batch.demo.library;
 
-import com.batch.domain.batch.LibraryTmpEntity;
-import com.batch.domain.batch.Sido;
-import com.batch.listener.CustomItemProcessorListener;
-import com.batch.listener.CustomItemReaderListener;
-import com.batch.listener.CustomStepListener;
+import com.batch.demo.library.domain.LibraryTmpEntity;
+import com.batch.demo.library.domain.Sido;
+import com.batch.common.listener.CustomItemProcessorListener;
+import com.batch.common.listener.CustomItemReaderListener;
+import com.batch.common.listener.CustomStepListener;
+import com.batch.demo.library.listener.CustomSidoJobListener;
+import com.batch.demo.library.repository.SidoEntityRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -37,6 +39,7 @@ public class LibraryTmpDbToSidoDbJobDemo {
     private final EntityManagerFactory entityManagerFactory;
     private final DataSource dataSource;
 
+    private final SidoEntityRepository sidoEntityRepository;
     private static final String JOB_NAME = "LIBRARY_TMP_TO_SIDO_JOB";
     private static final int CHUNK_SIZE = 1000;
 
@@ -45,6 +48,7 @@ public class LibraryTmpDbToSidoDbJobDemo {
         return jobBuilderFactory.get(JOB_NAME)
                 .incrementer(new RunIdIncrementer())
                 .start(libraryTmpDbToSidoDbStep())
+                .listener(new CustomSidoJobListener(sidoEntityRepository))
                 .build();
     }
 
@@ -76,7 +80,8 @@ public class LibraryTmpDbToSidoDbJobDemo {
     public JdbcPagingItemReader<? extends LibraryTmpEntity> libraryTmpDbToSidoDbReader() {
         return new JdbcPagingItemReader<LibraryTmpEntity>() {{
             setName("tmpDbReader");
-            setFetchSize(1000);
+            setPageSize(CHUNK_SIZE);
+            setFetchSize(CHUNK_SIZE);
             setDataSource(dataSource);
             setQueryProvider(dbToDbProvider());
             setRowMapper(new BeanPropertyRowMapper<>(LibraryTmpEntity.class));

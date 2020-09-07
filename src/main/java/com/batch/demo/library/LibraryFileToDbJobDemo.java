@@ -1,10 +1,14 @@
 package com.batch.demo.library;
 
-import com.batch.domain.batch.LibraryDTO;
-import com.batch.domain.batch.LibraryTmpEntity;
-import com.batch.domain.batch.LibraryTmpEntityFields;
-import com.batch.domain.repository.LibraryTmpEntityRepository;
-import com.batch.listener.*;
+import com.batch.common.listener.CustomItemProcessorListener;
+import com.batch.common.listener.CustomItemReaderListener;
+import com.batch.common.listener.CustomItemWriterListener;
+import com.batch.common.listener.CustomStepListener;
+import com.batch.demo.library.domain.LibraryDTO;
+import com.batch.demo.library.domain.LibraryTmpEntity;
+import com.batch.demo.library.domain.enums.LibraryTmpEntityFields;
+import com.batch.demo.library.listener.LibraryTmpJobListener;
+import com.batch.demo.library.repository.LibraryTmpEntityRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -12,7 +16,6 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
-import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.database.JpaItemWriter;
 import org.springframework.batch.item.file.FlatFileItemReader;
@@ -45,9 +48,8 @@ public class LibraryFileToDbJobDemo {
     @Bean(name = JOB_NAME)
     public Job libraryFileToDbJob() {
         return jobBuilderFactory.get(JOB_NAME)
-                .incrementer(new RunIdIncrementer())
                 .start(libraryFileToDbStep())
-                .listener(new LibraryJobListener(libraryTmpEntityRepository))
+                .listener(new LibraryTmpJobListener(libraryTmpEntityRepository))
                 .build();
     }
 
