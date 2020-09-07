@@ -77,16 +77,8 @@ public class LibraryTmpDbToSignguDbJobDemo {
                 .build();
     }
 
-
-    @Bean(name = "SIGNGU_DB_WRITER")
     @StepScope
-    public ItemWriter<? super Signgu> signguDbWriter() {
-        return new JpaItemWriter<Signgu>() {{
-            setEntityManagerFactory(entityManagerFactory);
-        }};
-    }
-
-    @StepScope
+    @Bean(name = "LIBRARY_TMP_TO_SIGNGU_PROCESSOR")
     public ItemProcessor<? super LibraryTmpEntity,? extends Signgu> tmpDbToSignguDbProcessor() {
         return item -> {
             Sido sido = sidoEntityRepository.findByCtprvnNm(item.getCtprvnNm());
@@ -99,8 +91,8 @@ public class LibraryTmpDbToSignguDbJobDemo {
         };
     }
 
-    @Bean(name = "LIBRARY_TMP_TO_SIGNGU_READER")
     @StepScope
+    @Bean(name = "LIBRARY_TMP_TO_SIGNGU_READER")
     public JdbcPagingItemReader<? extends LibraryTmpEntity> tmpDbToSignguReader() {
         return new JdbcPagingItemReader<LibraryTmpEntity>() {{
             setName("LIBRARY_TMP_TO_SIGNGU_READER");
@@ -109,30 +101,38 @@ public class LibraryTmpDbToSignguDbJobDemo {
             setDataSource(dataSource);
             setQueryProvider(dbToDbProvider());
             setRowMapper(new BeanPropertyRowMapper<>(LibraryTmpEntity.class));
+        }
+        private MySqlPagingQueryProvider dbToDbProvider() {
+
+            StringBuffer selectClause = new StringBuffer();
+            StringBuffer fromClause = new StringBuffer();
+
+            selectClause.append("CTPRVN_NM,");
+            selectClause.append("SIGNGU_NM ");
+
+            fromClause.append("CSV_TABLE");
+
+            StringBuffer groupByClause = new StringBuffer();
+            groupByClause.append("CTPRVN_NM, SIGNGU_NM");
+
+            Map<String, Order> sortKeys = new HashMap<>(1);
+            sortKeys.put("CTPRVN_NM", Order.DESCENDING);
+
+            return new MySqlPagingQueryProvider() {{
+                setSelectClause(selectClause.toString());
+                setFromClause(fromClause.toString());
+                setGroupClause(groupByClause.toString());
+                setSortKeys(sortKeys);
+            }};
         }};
     }
 
-    private MySqlPagingQueryProvider dbToDbProvider() {
-
-        StringBuffer selectClause = new StringBuffer();
-        StringBuffer fromClause = new StringBuffer();
-
-        selectClause.append("CTPRVN_NM,");
-        selectClause.append("SIGNGU_NM ");
-
-        fromClause.append("CSV_TABLE");
-
-        StringBuffer groupByClause = new StringBuffer();
-        groupByClause.append("CTPRVN_NM, SIGNGU_NM");
-
-        Map<String, Order> sortKeys = new HashMap<>(1);
-        sortKeys.put("CTPRVN_NM", Order.DESCENDING);
-
-        return new MySqlPagingQueryProvider() {{
-            setSelectClause(selectClause.toString());
-            setFromClause(fromClause.toString());
-            setGroupClause(groupByClause.toString());
-            setSortKeys(sortKeys);
+    @StepScope
+    @Bean(name = "SIGNGU_DB_WRITER")
+    public ItemWriter<? super Signgu> signguDbWriter() {
+        return new JpaItemWriter<Signgu>() {{
+            setEntityManagerFactory(entityManagerFactory);
         }};
     }
+
 }
