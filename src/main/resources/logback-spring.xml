@@ -10,8 +10,8 @@
     <!-- 로그 경로 변수 선언 -->
     <property name="LOG_PACKAGE" value="${log.config.logPath}"/>
     <property name="LOG_PATH" value="${log.config.path}"/>
-    <property name="LOG_FILENAME" value="${log.config.filename}"/>
-    <property name="LOG_ERR_FILENAME" value="${log.config.error_filename}"/>
+    <property name="LOG_FILENAME" value="${log.config.fileName}"/>
+    <property name="LOG_ERR_FILENAME" value="${log.config.errFile}"/>
     <property name="LOG_PATTERN" value="${log.config.pattern}"/>
 
     <!--Environment 내의 프로퍼티들을 개별적으로 설정-->
@@ -37,10 +37,10 @@
         <!-- Rolling 정책 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!--.gz, .zip 등을 넣으면 자동 일자별 로그파일 압축-->
-            <fileNamePattern>${LOG_PATH}/${LOG_FILENAME}.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+            <fileNamePattern>${LOG_PATH}/${LOG_FILENAME}-%d{yyyy-MM-dd}-%i.gz</fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <!-- 파일당 최고 용량 kb, mb, gb -->
-                <maxFileSize>10MB</maxFileSize>
+                <maxFileSize>100MB</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>
             <!--일자별 로그파일 최대 보관주기(~일), 해당 설정일 이상된 파일은 자동으로 제거-->
             <maxHistory>30</maxHistory>
@@ -54,17 +54,17 @@
             <onMatch>ACCEPT</onMatch>
             <onMismatch>DENY</onMismatch>
         </filter>
-        <file>${LOG_PATH}/${LOG_ERR_FILENAME}.log</file>
+        <file>${LOG_PATH}/${LOG_ERR_FILENAME}-%d{yyyy-MM-dd}.log</file>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <pattern>${LOG_PATTERN}</pattern>
         </encoder>
         <rollingPolicy
                 class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- .gz,.zip 등을 넣으면 자동 일자별 로그파일 압축 -->
-            <fileNamePattern>${LOG_PATH}/${LOG_ERR_FILENAME}.%d{yyyy-MM-dd}_%i.gz</fileNamePattern>
+            <fileNamePattern>${LOG_PATH}/${LOG_FILENAME}-%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <!-- 파일당 최고 용량 kb, mb, gb -->
-                <maxFileSize>10MB</maxFileSize>
+                <maxFileSize>100MB</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>
             <!-- 일자별 로그파일 최대 보관주기(~일), 해당 설정일 이상된 파일은 자동으로 제거-->
             <maxHistory>60</maxHistory>
