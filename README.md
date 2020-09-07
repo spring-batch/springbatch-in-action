@@ -35,9 +35,11 @@
 ## 스터디 회의록
 1. [1주차 주제 정하기](docs/README.md)
 2. [2주차 개발 진행 사항 확인 및 정리](docs/README.md)
+3. [3주차 코로나로인한 각자 학습](docs/README.md)
 
 ## 스프링 배치 문서 정리
-1. [intro](docs/batch/1.introduction.md)
+1. [Intro](docs/batch/1.introduction.md)
+2. [Domain](docs/batch/2.BatchDomain.md)
 
 ## 프로젝트 Spec
 - SpringFramework
