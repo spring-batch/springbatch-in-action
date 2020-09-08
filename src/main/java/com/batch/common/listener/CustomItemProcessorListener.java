@@ -15,8 +15,8 @@ public class CustomItemProcessorListener<T, S> implements ItemProcessListener<T,
 
     @Override
     public void afterProcess(T item, S result) {
-        log.info("[LOG] [PROCESSOR] [AFTER] [ITEM] [{}]", item);
-        log.info("[LOG] [PROCESSOR] [AFTER] [RESULT] [{}]", result);
+//        log.info("[LOG] [PROCESSOR] [AFTER] [ITEM] [{}]", item);
+//        log.info("[LOG] [PROCESSOR] [AFTER] [RESULT] [{}]", result);
     }
 
     @Override
