@@ -1,9 +1,9 @@
 # SpringBatch Saturday Study
 
 ## 스터디
-- 일자: 2020.08.22
-- 장소: 홍대입구역 ['셀스스터디'](https://hd.sels.co.kr/)
-- 인원: 6명
+- 일자: 2020.08 ~
+- 장소: 홍대 입구역 스터디 룸
+- 인원: N 명
 
 ## 배치 관련 업무 공유
 1. 통계 테이블 구성 (파티셔닝)
@@ -16,9 +16,8 @@
     1) [Spring.io](https://docs.spring.io/spring-batch/docs/current/reference/html/index.html)
 
 2. 스프링 배치 실습 아이디어
-    1) 도서관 데이터 
+    1) 도서관 데이터
         - '특정' 도서관 데이터 csv 기반 파일을 정규화된 테이블에 적재
-  
     2) 미정
 
 3. 스프링 배치 관리
@@ -36,6 +35,7 @@
 1. [1주차 주제 정하기](docs/README.md)
 2. [2주차 개발 진행 사항 확인 및 정리](docs/README.md)
 3. [3주차 코로나로인한 각자 학습](docs/README.md)
+4. [1-1주차 다시 시작하기](docs/README.md)
 
 ## 스프링 배치 문서 정리
 1. [Intro](docs/batch/1.introduction.md)

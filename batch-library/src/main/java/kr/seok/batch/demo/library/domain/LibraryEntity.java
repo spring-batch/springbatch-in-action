@@ -71,7 +71,7 @@ public class LibraryEntity {
                 .ctprvnCode(ctprvnCode)
                 .ctprvnNm(sido.getCtprvnNm())
                 .signguCode(signguCode)
-                .signguNm(signgu.getSignguNm().isEmpty() ? "" : signgu.getSignguNm())
+                .signguNm(signgu == null ? "" : signgu.getSignguNm())
 
                 .closeDay(closeDay)
                 .weekdayOperCloseHhmm(weekdayOperCloseHhmm)

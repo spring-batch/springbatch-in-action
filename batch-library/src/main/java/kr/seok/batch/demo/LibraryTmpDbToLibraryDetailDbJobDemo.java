@@ -31,48 +31,62 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 임시 테이블에 저장된 도서관 데이터 중 주로 사용되지 않는 속성을 Detail 테이블에 저장
+ */
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
 public class LibraryTmpDbToLibraryDetailDbJobDemo {
 
+    /* Batch */
     private static final String JOB_NAME = "LIBRARY_TMP_TO_LIBRARY_DETAIL_JOB";
+    private static final int CHUNK_SIZE = 1000;
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
+
+    /* Jdbc, Jpa */
     private final DataSource dataSource;
     private final EntityManagerFactory entityManagerFactory;
 
+    /* 도서관, 시도, 시군구 Repository */
     private final LibraryEntityRepository libraryEntityRepository;
     private final SidoEntityRepository sidoEntityRepository;
     private final SignguEntityRepository signguEntityRepository;
 
-    private static final int CHUNK_SIZE = 1000;
-
+    /* 임시 테이블의 데이터를 도서관 테이블에 저장하기위한 Job */
     @Bean(name = JOB_NAME)
     public Job libraryTmpToLibraryJob() {
         return jobBuilderFactory.get(JOB_NAME)
+                /* runid 생성 */
                 .incrementer(new RunIdIncrementer())
+                /* 도서관 임시 테이블의 데이터를 도서관 테이블에 저장하기 위한 Step 호출 */
                 .start(libraryTmpToLibraryStep())
                 .build();
     }
 
+    /* 도서관 임시 테이블의 데이터를 도서관 테이블에 저장하기 위한 Step */
     @Bean(name = JOB_NAME + "_STEP")
     public Step libraryTmpToLibraryStep() {
         return stepBuilderFactory.get(JOB_NAME + "_STEP")
                 .<LibraryTmpEntity, LibraryDetailEntity>chunk(CHUNK_SIZE)
 
                 .listener(new CustomItemReaderListener())
+                /* JdbcPagingItemReader 방식으로 임시 테이블의 데이터를 조회 */
                 .reader(libraryTmpToLibraryDetailReader())
 
                 .listener(new CustomItemProcessorListener<>())
+                /* 시도, 시군구, 도서관 데이터를 조회하여 상세 Entity 에 저장 */
                 .processor(tmpProcessor())
 
                 .listener(new CustomItemWriterListener<>())
+                /* Jpa Entity를 DB에 Flush 처리 */
                 .writer(libraryEntityJpaItemWriter())
 
                 .build();
     }
 
+    /* 임시 테이블에 저장되어 있던 도서관 상세 테이블을 조회 */
     @Bean
     @StepScope
     public JdbcPagingItemReader<? extends LibraryTmpEntity> libraryTmpToLibraryDetailReader() {
@@ -115,12 +129,16 @@ public class LibraryTmpDbToLibraryDetailDbJobDemo {
         }};
     }
 
+    /* Sido, Signgu, Library -> LibraryDetail */
     @Bean
     @StepScope
     public ItemProcessor<? super LibraryTmpEntity,? extends LibraryDetailEntity> tmpProcessor() {
         return item -> {
+            /* Sido의 key 값이 필요하기 때문에 Entity 자체를 조회할 필요가 없음 */
             Sido sido = sidoEntityRepository.findByCtprvnNm(item.getCtprvnNm());
+            /* Signgu key 값이 필요하기 때문에 Entity 자체를 조회할 필요가 없음 */
             Signgu signgu = signguEntityRepository.findBySignguNmAndCtprvnCode(item.getSignguNm(), sido.getCtprvnCode());
+            /* Library key 값이 필요하기 때문에 Entity 자체를 조회할 필요가 없음 */
             LibraryEntity libraryEntity = libraryEntityRepository.findByLbrryNmAndCtprvnCodeAndSignguCode(item.getLbrryNm(), sido.getCtprvnCode(), signgu.getSignguCode());
 
             return LibraryDetailEntity.builder()
@@ -136,6 +154,7 @@ public class LibraryTmpDbToLibraryDetailDbJobDemo {
         };
     }
 
+    /* Jpa Entity Flush 처리 */
     @Bean(name = "LIBRARY_DETAIL_WRITER")
     @StepScope
     public JpaItemWriter<LibraryDetailEntity> libraryEntityJpaItemWriter() {

@@ -30,54 +30,65 @@ import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 임시 테이블에 저장된 데이터를 Sido 테이블에 저장
+ */
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
 public class LibraryTmpDbToSidoDbJobDemo {
 
-    private final JobBuilderFactory jobBuilderFactory;
-    private final StepBuilderFactory stepBuilderFactory;
-    private final EntityManagerFactory entityManagerFactory;
-    private final DataSource dataSource;
-
-    private final SidoEntityRepository sidoEntityRepository;
+    /* Spring Batch */
     private static final String JOB_NAME = "LIBRARY_TMP_TO_SIDO_JOB";
     private static final int CHUNK_SIZE = 1000;
+    private final JobBuilderFactory jobBuilderFactory;
+    private final StepBuilderFactory stepBuilderFactory;
 
+    /* Jdbc, Jpa */
+    private final DataSource dataSource;
+    private final EntityManagerFactory entityManagerFactory;
+
+    /* Entity */
+    private final SidoEntityRepository sidoEntityRepository;
+
+    /* 임시 도서관 테이블의 데이터를 Sido 테이블에 저장 */
     @Bean(name = JOB_NAME)
-    public Job libraryTmpDbToOriginDbJob() {
+    public Job libraryTmpDbToSidoDbJob() {
         return jobBuilderFactory.get(JOB_NAME)
                 .incrementer(new RunIdIncrementer())
-                .start(libraryTmpDbToSidoDbStep())
+
+                /* 임시 테이블의 데이터를 Sido 테이블에 저장시 Sido 테이블 비우기 */
                 .listener(new CustomSidoJobListener(sidoEntityRepository))
+                /* 임시 도서관 테이블의 데이터를 Sido 테이블에 저장 Step 호출 */
+                .start(libraryTmpDbToSidoDbStep())
                 .build();
     }
 
+    /* 임시 도서관 테이블의 데이터를 Sido 테이블에 저장 Step*/
     @Bean(name = JOB_NAME + "_STEP")
     public Step libraryTmpDbToSidoDbStep() {
         return stepBuilderFactory.get(JOB_NAME + "_STEP")
                 .<LibraryTmpEntity, Sido>chunk(CHUNK_SIZE)
 
+                /* Console 출력 Listener */
                 .listener(new CustomItemReaderListener())
+                /* 임시 테이블의 데이터 조회 JdbcPagingItemReader */
                 .reader(libraryTmpDbToSidoDbReader())
 
+                /* Console 출력 Listener */
                 .listener(new CustomItemProcessorListener<>())
+                /* 임시 테이블 Entity를 시도 Entity로 저장 */
                 .processor(libraryTmpDbToSidoDbProcessor())
 
+                /* Sido Entity에 저장되어 있던 Data를 DB에 Flush */
                 .writer(libraryTmpDbToSidoDbWriter())
 
+                /* 이건 왜 만들었었지 ? 상태 값을 확인하려고 만들었던 것 같은데 의미 없음 */
                 .listener(new CustomStepListener())
                 .build();
     }
 
-    @StepScope
-    @Bean(name = "sidoDb_writer")
-    public JpaItemWriter<Sido> libraryTmpDbToSidoDbWriter() {
-        return new JpaItemWriter<Sido>() {{
-           setEntityManagerFactory(entityManagerFactory);
-        }};
-    }
-
+    /* 임시 테이블의 데이터 조회 JdbcPagingItemReader */
     @StepScope
     @Bean(name = "tmpDb_reader")
     public JdbcPagingItemReader<? extends LibraryTmpEntity> libraryTmpDbToSidoDbReader() {
@@ -137,10 +148,20 @@ public class LibraryTmpDbToSidoDbJobDemo {
         }};
     }
 
+    /* 임시 테이블 Entity를 시도 Entity로 저장 */
     @Bean
     @StepScope
     public ItemProcessor<? super LibraryTmpEntity, Sido> libraryTmpDbToSidoDbProcessor() {
         /* 없으면 code 매핑해서 저장 */
-        return (ItemProcessor<LibraryTmpEntity, Sido>) LibraryTmpEntity::toSido;
+        return LibraryTmpEntity::toSido;
+    }
+
+    /* Sido Entity에 저장되어 있던 Data를 DB에 Flush */
+    @StepScope
+    @Bean(name = "sidoDb_writer")
+    public JpaItemWriter<Sido> libraryTmpDbToSidoDbWriter() {
+        return new JpaItemWriter<Sido>() {{
+            setEntityManagerFactory(entityManagerFactory);
+        }};
     }
 }

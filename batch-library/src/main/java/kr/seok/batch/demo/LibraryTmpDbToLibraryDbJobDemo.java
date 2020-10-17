@@ -31,6 +31,10 @@ import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 임시 테이블에 저장된 Raw 데이터를 도서관 테이블(TB_LBRRY)에 저장
+ *  - JdbcPagingItemWReader to JpaItemWriter
+ */
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
@@ -48,31 +52,43 @@ public class LibraryTmpDbToLibraryDbJobDemo {
 
     private static final int CHUNK_SIZE = 1000;
 
+    /* 임시 테이블 -> 도서관 테이블에 저장 */
     @Bean(name = JOB_NAME)
     public Job libraryTmpToLibraryJob() {
         return jobBuilderFactory.get(JOB_NAME)
+                /* Job 실행시 JobParameters 의 run id 생성 */
                 .incrementer(new RunIdIncrementer())
+                /* 임시 테이블에 저장된 데이터를 도서관 테이블에 저장하는 step */
                 .start(libraryTmpToLibraryStep())
                 .build();
     }
 
+    /* 임시 테이블에 저장된 데이터를 도서관 테이블에 저장하는 step */
     @Bean(name = JOB_NAME + "_STEP")
     public Step libraryTmpToLibraryStep() {
         return stepBuilderFactory.get(JOB_NAME + "_STEP")
+                /* Input: 도서관 임시 Entity, OutPut: 도서관 Entity */
                 .<LibraryTmpEntity, LibraryEntity>chunk(CHUNK_SIZE)
 
+                /* Console 로 출력하기 위한 ReaderListener */
                 .listener(new CustomItemReaderListener())
+                /* 임시 테이블의 데이터를 읽는 JdbcPagingItemReader */
                 .reader(tmpToLibraryReader())
 
+                /* Console 로 출력하기 위한 ProcessorListener */
                 .listener(new CustomItemProcessorListener<>())
+                /* 임시 테이블의 데이터를 읽어 저장할 Entity에 저장 */
                 .processor(tmpProcessor())
 
+                /* Console로 Entity에 저장되어 있던 데이터를 DB에 Flush 하는 내용 출력 */
                 .listener(new CustomItemWriterListener<>())
+                /* Entity 캐시에 저장된 데이터를 DB로 Flush 처리 */
                 .writer(libraryEntityJpaItemWriter())
 
                 .build();
     }
 
+    /* 임시 테이블의 데이터를 읽는 JdbcPagingItemReader */
     @Bean
     @StepScope
     public JdbcPagingItemReader<? extends LibraryTmpEntity> tmpToLibraryReader() {

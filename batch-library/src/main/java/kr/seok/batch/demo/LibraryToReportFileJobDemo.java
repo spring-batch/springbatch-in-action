@@ -117,9 +117,12 @@ public class LibraryToReportFileJobDemo {
     @Bean(name = JOB_NAME + "_PROCESSOR")
     public ItemProcessor<? super LibraryEntity,? extends LibraryTotalEntity> libraryToLibraryTotalProcessor() {
         return item -> {
-            Sido sido = sidoEntityRepository.findByCtprvnCode(item.getCtprvnCode());
-            Signgu signgu = signguEntityRepository.findBySignguCode(item.getSignguCode());
-            LibraryDetailEntity libraryDetailEntity = libraryDetailEntityRepository.findByLbrryCode(item.getLbrryCode());
+            Sido sido = sidoEntityRepository.findByCtprvnCode(item.getCtprvnCode())
+                    .orElseThrow(RuntimeException::new);
+            Signgu signgu = signguEntityRepository.findBySignguCode(item.getSignguCode())
+                    .orElseThrow(RuntimeException::new);
+            LibraryDetailEntity libraryDetailEntity = libraryDetailEntityRepository.findByLbrryCode(item.getLbrryCode())
+                    .orElseThrow(RuntimeException::new);
             return item.toEntity(sido, signgu, libraryDetailEntity);
         };
     }
