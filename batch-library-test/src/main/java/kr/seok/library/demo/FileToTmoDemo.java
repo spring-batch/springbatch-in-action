@@ -1,9 +1,8 @@
 package kr.seok.library.demo;
 
-import kr.seok.common.listener.CustomItemReaderListener;
-import kr.seok.library.domain.FileDto;
-import kr.seok.library.domain.TmpEntity;
-import kr.seok.library.domain.repository.TmpRepository;
+import kr.seok.domain.library.FileDto;
+import kr.seok.domain.library.TmpEntity;
+import kr.seok.library.repository.TmpRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -72,13 +71,13 @@ public class FileToTmoDemo {
     public Step fileToTmpStep() {
         return stepBuilderFactory.get(JOB_NAME + "_STEP")
                 .<FileDto, TmpEntity>chunk(CHUNK_SIZE)
-
+                /* 읽기 */
                 .reader(fileReader())
-                .listener(new CustomItemReaderListener<>())
-
+                /* 데이터 변환 */
                 .processor(fileToTmpProcessor())
-
+                /* 쓰기 */
                 .writer(tmpWriter())
+
                 .build();
     }
 

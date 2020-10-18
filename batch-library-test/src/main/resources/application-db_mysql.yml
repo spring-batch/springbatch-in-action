@@ -5,11 +5,14 @@ spring:
   # JPA 설정
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
-#    generate-ddl: true
+    # 프로젝트 처음 실행 할 때 sequence 테이블 만들어야 함
+    generate-ddl: true
+    # 쿼리 확인
 #    show_sql: true
     properties:
       hibernate:
-#        format_sql: true
+        # console에 출력 시 줄 바꾸기
+        format_sql: true
         ddl-auto: update # 스키마가 변경된 경우에만 실행
 #        ddl-auto: none # 실행하지 않음
 #       ddl-auto: create-drop # 어플리케이션이 구동되고 Session이 시작될때 drop -> create 이 실행되고, Session이 종료될때 (어플리케이션 종료) drop
@@ -21,14 +24,6 @@ spring:
     # Spring Batch Schema MySQL
     batch:
       jdbc-url: jdbc:mysql://localhost:3308/batch_db?useSSL=false
-      username: seok
-      password: 1234
-      driver-class-name: com.mysql.cj.jdbc.Driver
-      sql-script-encoding: UTF-8
-
-    # Domain DB
-    domain:
-      jdbc-url: jdbc:mysql://localhost:3307/user_db?useSSL=false
       username: seok
       password: 1234
       driver-class-name: com.mysql.cj.jdbc.Driver

@@ -1,4 +1,4 @@
-package kr.seok.library.domain;
+package kr.seok.domain.library;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
