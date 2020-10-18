@@ -71,7 +71,7 @@ public class LibraryTmpDbToSidoDbJobDemo {
                 .<LibraryTmpEntity, Sido>chunk(CHUNK_SIZE)
 
                 /* Console 출력 Listener */
-                .listener(new CustomItemReaderListener())
+                .listener(new CustomItemReaderListener<>())
                 /* 임시 테이블의 데이터 조회 JdbcPagingItemReader */
                 .reader(libraryTmpDbToSidoDbReader())
 

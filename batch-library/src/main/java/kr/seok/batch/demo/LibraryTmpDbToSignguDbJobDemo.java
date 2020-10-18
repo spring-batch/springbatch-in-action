@@ -73,7 +73,7 @@ public class LibraryTmpDbToSignguDbJobDemo {
         return stepBuilderFactory.get(JOB_NAME + "_STEP")
                 .<LibraryTmpEntity, Signgu>chunk(CHUNK_SIZE)
 
-                .listener(new CustomItemReaderListener())
+                .listener(new CustomItemReaderListener<>())
                 /* 임시 테이블 읽는 ItemReader */
                 .reader(tmpDbToSignguReader())
 

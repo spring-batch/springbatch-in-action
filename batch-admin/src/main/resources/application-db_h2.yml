@@ -1,0 +1,29 @@
+# 해당 프로퍼티 파일 이름
+spring.profiles: db_h2
+
+spring:
+  h2:
+    console:
+      enabled: true
+  # JPA 설정
+  jpa:
+#    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    # 이미 생성되어 있는 테이블을 생성할 필요가 없음
+    generate-ddl: true
+    show_sql: true
+    properties:
+      hibernate:
+        format_sql: true
+#        ddl-auto: update # 스키마가 변경된 경우에만 실행
+#        ddl-auto: none # 실행하지 않음
+        ddl-auto: create-drop # 어플리케이션이 구동되고 Session이 시작될때 drop -> create 이 실행되고, Session이 종료될때 (어플리케이션 종료) drop
+#        ddl-auto: create # 어플리케이션이 구동되고 Session이 시작될때 drop -> create 이 실행
+#        ddl-auto: validate # 변경여부 확인 후 출력, 어플리케이션은 종료
+
+  # MySQL DataSource
+  datasource:
+    initialize: true
+    url: jdbc:h2:~/docker/h2/data/batch-admin
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:

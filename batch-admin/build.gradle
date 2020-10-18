@@ -1,0 +1,60 @@
+buildscript {
+    ext {
+        springfoxVersion =  '2.9.2'
+        swaggerVersion = '1.5.21'
+    }
+}
+
+plugins {
+    id 'org.springframework.boot' version '2.3.4.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+    id 'java'
+}
+
+group = 'kr.seok'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+configurations {
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+    implementation 'mysql:mysql-connector-java'
+
+
+    /* swagger */
+    implementation("io.springfox:springfox-swagger2:${springfoxVersion}")
+    implementation("io.springfox:springfox-swagger-ui:${springfoxVersion}")
+    /* [issue](https://github.com/SeokRae/sr/issues/1) */
+//    implementation("io.springfox:springfox-data-rest:${springfoxVersion}")
+
+    // 이슈로 인한 의존성 추가 https://github.com/springfox/springfox/issues/2265
+    implementation("io.swagger:swagger-annotations:${swaggerVersion}")
+    implementation("io.swagger:swagger-models:${swaggerVersion}")
+
+
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+test {
+    useJUnitPlatform()
+}
