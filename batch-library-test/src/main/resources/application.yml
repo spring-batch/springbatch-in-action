@@ -1,0 +1,9 @@
+spring:
+  profiles:
+    active: local
+
+---
+spring.profiles: local
+spring:
+  profiles:
+    include: local

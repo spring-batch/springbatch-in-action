@@ -1,0 +1,11 @@
+# Batch log
+logging.level.org.springframework.batch: debug
+
+
+logging:
+  level:
+    root: info
+    org:
+
+      # SpringFramework Logging
+      springframework: debug

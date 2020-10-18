@@ -1,4 +1,5 @@
 rootProject.name = 'springbatch_study'
 include 'batch-library'
 include 'batch-common'
+include 'batch-library-test'
 

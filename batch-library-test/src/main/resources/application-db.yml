@@ -1,0 +1,12 @@
+spring.profiles: db
+spring.profiles.include: db_mysql #, db_oracle
+
+logging:
+  level:
+    org:
+      hibernate:
+        type:
+          descriptor:
+
+            # DB Query Logging
+            sql: debug

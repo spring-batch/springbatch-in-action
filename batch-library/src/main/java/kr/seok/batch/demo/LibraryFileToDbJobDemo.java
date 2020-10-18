@@ -66,7 +66,7 @@ public class LibraryFileToDbJobDemo {
                 .<LibraryDTO, LibraryTmpEntity>chunk(CHUNK_SIZE)
 
                 /* Console 로그용 Reader Listener */
-                .listener(new CustomItemReaderListener())
+                .listener(new CustomItemReaderListener<>())
                 /* 파일 데이터 읽기위한 FlatFileReader 호출 */
                 .reader(flatFileReader())
 

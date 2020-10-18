@@ -7,10 +7,10 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class CustomItemReaderListener implements ItemReadListener<T> {
+public class CustomItemReaderListener<T> implements ItemReadListener<T> {
     @Override
     public void beforeRead() {
-        log.info("[LOG] [READER] [BEFORE]");
+        // log.info("[LOG] [READER] [BEFORE]");
     }
 
     @Override
