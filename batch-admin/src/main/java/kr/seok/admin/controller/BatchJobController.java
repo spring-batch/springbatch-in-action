@@ -17,7 +17,7 @@ public class BatchJobController {
         this.batchJobExecutionService = batchJobExecutionService;
     }
 
-    @GetMapping("/")
+    @GetMapping("/jobList")
     public ResponseEntity<?> getList() {
         List<BatchJobExecution> jobList = batchJobExecutionService.getBatchList();
         return ResponseEntity.ok(jobList);
