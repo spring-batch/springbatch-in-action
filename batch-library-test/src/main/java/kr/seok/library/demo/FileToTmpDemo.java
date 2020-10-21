@@ -27,16 +27,16 @@ import sun.nio.cs.ext.EUC_KR;
 
 import javax.persistence.EntityManagerFactory;
 
+import static kr.seok.library.common.Constants.CHUNK_SIZE;
 import static org.springframework.batch.item.file.transform.DelimitedLineTokenizer.DELIMITER_COMMA;
 
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-public class FileToTmoDemo {
+public class FileToTmpDemo {
 
     /* Batch */
     private static final String JOB_NAME = "batch_FILE_TO_TMP";
-    private static final int CHUNK_SIZE = 1000;
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
 
@@ -54,10 +54,12 @@ public class FileToTmoDemo {
                     @Override
                     public void beforeJob(JobExecution jobExecution) {
                         /* 테이블 비우기 */
-                        tmpRepository.deleteAll();
+                        tmpRepository.deleteAllInBatch();
                         long entityCnt = tmpRepository.count();
                         if(entityCnt < 1) {
                             log.debug("테이블 비우기: {}", entityCnt);
+                        } else {
+                            log.debug("테이블 비우기 실패: {}", entityCnt);
                         }
                     }
                     @Override

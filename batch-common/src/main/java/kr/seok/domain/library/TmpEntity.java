@@ -1,14 +1,13 @@
 package kr.seok.domain.library;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
-@Entity
+@Entity(name = "TMP_ENTITY")
 @Getter
+@ToString
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "TB_TMP_LIBRARY")
@@ -34,12 +33,4 @@ public class TmpEntity {
     /* 도서관 유형 */
     @Column(name = "LIBRARY_TYPE")
     private String libType;
-
-    @Builder
-    public TmpEntity(String libNm, String sidoNm, String signguNm, String libType) {
-        this.libNm = libNm;
-        this.sidoNm = sidoNm;
-        this.signguNm = signguNm;
-        this.libType = libType;
-    }
 }
