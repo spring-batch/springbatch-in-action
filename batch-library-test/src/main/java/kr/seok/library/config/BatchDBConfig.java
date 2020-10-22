@@ -18,7 +18,10 @@ import javax.sql.DataSource;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(
-        basePackages = {"kr.seok.library.repository"}
+        basePackages = {
+                "kr.seok.library.domain"
+                , "kr.seok.library.repository"
+        }
 )
 public class BatchDBConfig {
 
@@ -30,16 +33,20 @@ public class BatchDBConfig {
     }
 
     @Bean(name = "entityManagerFactory")
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory(EntityManagerFactoryBuilder builder, @Qualifier("dataSource") DataSource dataSource) {
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(
+            EntityManagerFactoryBuilder builder, @Qualifier("dataSource") DataSource dataSource
+    ) {
         return builder
                 .dataSource(dataSource)
-                .packages("kr.seok.domain.library")
+                .packages("kr.seok.library.domain")
                 .persistenceUnit("batch")
                 .build();
     }
 
     @Bean(name = "transactionManager")
-    public PlatformTransactionManager transactionManager(@Qualifier("entityManagerFactory") EntityManagerFactory entityManagerFactory) {
+    public PlatformTransactionManager transactionManager(
+            @Qualifier("entityManagerFactory") EntityManagerFactory entityManagerFactory
+    ) {
         return new JpaTransactionManager(entityManagerFactory);
     }
 }

@@ -8,11 +8,11 @@ spring:
     # 프로젝트 처음 실행 할 때 sequence 테이블 만들어야 함
     generate-ddl: true
     # 쿼리 확인
-    show_sql: true
+#    show_sql: true
     properties:
       hibernate:
         # console에 출력 시 줄 바꾸기
-        format_sql: true
+#        format_sql: true
         ddl-auto: update # 스키마가 변경된 경우에만 실행
 #        ddl-auto: none # 실행하지 않음
 #       ddl-auto: create-drop # 어플리케이션이 구동되고 Session이 시작될때 drop -> create 이 실행되고, Session이 종료될때 (어플리케이션 종료) drop

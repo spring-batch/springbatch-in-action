@@ -1,4 +1,4 @@
-package kr.seok.domain.library;
+package kr.seok.library.domain;
 
 import lombok.*;
 
@@ -10,20 +10,20 @@ import java.util.Arrays;
 @NoArgsConstructor
 public class FileDto {
 
-    private String libNm;       /* 도서관 명 */
-    private String sidoNm;      /* 시도 명 */
-    private String signguNm;    /* 시군구 명 */
-    private String libType;     /* 도서관 유형 */
+    private String libraryNm;       /* 도서관 명 */
+    private String cityNm;      /* 시도 명 */
+    private String countryNM;    /* 시군구 명 */
+    private String libraryType;     /* 도서관 유형 */
 
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
     public enum FileFields {
 
-        libNm("libNm", "LIBRARY_NM"),
-        sidoNm("sidoNm", "SIDO_NM"),
-        signguNM("signguNm", "SIGNGU_NM"),
-        libType("libType", "LIBRARY_TYPE")
+        libraryNm("libraryNm", "LIBRARY_NM"),
+        cityNm("cityNm", "CITY_NM"),
+        countryNM("countryNm", "COUNTRY_NM"),
+        libraryType("libraryType", "LIBRARY_TYPE")
         ;
 
         private String fieldNm;
@@ -46,10 +46,10 @@ public class FileDto {
 
     public TmpEntity toEntity() {
         return TmpEntity.builder()
-                .libNm(libNm)
-                .libType(libType)
-                .sidoNm(sidoNm)
-                .signguNm(signguNm)
+                .cityNm(cityNm)
+                .countryNm(countryNM)
+                .libraryNm(libraryNm)
+                .libraryType(libraryType)
                 .build();
     }
 
