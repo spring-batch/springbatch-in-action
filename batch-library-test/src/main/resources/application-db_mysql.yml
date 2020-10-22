@@ -8,7 +8,7 @@ spring:
     # 프로젝트 처음 실행 할 때 sequence 테이블 만들어야 함
     generate-ddl: true
     # 쿼리 확인
-#    show_sql: true
+    show_sql: true
     properties:
       hibernate:
         # console에 출력 시 줄 바꾸기

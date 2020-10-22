@@ -1,6 +1,6 @@
 package kr.seok.library.repository;
 
-import kr.seok.library.domain.CityEntity;
+import kr.seok.library.domain.entity.CityEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

@@ -1,4 +1,4 @@
-package kr.seok.library.domain;
+package kr.seok.library.domain.entity;
 
 import lombok.Builder;
 import lombok.Data;

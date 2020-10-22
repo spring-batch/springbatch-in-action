@@ -1,4 +1,4 @@
-package kr.seok.library.domain;
+package kr.seok.library.domain.entity;
 
 import lombok.Builder;
 import lombok.Data;
@@ -29,7 +29,9 @@ public class LibraryEntity extends CommonEntity implements Serializable {
     private String libraryType;
 
     @Builder
-    public LibraryEntity(String libraryNm, String libraryType) {
+    public LibraryEntity(Long cityId, Long countryId, String libraryNm, String libraryType) {
+        this.cityId = cityId;
+        this.countryId = countryId;
         this.libraryNm = libraryNm;
         this.libraryType = libraryType;
     }

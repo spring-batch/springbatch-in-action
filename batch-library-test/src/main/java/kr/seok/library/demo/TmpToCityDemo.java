@@ -1,8 +1,8 @@
 package kr.seok.library.demo;
 
-import kr.seok.library.domain.CityEntity;
-import kr.seok.library.domain.CommonEntity;
-import kr.seok.library.domain.TmpEntity;
+import kr.seok.library.domain.entity.CityEntity;
+import kr.seok.library.domain.entity.CommonEntity;
+import kr.seok.library.domain.entity.TmpEntity;
 import kr.seok.library.repository.CityRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

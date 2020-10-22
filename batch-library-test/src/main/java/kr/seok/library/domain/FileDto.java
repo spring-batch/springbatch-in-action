@@ -1,5 +1,6 @@
 package kr.seok.library.domain;
 
+import kr.seok.library.domain.entity.TmpEntity;
 import lombok.*;
 
 import java.util.Arrays;

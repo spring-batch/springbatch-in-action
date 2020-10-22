@@ -1,7 +1,7 @@
 package kr.seok.library.demo;
 
 import kr.seok.library.domain.FileDto;
-import kr.seok.library.domain.TmpEntity;
+import kr.seok.library.domain.entity.TmpEntity;
 import kr.seok.library.repository.TmpRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
