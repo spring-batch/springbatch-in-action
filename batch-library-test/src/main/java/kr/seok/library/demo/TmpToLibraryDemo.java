@@ -83,7 +83,6 @@ public class TmpToLibraryDemo {
                 /* Multi Writer: CompositeItemWriter */
                 .writer(compositeWriter())
                 .build();
-
     }
 
     /* One Reader: JdbcCursorItemReader Type */
@@ -107,11 +106,11 @@ public class TmpToLibraryDemo {
 
     /* 임시 테이블로부터 읽어온 데이터를 City, Country, Library Entity로 저장하기 위한 Processor */
     private ItemProcessor<? super TmpEntity, ? extends CommonEntity> compositeProcessor() {
-        CompositeItemProcessor<? super TmpEntity, ? extends CommonEntity> compositeProcessor = new CompositeItemProcessor<>();
 
         List<ItemProcessor<? super TmpEntity, ? extends CommonEntity>> delegates = new ArrayList<>();
         delegates.add(tmpToLibraryProcessor());
 
+        CompositeItemProcessor<? super TmpEntity, ? extends CommonEntity> compositeProcessor = new CompositeItemProcessor<>();
         compositeProcessor.setDelegates(delegates);
 
         return compositeProcessor;

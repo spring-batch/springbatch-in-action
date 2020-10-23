@@ -36,6 +36,7 @@
 2. [2주차 개발 진행 사항 확인 및 정리](docs/README.md)
 3. [3주차 코로나로인한 각자 학습](docs/README.md)
 4. [1-1주차 다시 시작하기](docs/README.md)
+5. [1-2주차 배치 리뷰하기](docs/README.md)
 
 ## 스프링 배치 문서 정리
 1. [Intro](docs/batch/1.introduction.md)

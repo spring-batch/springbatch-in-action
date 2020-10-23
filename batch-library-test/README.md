@@ -9,4 +9,4 @@
 
 
 ## 배치 로그 분석
-- 
+- 하나의 Job, Step, Reader, Processor, Writer 사이클

@@ -17,19 +17,25 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.JdbcCursorItemReader;
+import org.springframework.batch.item.database.JdbcPagingItemReader;
 import org.springframework.batch.item.database.JpaItemWriter;
+import org.springframework.batch.item.database.builder.JdbcPagingItemReaderBuilder;
+import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
+import org.springframework.batch.item.database.orm.JpaNativeQueryProvider;
+import org.springframework.batch.item.database.support.MySqlPagingQueryProvider;
+import org.springframework.batch.item.json.JacksonJsonObjectReader;
+import org.springframework.batch.item.json.JsonItemReader;
+import org.springframework.batch.item.json.builder.JsonItemReaderBuilder;
 import org.springframework.batch.item.support.CompositeItemProcessor;
 import org.springframework.batch.item.support.CompositeItemWriter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static kr.seok.library.common.Constants.CHUNK_SIZE;
 
@@ -99,6 +105,42 @@ public class TmpToCityDemo {
             /* 조회된 row 데이터 Bean으로 매핑 */
             setRowMapper(new BeanPropertyRowMapper<>(TmpEntity.class));
         }};
+    }
+
+    /* 필수 설정 정보 */
+    private ItemReader<? extends TmpEntity> tmpDbJdbcPagingReader() {
+        return new JdbcPagingItemReaderBuilder<TmpEntity>()
+                .name("")
+                .dataSource(datasource)
+                .pageSize(CHUNK_SIZE)
+                .queryProvider(new MySqlPagingQueryProvider() {{
+                    setSelectClause("");
+                    setFromClause("");
+                    setGroupClause("");
+                    setSortKeys(new HashMap<>());
+                }})
+                .rowMapper(new BeanPropertyRowMapper<>())
+                .build();
+    }
+
+    /* */
+    private ItemReader<? extends TmpEntity> tmpDbJpaPagingReader() {
+        return new JpaPagingItemReaderBuilder<TmpEntity>()
+                .pageSize(CHUNK_SIZE)
+                /* Jpa EntityManagerFactory */
+                .entityManagerFactory(entityManagerFactory)
+                /* JpaPagingItemReader 실행 시 이름 */
+                .name("")
+                /* QueryProvider or QueryString */
+                .queryProvider(new JpaNativeQueryProvider<TmpEntity>() {{
+                    setSqlQuery("");
+                    setEntityClass(TmpEntity.class);
+                }})
+                .build();
+    }
+
+    private ItemReader<? extends TmpEntity> tmpDbMybatisPagingReader() {
+        return null;
     }
 
     /* 임시 테이블로부터 읽어온 데이터를 City, Country, Library Entity로 저장하기 위한 Processor */
