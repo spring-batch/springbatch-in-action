@@ -140,7 +140,7 @@ public class TmpToLibraryDemo {
 
             /* TODO: Jpa로 처리시 깔끔하게 처리하는 방법이 있을 듯 */
             Long cityId = cityRepository.findByCityNm(item.getCityNm()).get().getId();
-            Long countryId = countryRepository.findByCountryNm(item.getCountryNm()).get().getId();
+            Long countryId = countryRepository.findByCityIdAndCountryNm(cityId, item.getCountryNm()).get().getId();
             String libraryNm = item.getLibraryNm();
             String libraryType = item.getLibraryType();
 
