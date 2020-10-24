@@ -44,7 +44,7 @@ public class TmpToLibraryDemo {
     private static final String JOB_NAME = "batch_TMP_TO_LIBRARY";
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
-    private static Set<String> test = new HashSet<>();
+    private static Set<String> libraryKeySet = new HashSet<>();
 
     /* DB */
     private final DataSource datasource;
@@ -133,9 +133,9 @@ public class TmpToLibraryDemo {
             String libraryKey = item.getCityNm() + " " + item.getCountryNm() + " " + item.getLibraryNm();
 
             /* Set에 키 값이 포함되어 있으면 넘어가기*/
-            if(test.contains(libraryKey)) return null;
+            if(libraryKeySet.contains(libraryKey)) return null;
             /* 값이 포함되지 않은 경우 set에 설정 및 Entity에 저장 */
-            test.add(libraryKey);
+            libraryKeySet.add(libraryKey);
 
             /* TODO: Jpa로 처리시 깔끔하게 처리하는 방법이 있을 듯 */
             Long cityId = cityRepository.findByCityNm(item.getCityNm()).get().getId();

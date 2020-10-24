@@ -23,6 +23,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 
+import javax.batch.runtime.context.StepContext;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
@@ -81,7 +82,6 @@ public class TmpToMultiProcessorDemo {
         return stepBuilderFactory.get(JOB_NAME + "_STEP")
                 .<TmpEntity, CommonEntity>chunk(CHUNK_SIZE)
                 .reader(tmpOneReader())
-                .processor(tmpToMultiEntityProcessor())
                 .writer(multiEntityWriter())
                 .build();
     }
@@ -115,20 +115,6 @@ public class TmpToMultiProcessorDemo {
         return new JpaItemWriter<LibraryEntity>() {{
             setEntityManagerFactory(entityManagerFactory);
         }};
-    }
-    /* 임시 테이블로부터 읽어온 데이터를 City, Country, Library Entity로 저장하기 위한 Processor */
-    private ItemProcessor<? super TmpEntity, ? extends CommonEntity> tmpToMultiEntityProcessor() {
-
-        List<ItemProcessor<? super TmpEntity, ? extends CommonEntity>> delegates = new ArrayList<>();
-        delegates.add(tmpToCityProcessor());
-        delegates.add(tmpToCountryProcessor());
-        delegates.add(tmpToLibraryProcessor());
-
-        /* Processor 위임 */
-        CompositeItemProcessor<? super TmpEntity, ? extends CommonEntity> compositeProcessor = new CompositeItemProcessor<>();
-        compositeProcessor.setDelegates(delegates);
-
-        return compositeProcessor;
     }
 
     /* 임시 테이블에서 각 도시명의 유잉한 값으로 Filtering */

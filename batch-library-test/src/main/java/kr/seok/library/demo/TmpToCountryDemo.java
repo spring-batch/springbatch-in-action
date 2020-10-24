@@ -43,7 +43,7 @@ public class TmpToCountryDemo {
     private static final String JOB_NAME = "batch_TMP_TO_COUNTRY";
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
-    private static Set<String> test = new HashSet<>();
+    private static Set<String> countryKeySet = new HashSet<>();
 
     /* DB */
     private final DataSource datasource;
@@ -132,9 +132,9 @@ public class TmpToCountryDemo {
             String countryKey = item.getCityNm() + " " + item.getCountryNm();
 
             /* Set에 키 값이 포함되어 있으면 넘어가기*/
-            if(test.contains(countryKey)) return null;
+            if(countryKeySet.contains(countryKey)) return null;
             /* 값이 포함되지 않은 경우 set에 설정 및 Entity에 저장 */
-            test.add(countryKey);
+            countryKeySet.add(countryKey);
 
             /* TODO: Jpa로 처리시 깔끔하게 처리하는 방법이 있을 듯 */
             Long cityId = cityRepository.findByCityNm(item.getCityNm()).get().getId();

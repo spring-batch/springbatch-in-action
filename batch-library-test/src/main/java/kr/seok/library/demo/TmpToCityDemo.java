@@ -17,20 +17,11 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.JdbcCursorItemReader;
-import org.springframework.batch.item.database.JdbcPagingItemReader;
 import org.springframework.batch.item.database.JpaItemWriter;
-import org.springframework.batch.item.database.builder.JdbcPagingItemReaderBuilder;
-import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
-import org.springframework.batch.item.database.orm.JpaNativeQueryProvider;
-import org.springframework.batch.item.database.support.MySqlPagingQueryProvider;
-import org.springframework.batch.item.json.JacksonJsonObjectReader;
-import org.springframework.batch.item.json.JsonItemReader;
-import org.springframework.batch.item.json.builder.JsonItemReaderBuilder;
 import org.springframework.batch.item.support.CompositeItemProcessor;
 import org.springframework.batch.item.support.CompositeItemWriter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 
 import javax.persistence.EntityManagerFactory;
@@ -48,7 +39,7 @@ public class TmpToCityDemo {
     private static final String JOB_NAME = "batch_TMP_TO_CITY";
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
-    private static Set<String> test = new HashSet<>();
+    private static Set<String> cityKeySet = new HashSet<>();
 
     /* DB */
     private final DataSource datasource;
@@ -107,42 +98,6 @@ public class TmpToCityDemo {
         }};
     }
 
-    /* 필수 설정 정보 */
-    private ItemReader<? extends TmpEntity> tmpDbJdbcPagingReader() {
-        return new JdbcPagingItemReaderBuilder<TmpEntity>()
-                .name("")
-                .dataSource(datasource)
-                .pageSize(CHUNK_SIZE)
-                .queryProvider(new MySqlPagingQueryProvider() {{
-                    setSelectClause("");
-                    setFromClause("");
-                    setGroupClause("");
-                    setSortKeys(new HashMap<>());
-                }})
-                .rowMapper(new BeanPropertyRowMapper<>())
-                .build();
-    }
-
-    /* */
-    private ItemReader<? extends TmpEntity> tmpDbJpaPagingReader() {
-        return new JpaPagingItemReaderBuilder<TmpEntity>()
-                .pageSize(CHUNK_SIZE)
-                /* Jpa EntityManagerFactory */
-                .entityManagerFactory(entityManagerFactory)
-                /* JpaPagingItemReader 실행 시 이름 */
-                .name("")
-                /* QueryProvider or QueryString */
-                .queryProvider(new JpaNativeQueryProvider<TmpEntity>() {{
-                    setSqlQuery("");
-                    setEntityClass(TmpEntity.class);
-                }})
-                .build();
-    }
-
-    private ItemReader<? extends TmpEntity> tmpDbMybatisPagingReader() {
-        return null;
-    }
-
     /* 임시 테이블로부터 읽어온 데이터를 City, Country, Library Entity로 저장하기 위한 Processor */
     private ItemProcessor<? super TmpEntity, ? extends CommonEntity> compositeProcessor() {
 
@@ -161,9 +116,9 @@ public class TmpToCityDemo {
     private ItemProcessor<? super TmpEntity, ? extends CommonEntity> tmpToCityProcessor() {
         return (ItemProcessor<TmpEntity, CityEntity>) item -> {
             /* Set에 키 값이 포함되어 있으면 넘어가기*/
-            if(test.contains(item.getCityNm())) return null;
+            if(cityKeySet.contains(item.getCityNm())) return null;
             /* 값이 포함되지 않은 경우 set에 설정 및 Entity에 저장 */
-            test.add(item.getCityNm());
+            cityKeySet.add(item.getCityNm());
             return CityEntity.builder().cityNm(item.getCityNm()).build();
         };
     }
