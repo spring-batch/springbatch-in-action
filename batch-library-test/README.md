@@ -63,6 +63,10 @@
     - CompositeItemProcessor
     - CompositeItemWriter
     
+    - 개선
+        - CompositeItemWriter를 사용하여 Delegate 처리
+        - 각 Delegates에 등록된 Writer는 TmpEntity 데이터를 City, Country, Library 세 테이블에 각각 유일한 값으로만 저장
+
 6. TotalProcessDemo
     - 위에 5번을 제외한 Job들을 Step Bean으로 생성하여 해당 Step들을 호출하는 Job 클래스
     - Job
