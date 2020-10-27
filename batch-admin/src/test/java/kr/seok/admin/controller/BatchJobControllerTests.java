@@ -1,6 +1,6 @@
 package kr.seok.admin.controller;
 
-import kr.seok.admin.service.BatchJobExecutionService;
+import kr.seok.admin.service.BatchJobService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class BatchJobControllerTests {
     private MockMvc mockMvc;
 
     @MockBean
-    private BatchJobExecutionService batchJobExecutionService;
+    private BatchJobService batchJobExecutionService;
 
     @Test
     public void getJob() throws Exception {

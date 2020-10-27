@@ -1,17 +1,14 @@
 package kr.seok.admin.service;
 
-import kr.seok.admin.domain.BatchJobExecution;
 import kr.seok.admin.repository.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.List;
+public class BatchJobServiceTest {
 
-public class BatchJobExecutionServiceTest {
-
-    private BatchJobExecutionService batchJobExecutionService;
+    private BatchJobService batchJobExecutionService;
 
     @Mock
     private BatchJobExecutionRepository batchJobExecutionRepository;
@@ -29,7 +26,7 @@ public class BatchJobExecutionServiceTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        batchJobExecutionService = new BatchJobExecutionService(
+        batchJobExecutionService = new BatchJobService(
                 batchJobExecutionRepository,
                 batchJobExecutionContextRepository,
                 batchJobExecutionParamsRepository,
@@ -40,10 +37,6 @@ public class BatchJobExecutionServiceTest {
 
     @Test
     public void list() {
-        List<BatchJobExecution> list = batchJobExecutionService.getBatchList();
-        for(BatchJobExecution job : list) {
-            System.out.println(job);
-        }
 
     }
 }

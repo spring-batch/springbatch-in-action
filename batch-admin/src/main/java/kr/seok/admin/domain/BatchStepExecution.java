@@ -1,5 +1,6 @@
 package kr.seok.admin.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,8 +25,10 @@ public class BatchStepExecution {
     private String stepName;
     @Column(name = "JOB_EXECUTION_ID")
     private Long jobExecutionId;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "START_TIME")
     private LocalDateTime startTime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "END_TIME")
     private LocalDateTime endTime;
     @Column(name = "STATUS")
@@ -50,6 +53,7 @@ public class BatchStepExecution {
     private String exitCode;
     @Column(name = "EXIT_MESSAGE")
     private String exitMessage;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "LAST_UPDATED")
     private LocalDateTime lastUpdated;
 }
