@@ -33,7 +33,7 @@ public class BatchJobController {
 
     @GetMapping("/batchStepExecutions")
     public ResponseEntity<?> getStepExecutions() {
-
-        return ResponseEntity.ok().body("");
+        Map<Long, Object> stepExecutions = batchJobExecutionService.getBatchStepExecutions();
+        return ResponseEntity.ok().body(stepExecutions);
     }
 }

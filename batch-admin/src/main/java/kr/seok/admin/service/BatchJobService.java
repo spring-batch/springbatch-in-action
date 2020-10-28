@@ -3,6 +3,7 @@ package kr.seok.admin.service;
 import kr.seok.admin.domain.BatchJobExecution;
 import kr.seok.admin.domain.BatchJobInstance;
 import kr.seok.admin.domain.BatchJobNameInterface;
+import kr.seok.admin.domain.BatchStepExecution;
 import kr.seok.admin.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,10 +57,28 @@ public class BatchJobService {
         for(BatchJobInstance instance : jobInstances) {
             Long jobInstanceId = instance.getJobInstanceId();
             List<BatchJobExecution> executions = batchJobExecutionRepository.findByJobInstanceId(jobInstanceId);
-
             executionPerInstance.put(jobInstanceId, executions);
         }
-
         return executionPerInstance;
+    }
+
+    @Transactional(readOnly = true)
+    public Map<Long, Object> getBatchStepExecutions() {
+        /* */
+        String jobName = "TOTAL_PROCESS_JOB";
+        List<BatchJobInstance> jobInstances = batchJobInstanceRepository.findByJobName(jobName);
+        Map<Long, Object> stepExecutionMap = new HashMap<>();
+
+        for(BatchJobInstance instance : jobInstances) {
+            Long jobInstanceId = instance.getJobInstanceId();
+            List<BatchJobExecution> executions = batchJobExecutionRepository.findByJobInstanceId(jobInstanceId);
+
+            for(BatchJobExecution execution : executions) {
+                Long jobExecutionId = execution.getJobExecutionId();
+                List<BatchStepExecution> stepExecutions = batchStepExecutionRepository.findByJobExecutionId(jobExecutionId);
+                stepExecutionMap.put(jobExecutionId, stepExecutions);
+            }
+        }
+        return stepExecutionMap;
     }
 }
