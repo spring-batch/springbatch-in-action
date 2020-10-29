@@ -1,10 +1,8 @@
 package kr.seok.admin.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.sun.istack.NotNull;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -56,4 +54,14 @@ public class BatchStepExecution {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "LAST_UPDATED")
     private LocalDateTime lastUpdated;
+
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class RequestBody {
+        @NotNull
+        private Long jobExecutionId;
+    }
 }

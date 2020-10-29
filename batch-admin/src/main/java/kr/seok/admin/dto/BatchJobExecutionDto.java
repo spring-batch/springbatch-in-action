@@ -1,46 +1,44 @@
-package kr.seok.admin.domain;
+package kr.seok.admin.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.sun.istack.NotNull;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-@Entity
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
+@Data
+@Builder
 @AllArgsConstructor
-@Table(name = "BATCH_JOB_EXECUTION")
-public class BatchJobExecution {
-    @Id
-    @Column(name = "JOB_EXECUTION_ID")
-    private Long jobExecutionId;
-    @Column(name = "VERSION")
-    private Long version;
-    @Column(name = "JOB_INSTANCE_ID")
+@NoArgsConstructor
+public class BatchJobExecutionDto {
+    /* JobInstance */
+    @NotNull
     private Long jobInstanceId;
+    @NotEmpty
+    private String jobName;
+
+    /* JobExecution */
+    private Long jobExecutionId;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    @Column(name = "CREATE_TIME")
     private LocalDateTime createTime;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    @Column(name = "START_TIME")
     private LocalDateTime startTime;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    @Column(name = "END_TIME")
     private LocalDateTime endTime;
-    @Column(name = "STATUS")
     private String status;
-    @Column(name = "EXIT_CODE")
     private String exitCode;
-    @Column(name = "EXIT_MESSAGE")
     private String exitMessage;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    @Column(name = "LAST_UPDATED")
     private LocalDateTime lastUpdated;
-    @Column(name = "JOB_CONFIGURATION_LOCATION")
-    private String jobConfigurationLocation;
+
+    private String typeCd;
+    private String keyName;
+    private String stringVal;
+    private LocalDateTime dateVal;
+    private Long longVal;
+    private Double doubleVal;
 }
