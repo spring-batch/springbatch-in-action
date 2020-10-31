@@ -35,10 +35,5 @@ public class BatchJobExecutionDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime lastUpdated;
 
-    private String typeCd;
     private String keyName;
-    private String stringVal;
-    private LocalDateTime dateVal;
-    private Long longVal;
-    private Double doubleVal;
 }

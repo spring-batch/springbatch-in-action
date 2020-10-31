@@ -12,4 +12,4 @@
 
 #### TODO
 1. [ ] Job 이력 분석을 통한 쿼리 작성
-2. [ ] Thymeleaf로 Front 작성
+2. [ ] Front 작성

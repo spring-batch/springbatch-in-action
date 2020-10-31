@@ -8,6 +8,7 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.Scheduled;
 
 /**
  * 각 Job을 Step 별로 작성하고 그 Step들을 한번에 실행하는 Job 생성
@@ -29,7 +30,6 @@ public class LibraryTotalToReportFileJobDemo {
     private final LibraryTmpToLibraryStep4 libraryTmpToLibraryStep4;
     private final LibraryTmpToLibraryDetailStep5 libraryTmpToLibraryDetailStep5;
     private final LibraryToReportFileStep6 libraryToReportFileStep6;
-
 
     @Bean(name = JOB_NAME)
     public Job libraryTotalToReportFileJob() {
