@@ -19,7 +19,7 @@ public class BatchJobExecutionDao {
         this.sqlSession = sqlSession;
     }
 
-    public List<BatchJobExecution> getJobExecutions(JobExecutionRequest request) {
-        return sqlSession.selectList(NAMESPACE + "SELECT_JOB_EXECUTIONS", request);
+    public List<BatchJobExecution> getJobExecutions(String JobName) {
+        return sqlSession.selectList(NAMESPACE + "SELECT_JOB_EXECUTIONS_PARAMS", JobName);
     }
 }
