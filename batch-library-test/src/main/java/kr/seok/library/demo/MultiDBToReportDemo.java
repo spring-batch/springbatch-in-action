@@ -32,7 +32,7 @@ public class MultiDBToReportDemo {
     private final CountryRepository countryRepository;
     private final LibraryRepository libraryRepository;
 
-    @Bean(name = JOB_NAME + "_JOB")
+//    @Bean(name = JOB_NAME + "_JOB")
     public Job multiDbToReportJob() {
         return jobBuilderFactory.get(JOB_NAME + "_JOB")
                 .start(multiDbToReportStep())

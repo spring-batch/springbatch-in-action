@@ -1,9 +1,11 @@
 package kr.seok.library.demo;
 
-import kr.seok.library.domain.entity.CityEntity;
 import kr.seok.library.domain.entity.CommonEntity;
+import kr.seok.library.domain.entity.LibraryEntity;
 import kr.seok.library.domain.entity.TmpEntity;
 import kr.seok.library.repository.CityRepository;
+import kr.seok.library.repository.CountryRepository;
+import kr.seok.library.repository.LibraryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -26,34 +28,39 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import static kr.seok.library.common.Constants.CHUNK_SIZE;
 
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-public class TmpToCityDemo {
+public class TmpToLibraryPrototype {
 
     /* batch */
-    private static final String JOB_NAME = "batch_TMP_TO_CITY";
+    private static final String JOB_NAME = "batch_TMP_TO_LIBRARY";
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
-    private static Set<String> cityKeySet = new HashSet<>();
+    private static Set<String> libraryKeySet = new HashSet<>();
 
     /* DB */
     private final DataSource datasource;
     private final EntityManagerFactory entityManagerFactory;
     private final CityRepository cityRepository;
+    private final CountryRepository countryRepository;
+    private final LibraryRepository libraryRepository;
 
     @Bean(name = JOB_NAME)
-    public Job tmpToCityJob() {
+    public Job tmpToLibraryJob() {
         return jobBuilderFactory.get(JOB_NAME)
                 .incrementer(new RunIdIncrementer())
                 .listener(new JobExecutionListener() {
                     @Override
                     public void beforeJob(JobExecution jobExecution) {
-                        cityRepository.deleteAllInBatch();
+                        libraryRepository.deleteAllInBatch();
                     }
 
                     @Override
@@ -61,12 +68,12 @@ public class TmpToCityDemo {
 
                     }
                 })
-                .start(tmpToCityStep())
+                .start(tmpToLibraryStep())
                 .build();
     }
 
     /* Step */
-    private Step tmpToCityStep() {
+    private Step tmpToLibraryStep() {
         return stepBuilderFactory.get(JOB_NAME + "_STEP")
                 .<TmpEntity, CommonEntity>chunk(CHUNK_SIZE)
                 /* One Reader: JdbcCursorItemReader */
@@ -76,7 +83,6 @@ public class TmpToCityDemo {
                 /* Multi Writer: CompositeItemWriter */
                 .writer(compositeWriter())
                 .build();
-
     }
 
     /* One Reader: JdbcCursorItemReader Type */
@@ -101,44 +107,52 @@ public class TmpToCityDemo {
     /* 임시 테이블로부터 읽어온 데이터를 City, Country, Library Entity로 저장하기 위한 Processor */
     private ItemProcessor<? super TmpEntity, ? extends CommonEntity> compositeProcessor() {
 
-        /* Processor 리스트 저장 */
         List<ItemProcessor<? super TmpEntity, ? extends CommonEntity>> delegates = new ArrayList<>();
-        delegates.add(tmpToCityProcessor());
+        delegates.add(tmpToLibraryProcessor());
 
-        /* Processor 위임 */
         CompositeItemProcessor<? super TmpEntity, ? extends CommonEntity> compositeProcessor = new CompositeItemProcessor<>();
         compositeProcessor.setDelegates(delegates);
 
         return compositeProcessor;
     }
 
-    /* 임시 테이블에서 각 도시명의 유잉한 값으로 Filtering */
-    private ItemProcessor<? super TmpEntity, ? extends CommonEntity> tmpToCityProcessor() {
-        return (ItemProcessor<TmpEntity, CityEntity>) item -> {
-            /* Set에 키 값이 포함되어 있으면 넘어가기*/
-            if(cityKeySet.contains(item.getCityNm())) return null;
-            /* 값이 포함되지 않은 경우 set에 설정 및 Entity에 저장 */
-            cityKeySet.add(item.getCityNm());
-            return CityEntity.builder().cityNm(item.getCityNm()).build();
-        };
-    }
-
-    /* Composite Multi Writer */
     private ItemWriter<? super CommonEntity> compositeWriter() {
-        /* 데이터 처리할 Processor를 리스트에 등록 */
-        List<ItemWriter<CityEntity>> delegates = new ArrayList<>();
-        delegates.add(cityWriter());
+        /* Composite Multi Writer */
+        List<ItemWriter<LibraryEntity>> delegates = new ArrayList<>();
+        delegates.add(libraryWriter());
 
-        /* Writer 위임 */
         CompositeItemWriter compositeItemWriter = new CompositeItemWriter<>();
         compositeItemWriter.setDelegates(delegates);
 
         return compositeItemWriter;
     }
 
-    /* Jpa Writer: City */
-    private ItemWriter<CityEntity> cityWriter() {
-        return new JpaItemWriter<CityEntity>() {{
+    /* 임시 테이블에서 각 도시명의 유잉한 값으로 Filtering */
+    private ItemProcessor<? super TmpEntity, ? extends CommonEntity> tmpToLibraryProcessor() {
+        return (ItemProcessor<TmpEntity, LibraryEntity>) item -> {
+            String libraryKey = item.getCityNm() + " " + item.getCountryNm() + " " + item.getLibraryNm();
+
+            /* Set에 키 값이 포함되어 있으면 넘어가기*/
+            if(libraryKeySet.contains(libraryKey)) return null;
+            /* 값이 포함되지 않은 경우 set에 설정 및 Entity에 저장 */
+            libraryKeySet.add(libraryKey);
+
+            /* TODO: Jpa로 처리시 깔끔하게 처리하는 방법이 있을 듯 */
+            Long cityId = cityRepository.findByCityNm(item.getCityNm()).get().getId();
+            Long countryId = countryRepository.findByCityIdAndCountryNm(cityId, item.getCountryNm()).get().getId();
+            String libraryNm = item.getLibraryNm();
+            String libraryType = item.getLibraryType();
+
+            return LibraryEntity.builder()
+                    .cityId(cityId)
+                    .countryId(countryId)
+                    .libraryNm(libraryNm)
+                    .libraryType(libraryType)
+                    .build();
+        };
+    }
+    private ItemWriter<LibraryEntity> libraryWriter() {
+        return new JpaItemWriter<LibraryEntity>() {{
             setEntityManagerFactory(entityManagerFactory);
         }};
     }

@@ -54,10 +54,13 @@ public abstract class SXSSFExcelFile<T> implements ExcelFile<T> {
 		renderExcel(data);
 	}
 
+	/* 직접 사용하는 클래스에서 필요시 구현 가능 */
 	protected void validateData(List<T> data) { }
 
+	/* 직접 사용하는 구현 클래스에서 필수로 구현 */
 	protected abstract void renderExcel(List<T> data);
 
+	/* 새로운 Sheet에 헤더 작성하기 */
 	protected void renderHeadersWithNewSheet(Sheet sheet, int rowIndex, int columnStartIndex) {
 		Row row = sheet.createRow(rowIndex);
 		int columnIndex = columnStartIndex;
@@ -68,6 +71,7 @@ public abstract class SXSSFExcelFile<T> implements ExcelFile<T> {
 		}
 	}
 
+	/* Body 부븐 작성하기 */
 	protected void renderBody(Object data, int rowIndex, int columnStartIndex) {
 		Row row = sheet.createRow(rowIndex);
 		int columnIndex = columnStartIndex;

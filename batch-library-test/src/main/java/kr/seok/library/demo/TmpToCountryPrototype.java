@@ -37,7 +37,7 @@ import static kr.seok.library.common.Constants.CHUNK_SIZE;
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-public class TmpToCountryDemo {
+public class TmpToCountryPrototype {
 
     /* batch */
     private static final String JOB_NAME = "batch_TMP_TO_COUNTRY";

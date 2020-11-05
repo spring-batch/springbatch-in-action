@@ -30,7 +30,7 @@
     2) [quartz](https://blog.kingbbode.com/posts/spring-batch-quartz)
     3) [Jenkins로 배치](https://jojoldu.tistory.com/313)
     4) [MyBatis 설정의 SpringBatch](http://mybatis.org/spring/ko/batch.html)
-
+    5) [One Reader Multi Writer](https://www.javaer101.com/ko/article/5094462.html)
 ## 스터디 회의록
 - [2020.08.22 ~ 현재](docs/README.md)
 

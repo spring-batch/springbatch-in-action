@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import static kr.seok.common.excel.utils.SuperClassReflectionUtils.getAllFields;
-import static org.springframework.core.annotation.AnnotationUtils.getAnnotation;
+import static kr.seok.common.excel.utils.SuperClassReflectionUtils.getAnnotation;
 
 /**
  * ExcelRenderResourceFactory
@@ -60,19 +60,19 @@ public final class ExcelRenderResourceFactory {
 	}
 
 	private static ExcelColumnStyle getHeaderExcelColumnStyle(Class<?> clazz) {
-		DefaultHeaderStyle annotation = getAnnotation(clazz, DefaultHeaderStyle.class);
+		Annotation annotation = getAnnotation(clazz, DefaultHeaderStyle.class);
 		if (annotation == null) {
 			return null;
 		}
-		return annotation.style();
+		return ((DefaultHeaderStyle) annotation).style();
 	}
 
 	private static ExcelColumnStyle getBodyExcelColumnStyle(Class<?> clazz) {
-		DefaultBodyStyle annotation = getAnnotation(clazz, DefaultBodyStyle.class);
+		Annotation annotation = getAnnotation(clazz, DefaultBodyStyle.class);
 		if (annotation == null) {
 			return null;
 		}
-		return annotation.style();
+		return ((DefaultBodyStyle) annotation).style();
 	}
 
 	private static ExcelColumnStyle decideAppliedStyleAnnotation(ExcelColumnStyle classAnnotation,
