@@ -30,7 +30,6 @@ public class CustomExcelItemWriter implements ItemStreamWriter<LibraryTotalEntit
 
     private SXSSFWorkbook wb;
     private WritableResource resource;
-    private CellStyle cellStyle;
     private Cell cell;
     private int row;
 

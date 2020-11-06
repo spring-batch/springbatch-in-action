@@ -2,7 +2,9 @@ package kr.seok.library.domain;
 
 
 import kr.seok.common.excel.annotation.ExcelColumn;
+import lombok.Data;
 
+@Data
 public class ReportDto {
 
     @ExcelColumn(headerName = "도서관 명")
@@ -13,7 +15,5 @@ public class ReportDto {
     private String countryNm;
     @ExcelColumn(headerName = "도서관 유형")
     private String libraryType;
-    @ExcelColumn(headerName = "좌석 수")
-    private String seatNum;
 
 }
