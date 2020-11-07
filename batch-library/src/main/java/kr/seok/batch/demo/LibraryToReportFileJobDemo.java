@@ -68,8 +68,8 @@ public class LibraryToReportFileJobDemo {
     public JdbcPagingItemReader<? extends LibraryEntity> libraryTotalReader() {
         return new JdbcPagingItemReader<LibraryEntity>() {{
             setName(JOB_NAME + "_READER");
-            setPageSize(1000);
-            setFetchSize(1000);
+            setPageSize(CHUNK_SIZE);
+            setFetchSize(CHUNK_SIZE);
             setDataSource(dataSource);
             setQueryProvider(libraryTmpProvider());
             setRowMapper(new BeanPropertyRowMapper<>(LibraryEntity.class));

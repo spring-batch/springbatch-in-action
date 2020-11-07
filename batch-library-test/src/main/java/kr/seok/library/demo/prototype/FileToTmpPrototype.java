@@ -1,4 +1,4 @@
-package kr.seok.library.demo;
+package kr.seok.library.demo.prototype;
 
 import kr.seok.library.domain.FileDto;
 import kr.seok.library.domain.entity.TmpEntity;
@@ -33,7 +33,7 @@ import static org.springframework.batch.item.file.transform.DelimitedLineTokeniz
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-public class FileToTmpDemo {
+public class FileToTmpPrototype {
 
     /* Batch */
     private static final String JOB_NAME = "batch_FILE_TO_TMP";

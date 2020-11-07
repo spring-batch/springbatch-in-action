@@ -14,11 +14,16 @@ import javax.sql.DataSource;
 
 import static kr.seok.library.common.Constants.CHUNK_SIZE;
 
+/**
+ * Multi DB to Report Step 클래스
+ */
 @Configuration
 public class MultiDBToReportStep {
 
+    /* Batch Attribute */
     private static final String STEP_NAME = "MULTI_DB_TO_REPORT";
     private final StepBuilderFactory stepBuilderFactory;
+    /* Database */
     private final DataSource dataSource;
 
     public MultiDBToReportStep(StepBuilderFactory stepBuilderFactory, DataSource dataSource) {
@@ -26,15 +31,19 @@ public class MultiDBToReportStep {
         this.dataSource = dataSource;
     }
 
+    /* Step으로 분리되어 Bean으로 등록 */
     @Bean(name = STEP_NAME + "_STEP")
     public Step multiDbToReportStep() {
-        return stepBuilderFactory.get(STEP_NAME + "_STEP_NAME")
+        return stepBuilderFactory.get(STEP_NAME + "_STEP")
                 .<ReportDto, ReportDto>chunk(CHUNK_SIZE)
+                /* Multi DB Reader */
                 .reader(multiDbReader())
-                .writer(new ExcelItemWriter<>())
+                /* Report Writer */
+                .writer(new ExcelItemWriter<ReportDto>())
                 .build();
     }
 
+    /* Multi DB의 데이터의 필요한 데이터를 조회 */
     private ItemReader<? extends ReportDto> multiDbReader() {
         return new JdbcCursorItemReaderBuilder<ReportDto>()
                 .name(STEP_NAME + "_STEP_READER")
@@ -44,15 +53,14 @@ public class MultiDBToReportStep {
                         "    , B.COUNTRY_NM countryNm " +
                         "    , C.LIBRARY_NM libraryNm " +
                         "    , C.LIBRARY_TYPE libraryType " +
-                        "FROM TB_CITY A\n" +
-                        "JOIN TB_COUNTRY B\n" +
-                        "ON A.CITY_ID = B.CITY_ID\n" +
-                        "JOIN TB_LIBRARY C\n" +
-                        "ON B.COUNTRY_ID = C.COUNTRY_ID\n" +
-                        "AND B.CITY_ID = C.CITY_ID\n" +
+                        "FROM TB_CITY A " +
+                        "JOIN TB_COUNTRY B " +
+                        "ON A.CITY_ID = B.CITY_ID " +
+                        "JOIN TB_LIBRARY C " +
+                        "ON B.COUNTRY_ID = C.COUNTRY_ID " +
+                        "AND B.CITY_ID = C.CITY_ID " +
                         "ORDER BY CITY_NM, COUNTRY_NM, LIBRARY_NM, LIBRARY_TYPE")
                 .rowMapper(new BeanPropertyRowMapper<>(ReportDto.class))
                 .build();
     }
-
 }

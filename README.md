@@ -31,12 +31,24 @@
     3) [Jenkins로 배치](https://jojoldu.tistory.com/313)
     4) [MyBatis 설정의 SpringBatch](http://mybatis.org/spring/ko/batch.html)
     5) [One Reader Multi Writer](https://www.javaer101.com/ko/article/5094462.html)
+
 ## 스터디 회의록
 - [2020.08.22 ~ 현재](docs/README.md)
 
 ## 스프링 배치 문서 정리
 1. [Intro](docs/batch/1.introduction.md)
 2. [Domain](docs/batch/2.BatchDomain.md)
+
+## 스프링 배치 관리
+- [Airflow](https://airbnb.io/projects/airflow/)
+
+- [Apache Airflow](https://bcho.tistory.com/1184)
+- [Spring Batch 관리 도구로서의 Jenkins](https://jojoldu.tistory.com/489)
+- [Airflow VS Jenkins](https://dodonam.tistory.com/157)
+- [Airflow를 이용한 데이터 Workflow 관리](https://www.slideshare.net/YoungHeonKim1/airflow-workflow)
+- [Airflow 워크플로우 모니터링 플랫폼](https://118k.tistory.com/860)
+
+
 
 ## 프로젝트 Spec
 - SpringFramework

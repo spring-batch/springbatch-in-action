@@ -11,6 +11,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbookType;
 import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.item.ItemStreamException;
 import org.springframework.batch.item.ItemStreamWriter;
@@ -41,7 +42,7 @@ public class ExcelItemWriter<T> implements ItemStreamWriter<ReportDto> {
 
     protected static final SpreadsheetVersion supplyExcelVersion = SpreadsheetVersion.EXCEL2007;
 
-    private static final String currDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss").withZone(ZoneId.systemDefault()));
+    private static final String currDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss").withZone(ZoneId.systemDefault()));
     private static final int ROW_START_INDEX = 0;
     private static final int COLUMN_START_INDEX = 0;
     private int currentRowIndex = ROW_START_INDEX;
@@ -53,7 +54,7 @@ public class ExcelItemWriter<T> implements ItemStreamWriter<ReportDto> {
         this.wb = new SXSSFWorkbook();
         this.sheet = wb.createSheet();
 
-        this.resource = new FileSystemResource("libraryReport_" + currDate + ".xlsx");
+        this.resource = new FileSystemResource("libraryReport_" + currDate + "." + XSSFWorkbookType.XLSX.getExtension());
         this.renderResource = ExcelRenderResourceFactory.prepareRenderResource(ReportDto.class, wb, new DefaultDataFormatDecider());
         renderHeadersWithNewSheet(sheet, currentRowIndex++, COLUMN_START_INDEX);
     }

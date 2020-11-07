@@ -1,4 +1,4 @@
-package kr.seok.library.step;
+package kr.seok.library.demo.prototype;
 
 import kr.seok.library.domain.entity.CityEntity;
 import kr.seok.library.domain.entity.CountryEntity;
@@ -7,8 +7,19 @@ import kr.seok.library.domain.entity.TmpEntity;
 import kr.seok.library.repository.CityRepository;
 import kr.seok.library.repository.CountryRepository;
 import kr.seok.library.repository.LibraryRepository;
+import kr.seok.library.repository.TmpRepository;
+import kr.seok.library.step.FileToTmpStep;
+import kr.seok.library.step.MultiDBToReportStep;
+import kr.seok.library.step.TmpToMultiDbStep;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobExecution;
+import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.Step;
+import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.JdbcCursorItemReader;
@@ -26,15 +37,20 @@ import java.util.Set;
 import static kr.seok.library.common.Constants.CHUNK_SIZE;
 
 /**
- * 임시 테이블에서 City, Country, Library 테이블에 한 번에 입력할 수 있도록 한 Step
+ * FileToTmp
+ * TmpToMultiDB
+ * MultiDBToReport
  */
+@Slf4j
 @Configuration
-public class TmpToMultiDbStep {
-
-    private static final String STEP_NAME = "TMP_TO_MULTI_DB";
+@RequiredArgsConstructor
+public class TmpToMultiWriterPrototype {
+    /* Batch */
+    private static final String JOB_NAME = "TMP_TO_MULTI_DB_WRITER_PROTOTYPE";
     private final StepBuilderFactory stepBuilderFactory;
+    private final JobBuilderFactory jobBuilderFactory;
 
-    /* Jdbc */
+    /* JPA */
     private final DataSource dataSource;
     private final CityRepository cityRepository;
     private final CountryRepository countryRepository;
@@ -45,24 +61,36 @@ public class TmpToMultiDbStep {
     private static Set<String> countryKeySet = new HashSet<>();
     private static Set<String> libraryKeySet = new HashSet<>();
 
-    public TmpToMultiDbStep(StepBuilderFactory stepBuilderFactory, DataSource dataSource, CityRepository cityRepository, CountryRepository countryRepository, LibraryRepository libraryRepository) {
-        this.stepBuilderFactory = stepBuilderFactory;
-        this.dataSource = dataSource;
-        this.cityRepository = cityRepository;
-        this.countryRepository = countryRepository;
-        this.libraryRepository = libraryRepository;
+    @Bean(name  = JOB_NAME + "_JOB")
+    public Job tmpToMultiJob() {
+        return jobBuilderFactory.get(JOB_NAME + "_JOB")
+                .incrementer(new RunIdIncrementer())
+                .listener(new JobExecutionListener() {
+                    @Override
+                    public void beforeJob(JobExecution jobExecution) {
+                        cityRepository.deleteAllInBatch();
+                        countryRepository.deleteAllInBatch();
+                        libraryRepository.deleteAllInBatch();
+                    }
+
+                    @Override
+                    public void afterJob(JobExecution jobExecution) {
+
+                    }
+                })
+                .start(tmpToMultiDbStep())
+                .build();
     }
 
-    @Bean(name = STEP_NAME + "_STEP")
     public Step tmpToMultiDbStep() {
-        return stepBuilderFactory.get(STEP_NAME + "_STEP")
+        return stepBuilderFactory.get(JOB_NAME + "_STEP")
                 .<TmpEntity, TmpEntity>chunk(CHUNK_SIZE)
                 .reader(tmpOneReader())
                 .writer(multiEntityWriter())
                 .build();
     }
 
-    private ItemReader<? extends TmpEntity> tmpOneReader() {
+    public ItemReader<? extends TmpEntity> tmpOneReader() {
         /* TB_TMP_LIBRARY 테이블의 컬럼리스트를 작성 */
         StringBuilder sb = new StringBuilder();
         for(String fields : TmpEntity.TmpFields.getFields())
@@ -70,7 +98,7 @@ public class TmpToMultiDbStep {
 
         return new JdbcCursorItemReader<TmpEntity>() {{
             /* 실행 Reader 명 설정 */
-            setName(STEP_NAME + "_STEP_READER");
+            setName(JOB_NAME + "_READER");
             /* Jdbc 방식으로 DB 접근 */
             setDataSource(dataSource);
             /* 조회 쿼리 */
@@ -95,7 +123,7 @@ public class TmpToMultiDbStep {
     }
 
     /* Jpa Writer: City */
-    private ItemWriter<? super TmpEntity> cityWriter() {
+    public ItemWriter<? super TmpEntity> cityWriter() {
         return items -> {
             List<CityEntity> cityList = new ArrayList<>();
 
@@ -116,7 +144,7 @@ public class TmpToMultiDbStep {
         };
     }
 
-    private ItemWriter<? super TmpEntity> countryWriter() {
+    public ItemWriter<? super TmpEntity> countryWriter() {
         return items -> {
             List<CountryEntity> countryList = new ArrayList<>();
 
@@ -141,7 +169,7 @@ public class TmpToMultiDbStep {
         };
     }
 
-    private ItemWriter<? super TmpEntity> libraryWriter() {
+    public ItemWriter<? super TmpEntity> libraryWriter() {
         return items -> {
             List<LibraryEntity> libraryList = new ArrayList<>();
             for(TmpEntity item : items) {

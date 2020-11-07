@@ -20,6 +20,9 @@ import java.util.Set;
 
 import static kr.seok.library.common.Constants.CHUNK_SIZE;
 
+/**
+ * 임시 테이블에서 유일한 도시명만을 City Table에 적재하기 위한 Step
+ */
 @Configuration
 public class TmpToCityStep {
     /* Batch */

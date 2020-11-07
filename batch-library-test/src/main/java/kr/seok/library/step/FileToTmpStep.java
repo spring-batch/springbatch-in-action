@@ -24,6 +24,9 @@ import javax.persistence.EntityManagerFactory;
 import static kr.seok.library.common.Constants.CHUNK_SIZE;
 import static org.springframework.batch.item.file.transform.DelimitedLineTokenizer.DELIMITER_COMMA;
 
+/**
+ * 파일 읽어서 임시테이블에 넣는 Step
+ */
 @Configuration
 public class FileToTmpStep {
     /* Batch */

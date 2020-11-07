@@ -13,12 +13,18 @@ import org.apache.poi.ss.usermodel.CellStyle;
  */
 public enum DefaultExcelCellStyle implements ExcelCellStyle {
 
-	GREY_HEADER(DefaultExcelColor.rgb(217, 217, 217),
-			DefaultExcelBorders.newInstance(ExcelBorderStyle.THIN), DefaultExcelAlign.CENTER_CENTER),
-	BLUE_HEADER(DefaultExcelColor.rgb(223, 235, 246),
-			DefaultExcelBorders.newInstance(ExcelBorderStyle.THIN), DefaultExcelAlign.CENTER_CENTER),
-	BODY(DefaultExcelColor.rgb(255, 255, 255),
-			DefaultExcelBorders.newInstance(ExcelBorderStyle.THIN), DefaultExcelAlign.RIGHT_CENTER);
+	GREY_HEADER(
+			DefaultExcelColor.rgb(217, 217, 217),
+			DefaultExcelBorders.newInstance(ExcelBorderStyle.THIN),
+			DefaultExcelAlign.CENTER_CENTER),
+	BLUE_HEADER(
+			DefaultExcelColor.rgb(223, 235, 246),
+			DefaultExcelBorders.newInstance(ExcelBorderStyle.THIN),
+			DefaultExcelAlign.CENTER_CENTER),
+	BODY(
+			DefaultExcelColor.rgb(255, 255, 255),
+			DefaultExcelBorders.newInstance(ExcelBorderStyle.THIN),
+			DefaultExcelAlign.RIGHT_CENTER);
 
 	private final ExcelColor backgroundColor;
 	/**

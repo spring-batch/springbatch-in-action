@@ -10,8 +10,9 @@ import kr.seok.library.step.TmpToMultiDbStep;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobExecution;
+import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
-import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,9 +25,9 @@ import org.springframework.context.annotation.Configuration;
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-public class TmpToMultiWriterDemo {
+public class LibrarySummaryDemo {
     /* Batch */
-    private static final String JOB_NAME = "TMP_TO_MULTI_DB_WRITER";
+    private static final String JOB_NAME = "LIBRARY_SUMMARY";
     private final JobBuilderFactory jobBuilderFactory;
 
     /* Step Class */
@@ -34,10 +35,29 @@ public class TmpToMultiWriterDemo {
     private final TmpToMultiDbStep tmpToMultiDbStep;
     private final MultiDBToReportStep multiDBToReportStep;
 
+    private final TmpRepository tmpRepository;
+    private final CityRepository cityRepository;
+    private final CountryRepository countryRepository;
+    private final LibraryRepository libraryRepository;
+
     @Bean(name  = JOB_NAME + "_JOB")
     public Job tmpToMultiJob() {
         return jobBuilderFactory.get(JOB_NAME + "_JOB")
                 .incrementer(new RunIdIncrementer())
+                .listener(new JobExecutionListener() {
+                    @Override
+                    public void beforeJob(JobExecution jobExecution) {
+                        tmpRepository.deleteAllInBatch();
+                        cityRepository.deleteAllInBatch();
+                        countryRepository.deleteAllInBatch();
+                        libraryRepository.deleteAllInBatch();
+                    }
+
+                    @Override
+                    public void afterJob(JobExecution jobExecution) {
+
+                    }
+                })
                 .start(fileToTmpStep.fileToTmpStep())
                 .next(tmpToMultiDbStep.tmpToMultiDbStep())
                 .next(multiDBToReportStep.multiDbToReportStep())

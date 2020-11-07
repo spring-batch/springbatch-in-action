@@ -1,10 +1,11 @@
-package kr.seok.library.demo;
+package kr.seok.library.demo.prototype;
 
 import kr.seok.library.domain.entity.CommonEntity;
-import kr.seok.library.domain.entity.CountryEntity;
+import kr.seok.library.domain.entity.LibraryEntity;
 import kr.seok.library.domain.entity.TmpEntity;
 import kr.seok.library.repository.CityRepository;
 import kr.seok.library.repository.CountryRepository;
+import kr.seok.library.repository.LibraryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -37,28 +38,29 @@ import static kr.seok.library.common.Constants.CHUNK_SIZE;
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-public class TmpToCountryPrototype {
+public class TmpToLibraryPrototype {
 
     /* batch */
-    private static final String JOB_NAME = "batch_TMP_TO_COUNTRY";
+    private static final String JOB_NAME = "batch_TMP_TO_LIBRARY";
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
-    private static Set<String> countryKeySet = new HashSet<>();
+    private static Set<String> libraryKeySet = new HashSet<>();
 
     /* DB */
     private final DataSource datasource;
     private final EntityManagerFactory entityManagerFactory;
     private final CityRepository cityRepository;
     private final CountryRepository countryRepository;
+    private final LibraryRepository libraryRepository;
 
     @Bean(name = JOB_NAME)
-    public Job tmpToCountryJob() {
+    public Job tmpToLibraryJob() {
         return jobBuilderFactory.get(JOB_NAME)
                 .incrementer(new RunIdIncrementer())
                 .listener(new JobExecutionListener() {
                     @Override
                     public void beforeJob(JobExecution jobExecution) {
-                        countryRepository.deleteAllInBatch();
+                        libraryRepository.deleteAllInBatch();
                     }
 
                     @Override
@@ -66,12 +68,12 @@ public class TmpToCountryPrototype {
 
                     }
                 })
-                .start(tmpToCountryStep())
+                .start(tmpToLibraryStep())
                 .build();
     }
 
     /* Step */
-    private Step tmpToCountryStep() {
+    private Step tmpToLibraryStep() {
         return stepBuilderFactory.get(JOB_NAME + "_STEP")
                 .<TmpEntity, CommonEntity>chunk(CHUNK_SIZE)
                 /* One Reader: JdbcCursorItemReader */
@@ -81,7 +83,6 @@ public class TmpToCountryPrototype {
                 /* Multi Writer: CompositeItemWriter */
                 .writer(compositeWriter())
                 .build();
-
     }
 
     /* One Reader: JdbcCursorItemReader Type */
@@ -105,11 +106,11 @@ public class TmpToCountryPrototype {
 
     /* 임시 테이블로부터 읽어온 데이터를 City, Country, Library Entity로 저장하기 위한 Processor */
     private ItemProcessor<? super TmpEntity, ? extends CommonEntity> compositeProcessor() {
-        CompositeItemProcessor<? super TmpEntity, ? extends CommonEntity> compositeProcessor = new CompositeItemProcessor<>();
 
         List<ItemProcessor<? super TmpEntity, ? extends CommonEntity>> delegates = new ArrayList<>();
-        delegates.add(tmpToCountryProcessor());
+        delegates.add(tmpToLibraryProcessor());
 
+        CompositeItemProcessor<? super TmpEntity, ? extends CommonEntity> compositeProcessor = new CompositeItemProcessor<>();
         compositeProcessor.setDelegates(delegates);
 
         return compositeProcessor;
@@ -117,8 +118,8 @@ public class TmpToCountryPrototype {
 
     private ItemWriter<? super CommonEntity> compositeWriter() {
         /* Composite Multi Writer */
-        List<ItemWriter<CountryEntity>> delegates = new ArrayList<>();
-        delegates.add(countryWriter());
+        List<ItemWriter<LibraryEntity>> delegates = new ArrayList<>();
+        delegates.add(libraryWriter());
 
         CompositeItemWriter compositeItemWriter = new CompositeItemWriter<>();
         compositeItemWriter.setDelegates(delegates);
@@ -127,25 +128,31 @@ public class TmpToCountryPrototype {
     }
 
     /* 임시 테이블에서 각 도시명의 유잉한 값으로 Filtering */
-    private ItemProcessor<? super TmpEntity, ? extends CommonEntity> tmpToCountryProcessor() {
-        return (ItemProcessor<TmpEntity, CountryEntity>) item -> {
-            String countryKey = item.getCityNm() + " " + item.getCountryNm();
+    private ItemProcessor<? super TmpEntity, ? extends CommonEntity> tmpToLibraryProcessor() {
+        return (ItemProcessor<TmpEntity, LibraryEntity>) item -> {
+            String libraryKey = item.getCityNm() + " " + item.getCountryNm() + " " + item.getLibraryNm();
 
             /* Set에 키 값이 포함되어 있으면 넘어가기*/
-            if(countryKeySet.contains(countryKey)) return null;
+            if(libraryKeySet.contains(libraryKey)) return null;
             /* 값이 포함되지 않은 경우 set에 설정 및 Entity에 저장 */
-            countryKeySet.add(countryKey);
+            libraryKeySet.add(libraryKey);
 
             /* TODO: Jpa로 처리시 깔끔하게 처리하는 방법이 있을 듯 */
             Long cityId = cityRepository.findByCityNm(item.getCityNm()).get().getId();
-            return CountryEntity.builder()
+            Long countryId = countryRepository.findByCityIdAndCountryNm(cityId, item.getCountryNm()).get().getId();
+            String libraryNm = item.getLibraryNm();
+            String libraryType = item.getLibraryType();
+
+            return LibraryEntity.builder()
                     .cityId(cityId)
-                    .countryNm(item.getCountryNm())
+                    .countryId(countryId)
+                    .libraryNm(libraryNm)
+                    .libraryType(libraryType)
                     .build();
         };
     }
-    private ItemWriter<CountryEntity> countryWriter() {
-        return new JpaItemWriter<CountryEntity>() {{
+    private ItemWriter<LibraryEntity> libraryWriter() {
+        return new JpaItemWriter<LibraryEntity>() {{
             setEntityManagerFactory(entityManagerFactory);
         }};
     }

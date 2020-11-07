@@ -21,12 +21,17 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManagerFactory;
 
-@Transactional
+/**
+ * 아래 순서로 전체 프로세스를 수행하는 Job
+ * 1. 파일을 읽고 임시테이블에 적재하는 작업
+ * 2. 임시테이블에 적재된 데이터를 가공하여 City, Country, Library 테이블에 적재하는 작업
+ * 3. City, Country, Library 테이블에서 필요한 데이터만을 가공하여 Report 작성
+ */
 @Configuration
 @RequiredArgsConstructor
 public class TotalProcessDemo {
     /* Batch */
-    private static final String JOB_NAME = "TOTAL_PROCESS";
+    private static final String JOB_NAME = "TOTAL_PROCESS_JOB";
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
 
@@ -37,11 +42,13 @@ public class TotalProcessDemo {
     private final CountryRepository countryRepository;
     private final LibraryRepository libraryRepository;
 
-    @Bean(name = JOB_NAME + "_JOB")
+    /* 전체 프로세스*/
+    @Bean(name = JOB_NAME)
     public Job totalProcess() {
-        return jobBuilderFactory.get(JOB_NAME + "_JOB")
+        return jobBuilderFactory.get(JOB_NAME)
                 .incrementer(new RunIdIncrementer())
                 .listener(new JobExecutionListener() {
+                    /* 배치 데이터 가공하여 적재하기 전 테이블 비우기 */
                     @Override
                     public void beforeJob(JobExecution jobExecution) {
                         tmpRepository.deleteAllInBatch();
