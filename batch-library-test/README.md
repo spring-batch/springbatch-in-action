@@ -96,18 +96,28 @@
 8. LibrarySummaryDemo
     - Job
         - FileToTmpStep
-        - TmpToMultiDbStep
-        - MultiDbToReportStep
-    
+        - [TmpToMultiDbStep](/src/main/java/kr/seok/library/step/TmpToMultiDbStep.java)
+            - CompositeItemWriter를 이렇게 Jpa로 사용하는 경우 하나의 ItemWriter안에서 save로 가능
+            - Jpa외에 다른 Writer를 사용하는 경우에는 각 ItemWriter를 구현해야하기 때문에 분리가 필요
+        - [MultiDBToReportStep](/src/main/java/kr/seok/library/step/MultiDBToReportStep.java)
+            - 정규화된 테이블로부터 필요한 데이터를 가져와 Excel로 작성하는 Step
+            - [AbstractExcelItemWriter](/src/main/java/kr/seok/library/writer/AbstractExcelItemWriter.java)
+                - 공통으로 사용할 수 있는 엑셀 작성 추상클래스
+
     - 결과
         - 전체 도서관 파일 데이터에 대해 임시 테이블에 저장
         - 임시 테이블에 저장된 데이터를 정규화 테이블로 구성
         - 정규화 테이블에 저장된 데이터를 Report로 생성하는 작업을 수행
 
     - 문제점
-        - 임시테이블에서 정규화 처리된 각 테이블에 적재하는 경우 기존의 경우 Step 별로 City, Country, Library 테이블에 저장하는 경우 read, filter, write count를 저장한다. 
-        - 기존의 내용을 개선하여 하나의 Step으로 구성하는 경우 Writer가 한 번에 처리 되기 때문에 이력 테이블의 READ_COUNT, FILTER_COUNT, WRITE_COUNT로 관리할 수 없다.
-        - 데이터를 읽고, 필터링하고, 쓰기에 대한 이력을 관리하고 싶은 경우, 임시테이블의 전체 데이터를 읽고 각 Step으로 나누어 쓰는 방향으로 구성으로 개선해야 한다.
+        - (Writer) 임시테이블에서 정규화 처리된 각 테이블에 적재하는 경우 기존의 경우 Step 별로 City, Country, Library 테이블에 저장하는 경우 read, filter, write count를 저장한다. 
+        - (Manage) 기존의 내용을 개선하여 하나의 Step으로 구성하는 경우 Writer가 한 번에 처리 되기 때문에 이력 테이블의 READ_COUNT, FILTER_COUNT, WRITE_COUNT로 관리할 수 없다.
+        - 데이터를 읽고, 필터링하고, 쓰기에 대한 이력을 관리하고 싶은 경우, 임시테이블의 전체 데이터를 읽고 각 Step으로 나누어 쓰는 방향으로 구성을 사용해야함
+        - (Excel) 엑셀 작성 시 동일한 작업을 필드 별로 작성하여 동적으로 생성할 수 없는 문제
+
+    - 개선한 내용
+        - 임시 테이블에서 가져온 데이터를 정규화 처리하여 각각의 테이블에 저장하는 방식을 각각의 테이블별 ItemWriter를 만들어 CompositeItemWriter를 통해 하나의 트랜잭션으로 처리할 수 있도록 개선
+        - 엑셀 작성 코드 작성 시 공통으로 사용할 수 있는 코드를 추상화 클래스를 만들어 상속받아 사용할 수 있도록 개선 [AbstractExcelItemWriter](/src/main/java/kr/seok/library/writer/AbstractExcelItemWriter.java)
 
 ## 배치 로그 분석
 - 하나의 Job, Step, Reader, Processor, Writer 사이클

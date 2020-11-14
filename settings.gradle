@@ -3,4 +3,5 @@ include 'batch-library'
 include 'batch-common'
 include 'batch-library-test'
 include 'batch-admin'
+include 'batch-real-estate'
 

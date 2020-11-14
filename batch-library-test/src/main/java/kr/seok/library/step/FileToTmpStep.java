@@ -1,5 +1,6 @@
 package kr.seok.library.step;
 
+import kr.seok.library.domain.FileCSVDto;
 import kr.seok.library.domain.FileDto;
 import kr.seok.library.domain.entity.TmpEntity;
 import kr.seok.library.repository.TmpRepository;
@@ -21,6 +22,7 @@ import sun.nio.cs.ext.EUC_KR;
 
 import javax.persistence.EntityManagerFactory;
 
+import static kr.seok.common.excel.utils.SuperClassReflectionUtils.getAllFieldNames;
 import static kr.seok.library.common.Constants.CHUNK_SIZE;
 import static org.springframework.batch.item.file.transform.DelimitedLineTokenizer.DELIMITER_COMMA;
 

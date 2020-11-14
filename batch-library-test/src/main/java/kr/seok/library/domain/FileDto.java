@@ -13,7 +13,7 @@ public class FileDto {
 
     private String libraryNm;       /* 도서관 명 */
     private String cityNm;      /* 시도 명 */
-    private String countryNM;    /* 시군구 명 */
+    private String countryNm;    /* 시군구 명 */
     private String libraryType;     /* 도서관 유형 */
 
     @Getter
@@ -48,7 +48,7 @@ public class FileDto {
     public TmpEntity toEntity() {
         return TmpEntity.builder()
                 .cityNm(cityNm)
-                .countryNm(countryNM)
+                .countryNm(countryNm)
                 .libraryNm(libraryNm)
                 .libraryType(libraryType)
                 .build();

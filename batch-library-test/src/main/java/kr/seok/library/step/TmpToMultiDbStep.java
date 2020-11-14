@@ -116,6 +116,7 @@ public class TmpToMultiDbStep {
         };
     }
 
+    /* Jpa Writer: Country */
     private ItemWriter<? super TmpEntity> countryWriter() {
         return items -> {
             List<CountryEntity> countryList = new ArrayList<>();
@@ -141,6 +142,7 @@ public class TmpToMultiDbStep {
         };
     }
 
+    /* Jpa Writer: Library */
     private ItemWriter<? super TmpEntity> libraryWriter() {
         return items -> {
             List<LibraryEntity> libraryList = new ArrayList<>();

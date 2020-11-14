@@ -1,16 +1,27 @@
 package kr.seok.common.excel.utils;
 
+import kr.seok.common.excel.annotation.ExcelColumn;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public final class SuperClassReflectionUtils {
 
 	private SuperClassReflectionUtils() {
 
+	}
+
+	public static List<String> getAllFieldNames(Class<?> clazz) {
+		List<Field> fields = new ArrayList<>();
+		for (Class<?> clazzInClasses : getAllClassesIncludingSuperClasses(clazz, true)) {
+			fields.addAll(Arrays.asList(clazzInClasses.getDeclaredFields()));
+		}
+		return fields.stream().map(Field::getName).collect(Collectors.toList());
 	}
 
 	public static List<Field> getAllFields(Class<?> clazz) {
@@ -29,6 +40,19 @@ public final class SuperClassReflectionUtils {
 			}
 		}
 		return null;
+	}
+
+	public static List<String> getAnnotations(
+			Class<?> clazz, Class<? extends Annotation> targetAnnotation
+	) {
+		List<String> annotations = new ArrayList<>();
+		for(Field item : getAllFields(clazz)) {
+			if(item.isAnnotationPresent(targetAnnotation)) {
+				ExcelColumn annotation = (ExcelColumn) item.getAnnotation(targetAnnotation);
+				annotations.add(annotation.headerName());
+			}
+		}
+		return annotations;
 	}
 
 	public static Field getField(Class<?> clazz, String name) throws Exception {

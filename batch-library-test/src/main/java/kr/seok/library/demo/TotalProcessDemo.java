@@ -4,10 +4,8 @@ import kr.seok.library.repository.CityRepository;
 import kr.seok.library.repository.CountryRepository;
 import kr.seok.library.repository.LibraryRepository;
 import kr.seok.library.repository.TmpRepository;
-import kr.seok.library.step.FileToTmpStep;
-import kr.seok.library.step.TmpToCityStep;
-import kr.seok.library.step.TmpToCountryStep;
-import kr.seok.library.step.TmpToLibraryStep;
+import kr.seok.library.step.*;
+import kr.seok.library.writer.ExcelItemWriter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
@@ -20,6 +18,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManagerFactory;
+import javax.sql.DataSource;
 
 /**
  * 아래 순서로 전체 프로세스를 수행하는 Job
@@ -41,6 +40,7 @@ public class TotalProcessDemo {
     private final CityRepository cityRepository;
     private final CountryRepository countryRepository;
     private final LibraryRepository libraryRepository;
+    private final DataSource datasource;
 
     /* 전체 프로세스*/
     @Bean(name = JOB_NAME)
@@ -66,6 +66,7 @@ public class TotalProcessDemo {
                 .next(new TmpToCityStep(stepBuilderFactory, cityRepository, entityManagerFactory).tmpToCityStep())
                 .next(new TmpToCountryStep(stepBuilderFactory, entityManagerFactory, cityRepository).tmpToCountryStep())
                 .next(new TmpToLibraryStep(stepBuilderFactory, entityManagerFactory, cityRepository, countryRepository).tmpToLibraryStep())
+                .next(new MultiDBToReportStep(stepBuilderFactory, datasource).multiDbToReportStep())
                 .build();
 
     }
