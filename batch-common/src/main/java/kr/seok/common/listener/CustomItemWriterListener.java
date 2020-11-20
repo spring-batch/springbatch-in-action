@@ -27,7 +27,6 @@ public class CustomItemWriterListener<S> implements ItemWriteListener<S> {
     public void afterWrite(List<? extends S> items) {
         postSize = items.size();
         log.info("[LOG] [Writer] [AFTER] [{}]", items.size());
-
         if (preSize != postSize) onWriteError(new RuntimeException("데이터 입력 값이 같지 않음"), items);
     }
 

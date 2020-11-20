@@ -5,7 +5,6 @@ import kr.seok.common.excel.resources.ExcelRenderLocation;
 import kr.seok.common.excel.resources.ExcelRenderResource;
 import kr.seok.library.domain.ReportDto;
 import org.apache.poi.ss.SpreadsheetVersion;
-import org.apache.poi.ss.formula.functions.T;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
@@ -61,6 +60,7 @@ public abstract class AbstractExcelItemWriter {
     /* Excel Header Writer */
     protected void renderHeadersWithNewSheet(SXSSFSheet sheet, int rowIndex, int columnStartIndex) {
         Row row = sheet.createRow(rowIndex);
+
         int columnIndex = columnStartIndex;
         for (String dataFieldName : renderResource.getDataFieldNames()) {
             Cell cell = row.createCell(columnIndex++);

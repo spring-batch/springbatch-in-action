@@ -49,10 +49,13 @@ public class MultiDBToReportStep {
                 .name(STEP_NAME + "_STEP_READER")
                 .dataSource(dataSource)
                 .sql("SELECT " +
-                        "    A.CITY_NM as cityNm " +
-                        "    , B.COUNTRY_NM countryNm " +
-                        "    , C.LIBRARY_NM libraryNm " +
-                        "    , C.LIBRARY_TYPE libraryType " +
+                        "    A.CITY_ID as cityCd " +
+                        "    , A.CITY_NM as cityNm " +
+                        "    , B.COUNTRY_ID as countryCd " +
+                        "    , B.COUNTRY_NM as countryNm " +
+                        "    , C.LIBRARY_ID as libraryCd " +
+                        "    , C.LIBRARY_NM as libraryNm " +
+                        "    , C.LIBRARY_TYPE as libraryType " +
                         "FROM TB_CITY A " +
                         "JOIN TB_COUNTRY B " +
                         "ON A.CITY_ID = B.CITY_ID " +

@@ -23,8 +23,9 @@ public class DefaultExcelColor implements ExcelColor {
 	}
 
 	public static DefaultExcelColor rgb(int red, int green, int blue) {
-		if (red < MIN_RGB || red > MAX_RGB || green < MIN_RGB ||
-				green > MAX_RGB || blue < MIN_RGB || blue > MAX_RGB) {
+		if (red < MIN_RGB || red > MAX_RGB ||
+			green < MIN_RGB || green > MAX_RGB ||
+			blue < MIN_RGB || blue > MAX_RGB) {
 			throw new IllegalArgumentException(
 					String.format("Wrong RGB(%s %s %s)", red, green, blue)
 			);
