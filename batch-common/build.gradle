@@ -46,6 +46,13 @@ dependencies {
     /* Test */
     testImplementation('org.springframework.boot:spring-boot-starter-test')
     testImplementation('org.springframework.batch:spring-batch-test')
+
+    testCompile('org.junit.jupiter:junit-jupiter:5.5.2')
+    testCompile('org.assertj:assertj-core:3.14.0')
+}
+
+test {
+    useJUnitPlatform()
 }
 
 bootJar { enabled = false }

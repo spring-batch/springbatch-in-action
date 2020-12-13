@@ -1,4 +1,4 @@
-package kr.seok.common.excel.utils;
+package kr.seok.common.utils;
 
 import kr.seok.common.excel.annotation.ExcelColumn;
 
@@ -12,9 +12,7 @@ import java.util.stream.Collectors;
 
 public final class SuperClassReflectionUtils {
 
-	private SuperClassReflectionUtils() {
-
-	}
+	private SuperClassReflectionUtils() {}
 
 	public static List<String> getAllFieldNames(Class<?> clazz) {
 		List<Field> fields = new ArrayList<>();

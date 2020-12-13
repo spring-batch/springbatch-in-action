@@ -18,8 +18,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static kr.seok.common.excel.utils.SuperClassReflectionUtils.getAllFields;
-import static kr.seok.common.excel.utils.SuperClassReflectionUtils.getAnnotation;
+import static kr.seok.common.utils.SuperClassReflectionUtils.getAllFields;
+import static kr.seok.common.utils.SuperClassReflectionUtils.getAnnotation;
 
 /**
  * ExcelRenderResourceFactory
