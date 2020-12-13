@@ -1,6 +1,7 @@
-package kr.seok.common.library.vo;
+package kr.seok.library.domain.vo;
 
 import kr.seok.common.entity.EntityField;
+import kr.seok.library.domain.entity.TmpEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,4 +25,12 @@ public class LibraryFileVo {
     @EntityField(fieldName = "libraryType", columnName = "LIBRARY_TYPE")
     private String libraryType;
 
+    public TmpEntity toEntity() {
+        return TmpEntity.builder()
+                .cityNm(cityNm)
+                .countryNm(countryNm)
+                .libraryNm(libraryNm)
+                .libraryType(libraryType)
+                .build();
+    }
 }

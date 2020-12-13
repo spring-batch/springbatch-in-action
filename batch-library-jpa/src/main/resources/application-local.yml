@@ -1,0 +1,15 @@
+spring.profiles: local
+spring:
+  profiles:
+    include: db, batch
+
+# 서버 포트 설정
+server:
+  port: 8082
+
+# 로그 설정
+logging:
+  level:
+    org:
+      springframework:
+        batch: info

@@ -24,15 +24,16 @@ import javax.sql.DataSource;
 public class BatchAppConfig {
 
     /* */
-    @Bean(name = "datasource")
-    @ConfigurationProperties(prefix = "spring.datasource.batch")
+    @Bean(name = "dataSource")
+    @ConfigurationProperties(prefix = "spring.datasource")
     public DataSource datasource() {
         return DataSourceBuilder.create().build();
     }
 
     @Bean(name = "entityManagerFactory")
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(
-            EntityManagerFactoryBuilder builder, @Qualifier("dataSource") DataSource dataSource
+            EntityManagerFactoryBuilder builder,
+            @Qualifier("dataSource") DataSource dataSource
     ) {
         return builder
                 .dataSource(dataSource)

@@ -19,7 +19,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-import static kr.seok.common.excel.utils.SuperClassReflectionUtils.getField;
+import static kr.seok.common.utils.SuperClassReflectionUtils.getField;
 
 /**
  * [공통] 엑셀 작성 추상클래스
