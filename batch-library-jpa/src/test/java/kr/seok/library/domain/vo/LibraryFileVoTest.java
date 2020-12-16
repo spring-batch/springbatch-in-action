@@ -1,6 +1,6 @@
 package kr.seok.library.domain.vo;
 
-import kr.seok.common.entity.EntityField;
+import kr.seok.common.annotations.EntityField;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

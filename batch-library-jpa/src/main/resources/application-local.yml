@@ -13,3 +13,6 @@ logging:
     org:
       springframework:
         batch: info
+
+file:
+  path: files/전국도서관표준데이터.csv

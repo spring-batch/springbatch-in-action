@@ -5,4 +5,5 @@ include 'batch-library-test'
 include 'batch-admin'
 include 'batch-real-estate'
 include 'batch-library-jpa'
+include 'batch-hospital-position'
 

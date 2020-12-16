@@ -1,12 +1,15 @@
 package kr.seok.library.domain.vo;
 
-import kr.seok.common.entity.EntityField;
+import kr.seok.common.annotations.EntityField;
 import kr.seok.library.domain.entity.TmpEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * 앞으로 개선하여 사용하게 될 dto
+ */
 @Data
 @Builder
 @NoArgsConstructor
