@@ -2,8 +2,9 @@ package kr.seok.library.step;
 
 import kr.seok.library.domain.entity.TmpEntity;
 import kr.seok.library.domain.vo.FileDto;
+import kr.seok.library.listener.TmpEntityStepListener;
 import lombok.RequiredArgsConstructor;
-import org.springframework.batch.core.Step;
+import org.springframework.batch.core.*;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
@@ -21,7 +22,6 @@ import sun.nio.cs.ext.EUC_KR;
 
 import javax.persistence.EntityManagerFactory;
 
-import static kr.seok.common.consts.Constants.CHUNK_SIZE;
 import static org.springframework.batch.item.file.transform.DelimitedLineTokenizer.DELIMITER_COMMA;
 
 /**
@@ -33,18 +33,22 @@ public class FileToTmpStep {
     /* Batch */
     private static final String STEP_NAME = "JPA_VERSION_STEP_ONE";
     private final StepBuilderFactory stepBuilderFactory;
+    private final TmpEntityStepListener tmpEntityStepListener;
     /* DB */
     private final EntityManagerFactory entityManagerFactory;
 
     /* TODO 파일 경로를 외부 파라미터로 받을 수 있도록 해야함, 파라미터로 들어오지 않은 경우 기본 경로도 필요 */
-    @Value("${file.path}")
+    @Value("${file.library}")
     private String filePath;
+
+    private static final int CHUNK_SIZE = 1000;
 
     /* 파일 읽어서 임시 테이블에 저장하는 Step */
     @Bean(name = STEP_NAME)
     public Step fileToTmpStep() {
 
         return stepBuilderFactory.get(STEP_NAME)
+                .listener(tmpEntityStepListener)
                 .<FileDto, TmpEntity>chunk(CHUNK_SIZE)
                 .reader(fileReader())
                 .processor(fileToTmpProcessor())

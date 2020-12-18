@@ -1,6 +1,7 @@
 package kr.seok.library.job;
 
 import kr.seok.library.step.FileToTmpStep;
+import kr.seok.library.step.TmpToMultiStep;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -17,6 +18,7 @@ public class LibraryJobConfig {
 
     /* Step */
     private final FileToTmpStep fileToTmpStep;
+    private final TmpToMultiStep tmpToMultiStep;
 
     @Bean(name = JOB_NAME + "_JOB")
     public Job jpaLibraryJob() {

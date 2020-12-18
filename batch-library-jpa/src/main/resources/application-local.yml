@@ -15,4 +15,5 @@ logging:
         batch: info
 
 file:
-  path: files/전국도서관표준데이터.csv
+  library: files/전국도서관표준데이터.csv
+  area: files/법정동코드전체자료.txt
