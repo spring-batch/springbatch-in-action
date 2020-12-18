@@ -5,37 +5,36 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
-@EqualsAndHashCode(callSuper = true)
 @Entity
-@Data
-@Table(name = "TB_LIBRARY")
 @NoArgsConstructor
+@Table(name = "TB_LIBRARY")
+@EqualsAndHashCode(callSuper = false, of = {"libraryNm"})
 @AttributeOverride(name = "id", column = @Column(name = "LIBRARY_ID"))
 public class LibraryEntity extends CommonEntity implements Serializable {
-
-    @Column(name = "CITY_ID")
-    private Long cityId;
-
-    @Column(name = "COUNTRY_ID")
-    private Long countryId;
 
     @Column(name = "LIBRARY_NM")
     private String libraryNm;
 
-    @Column(name = "LIBRARY_TYPE")
-    private String libraryType;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "CITY_ID")
+    private CityEntity cityEntity;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "COUNTRY_ID")
+    private CountryEntity countryEntity;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "LIBRARY_TYPE_ID")
+    private LibraryTypeEntity libraryTypeEntity;
 
     @Builder
-    public LibraryEntity(Long cityId, Long countryId, String libraryNm, String libraryType) {
-        this.cityId = cityId;
-        this.countryId = countryId;
+    public LibraryEntity(String libraryNm, CityEntity cityEntity, CountryEntity countryEntity, LibraryTypeEntity libraryTypeEntity) {
         this.libraryNm = libraryNm;
-        this.libraryType = libraryType;
+        this.cityEntity = cityEntity;
+        this.countryEntity = countryEntity;
+        this.libraryTypeEntity = libraryTypeEntity;
     }
 }
