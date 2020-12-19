@@ -1,9 +1,4 @@
 rootProject.name = 'springbatch_study'
-include 'batch-library'
-include 'batch-common'
-include 'batch-library-test'
-include 'batch-admin'
-include 'batch-real-estate'
-include 'batch-library-jpa'
-include 'batch-hospital-position'
+include 'batch-common', 'batch-admin', 'batch-core'
+include 'batch-library', 'batch-library-test', 'batch-real-estate', 'batch-library-jpa', 'batch-hospital-position'
 

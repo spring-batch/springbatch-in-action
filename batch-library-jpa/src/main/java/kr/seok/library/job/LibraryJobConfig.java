@@ -23,6 +23,7 @@ public class LibraryJobConfig {
     private final TmpToLibraryTypeStep tmpToLibraryTypeStep;
     private final TmpToLibraryStep tmpToLibraryStep;
 
+    /* 테이블 비우기 */
     private final TotalEntityJobListener totalEntityJobListener;
 
     @Bean(name = JOB_NAME + "_JOB")
