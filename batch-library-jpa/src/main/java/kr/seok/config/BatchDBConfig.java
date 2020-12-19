@@ -19,11 +19,19 @@ import javax.sql.DataSource;
 @EnableTransactionManagement
 /* Repository */
 @EnableJpaRepositories(
-        basePackages = {"kr.seok.library.domain.repository"}
+        basePackages = {
+                "kr.seok.library.domain.repository"
+                , "kr.seok.area.domain.repository"
+        }
 )
 public class BatchDBConfig {
 
-    /* */
+    /* Entity 관리 경로 */
+    String[] packages = {
+            "kr.seok.library.domain.entity",
+            "kr.seok.area.domain.entity"
+    };
+
     @Bean(name = "dataSource")
     @ConfigurationProperties(prefix = "spring.datasource")
     public DataSource datasource() {
@@ -32,22 +40,17 @@ public class BatchDBConfig {
 
     @Bean(name = "entityManagerFactory")
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(
-            EntityManagerFactoryBuilder builder,
-            @Qualifier("dataSource") DataSource dataSource
-    ) {
+            EntityManagerFactoryBuilder builder, @Qualifier("dataSource") DataSource dataSource) {
         return builder
                 .dataSource(dataSource)
-                .packages(
-                        "kr.seok.library.domain",
-                        "kr.seok.area.domain")
+                .packages(packages)
                 .persistenceUnit("batch")
                 .build();
     }
 
     @Bean(name = "transactionManager")
     public PlatformTransactionManager transactionManager(
-            @Qualifier("entityManagerFactory") EntityManagerFactory entityManagerFactory
-    ) {
+            @Qualifier("entityManagerFactory") EntityManagerFactory entityManagerFactory) {
         return new JpaTransactionManager(entityManagerFactory);
     }
 }

@@ -5,28 +5,27 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
 @NoArgsConstructor
 @Table(name = "TB_COUNTRY")
 /* cityNm, countryNm 필드로 해당 CountryEntity 를 구분 */
-@EqualsAndHashCode(callSuper = false, of = {"cityNm", "countryNm"})
+@EqualsAndHashCode(callSuper = false, of = {"cityEntity", "countryNm"})
+@AttributeOverride(name = "id", column = @Column(name = "COUNTRY_ID"))
 public class CountryEntity extends CommonEntity implements Serializable {
 
-    @Column(name = "CITY_NM")
-    private String cityNm;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "CITY_ID")
+    private CityEntity cityEntity;
 
     @Column(name = "COUNTRY_NM")
     private String countryNm;
 
     @Builder
-    public CountryEntity(String cityNm, String countryNm) {
-        this.cityNm = cityNm;
+    public CountryEntity(CityEntity cityEntity, String countryNm) {
+        this.cityEntity = cityEntity;
         this.countryNm = countryNm;
     }
 }

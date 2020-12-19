@@ -44,10 +44,10 @@ public class FileToTmpStep {
     private static final int CHUNK_SIZE = 1000;
 
     /* 파일 읽어서 임시 테이블에 저장하는 Step */
-    @Bean(name = STEP_NAME)
+    @Bean(name = STEP_NAME + "_STEP")
     public Step fileToTmpStep() {
 
-        return stepBuilderFactory.get(STEP_NAME)
+        return stepBuilderFactory.get(STEP_NAME + "_STEP")
                 .listener(tmpEntityStepListener)
                 .<LibraryFileDto, LibraryTmpEntity>chunk(CHUNK_SIZE)
                 .reader(fileReader())

@@ -19,9 +19,9 @@ public class LibraryFileDto {
     @AllArgsConstructor
     public enum LibraryFileFields {
 
+        libraryNm("libraryNm", "LIBRARY_NM"),
         cityNm("cityNm", "CITY_NM"),
         countryNM("countryNm", "COUNTRY_NM"),
-        libraryNm("libraryNm", "LIBRARY_NM"),
         libraryType("libraryType", "LIBRARY_TYPE");
 
         private String fieldNm;

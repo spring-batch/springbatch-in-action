@@ -12,9 +12,9 @@ import javax.persistence.Table;
 import java.io.Serializable;
 
 @Data
-@NoArgsConstructor
-@Entity(name = "TMP_ENTITY")
+@Entity(name = "libraryTmpEntity")
 @Table(name = "TB_TMP_LIBRARY")
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = false, of = {"cityNm", "countryNm", "libraryNm", "libraryType"})
 @AttributeOverride(name = "id", column = @Column(name = "TMP_ID"))
 public class LibraryTmpEntity extends CommonEntity implements Serializable {
@@ -41,5 +41,11 @@ public class LibraryTmpEntity extends CommonEntity implements Serializable {
         this.countryNm = countryNm;
         this.libraryNm = libraryNm;
         this.libraryType = libraryType;
+    }
+
+    public CityEntity toCityEntity() {
+        return CityEntity.builder()
+                .cityNm(cityNm)
+                .build();
     }
 }

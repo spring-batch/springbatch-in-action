@@ -30,7 +30,6 @@ public class AreaJobConfig {
     private final String JOB_NAME = "JPA_AREA";
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
-
     private final EntityManagerFactory entityManagerFactory;
 
     @Value("${file.area}")
@@ -38,12 +37,13 @@ public class AreaJobConfig {
 
     @Bean
     public Job areaJob() {
-        return jobBuilderFactory.get(JOB_NAME)
+        return jobBuilderFactory.get(JOB_NAME + "_JOB")
                 .incrementer(new RunIdIncrementer())
                 .start(areaStep())
                 .build();
     }
 
+    /* File Reader -> File :: Entity -> Entity 프로세스 Step */
     private Step areaStep() {
         return stepBuilderFactory.get(JOB_NAME + "_STEP")
                 .<FileLineDto, AreaEntity>chunk(1000)
@@ -53,7 +53,7 @@ public class AreaJobConfig {
                 .build();
     }
 
-    /* Text FileReader */
+    /* Text - FlatFileItemReader */
     private ItemReader<? extends FileLineDto> txtFlatFileReader() {
         return new FlatFileItemReader<FileLineDto>() {{
             setResource(new ClassPathResource(filePath));
@@ -63,7 +63,7 @@ public class AreaJobConfig {
         }};
     }
 
-    /* TmpEntity Persistence Context cache에 저장되어 있는 데이터를 DB에 Flush */
+    /* File 필드 값을 AreaEntity에 저장하여 DB에 적재 */
     private ItemWriter<? super AreaEntity> areaWriter() {
         return new JpaItemWriterBuilder<>()
                 .entityManagerFactory(entityManagerFactory)

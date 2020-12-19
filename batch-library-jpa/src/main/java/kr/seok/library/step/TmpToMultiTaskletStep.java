@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Configuration;
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-public class TmpToMultiStep {
+public class TmpToMultiTaskletStep {
 
     /* Batch */
     private static final String STEP_NAME = "JPA_VERSION_STEP_TWO";

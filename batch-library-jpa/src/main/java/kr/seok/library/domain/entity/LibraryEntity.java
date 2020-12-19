@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 
-@Entity
+@Entity(name = "libraryEntity")
 @NoArgsConstructor
 @Table(name = "TB_LIBRARY")
 /* libraryNm 필드와 cityEntity, countryEntity, libraryTypeEntity 엔티티로 LibraryEntity 를 구분 */
@@ -19,15 +19,15 @@ public class LibraryEntity extends CommonEntity implements Serializable {
     @Column(name = "LIBRARY_NM")
     private String libraryNm;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "CITY_ID")
     private CityEntity cityEntity;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "COUNTRY_ID")
     private CountryEntity countryEntity;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "LIBRARY_TYPE_ID")
     private LibraryTypeEntity libraryTypeEntity;
 

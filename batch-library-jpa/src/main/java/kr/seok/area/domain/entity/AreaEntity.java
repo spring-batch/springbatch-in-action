@@ -12,11 +12,11 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.io.Serializable;
 
-@Entity
 @Data
+@Entity
 @NoArgsConstructor
 @Table(name = "TB_AREA")
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false, of = {"areaCd", "bigLocalNm", "midLocalNm", "smallLocalNm", "tooSmallLocalNm", "useYn"})
 @AttributeOverride(name = "id", column = @Column(name = "AREA_ID"))
 public class AreaEntity extends CommonEntity implements Serializable {
     private String areaCd;
