@@ -1,6 +1,6 @@
 package kr.seok.library.step;
 
-import kr.seok.library.domain.repository.TmpRepository;
+import kr.seok.library.tasklet.OneToManyTasklet;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -24,7 +24,7 @@ public class TmpToMultiStep {
     private final StepBuilderFactory stepBuilderFactory;
     private final JobBuilderFactory jobBuilderFactory;
 
-    private final TaskletStep taskletStep;
+    private final OneToManyTasklet oneToManyTasklet;
 
     @Bean
     public Job jpaVersionJobTwo() {
@@ -36,7 +36,7 @@ public class TmpToMultiStep {
 
     private Step taskStep() {
         return stepBuilderFactory.get(STEP_NAME + "_STEP")
-                .tasklet(taskletStep)
+                .tasklet(oneToManyTasklet)
                 .build();
     }
 }

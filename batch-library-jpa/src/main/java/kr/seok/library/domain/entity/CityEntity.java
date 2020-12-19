@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Entity
 @NoArgsConstructor
 @Table(name = "TB_CITY")
-/* Entity 필드 HashCode로 구분 */
+/* cityNm 필드로 해당 CityEntity를 구분 */
 @EqualsAndHashCode(callSuper = false, of = "cityNm")
 @AttributeOverride(name = "id", column = @Column(name = "CITY_ID"))
 public class CityEntity extends CommonEntity implements Serializable {

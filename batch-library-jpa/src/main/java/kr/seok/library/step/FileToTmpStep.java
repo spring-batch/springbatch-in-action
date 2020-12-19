@@ -1,7 +1,7 @@
 package kr.seok.library.step;
 
-import kr.seok.library.domain.entity.TmpEntity;
-import kr.seok.library.domain.vo.FileDto;
+import kr.seok.library.domain.entity.LibraryTmpEntity;
+import kr.seok.library.domain.vo.LibraryFileDto;
 import kr.seok.library.listener.TmpEntityStepListener;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.*;
@@ -49,7 +49,7 @@ public class FileToTmpStep {
 
         return stepBuilderFactory.get(STEP_NAME)
                 .listener(tmpEntityStepListener)
-                .<FileDto, TmpEntity>chunk(CHUNK_SIZE)
+                .<LibraryFileDto, LibraryTmpEntity>chunk(CHUNK_SIZE)
                 .reader(fileReader())
                 .processor(fileToTmpProcessor())
                 .writer(tmpWriter())
@@ -57,33 +57,33 @@ public class FileToTmpStep {
     }
 
     /* 파일 읽는 Reader */
-    private ItemReader<? extends FileDto> fileReader() {
-        return new FlatFileItemReader<FileDto>() {{
+    private ItemReader<? extends LibraryFileDto> fileReader() {
+        return new FlatFileItemReader<LibraryFileDto>() {{
             setResource(new ClassPathResource(filePath));
             setEncoding(new EUC_KR().historicalName());
             setLinesToSkip(1);
-            setLineMapper(new DefaultLineMapper<FileDto>() {{
+            setLineMapper(new DefaultLineMapper<LibraryFileDto>() {{
                 setLineTokenizer(
                         new DelimitedLineTokenizer(DELIMITER_COMMA) {{
                             /* TODO 파일 필드 값을 필드의 어노테이션 등록 형식으로 변경해보기 */
-                            setNames(FileDto.FileFields.getFieldNms());
+                            setNames(LibraryFileDto.LibraryFileFields.getFieldNms());
                             setIncludedFields(0, 1, 2, 3);
                         }});
-                setFieldSetMapper(new BeanWrapperFieldSetMapper<FileDto>() {{
-                    setTargetType(FileDto.class);
+                setFieldSetMapper(new BeanWrapperFieldSetMapper<LibraryFileDto>() {{
+                    setTargetType(LibraryFileDto.class);
                 }});
             }});
         }};
     }
 
     /* 파일 데이터를 읽어서 TmpEntity로 매핑하여 Persistence Context에 저장 */
-    private ItemProcessor<? super FileDto,? extends TmpEntity> fileToTmpProcessor() {
-        return FileDto::toEntity;
+    private ItemProcessor<? super LibraryFileDto,? extends LibraryTmpEntity> fileToTmpProcessor() {
+        return LibraryFileDto::toEntity;
     }
 
     /* TmpEntity Persistence Context cache에 저장되어 있는 데이터를 DB에 Flush > transaction > commit */
-    private ItemWriter<? super TmpEntity> tmpWriter() {
-        return new JpaItemWriter<TmpEntity>() {{
+    private ItemWriter<? super LibraryTmpEntity> tmpWriter() {
+        return new JpaItemWriter<LibraryTmpEntity>() {{
             setEntityManagerFactory(entityManagerFactory);
         }};
     }

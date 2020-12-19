@@ -13,6 +13,7 @@ import java.io.Serializable;
 @Entity
 @NoArgsConstructor
 @Table(name = "TB_LIBRARY_TYPE")
+/* libraryType 필드로 해당 LibraryTypeEntity 를 구분 */
 @EqualsAndHashCode(callSuper = false, of = "libraryType")
 @AttributeOverride(name = "id", column = @Column(name = "LIBRARY_TYPE_ID"))
 public class LibraryTypeEntity extends CommonEntity implements Serializable {

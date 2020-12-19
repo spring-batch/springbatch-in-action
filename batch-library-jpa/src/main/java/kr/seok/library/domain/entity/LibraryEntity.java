@@ -11,7 +11,8 @@ import java.io.Serializable;
 @Entity
 @NoArgsConstructor
 @Table(name = "TB_LIBRARY")
-@EqualsAndHashCode(callSuper = false, of = {"libraryNm"})
+/* libraryNm 필드와 cityEntity, countryEntity, libraryTypeEntity 엔티티로 LibraryEntity 를 구분 */
+@EqualsAndHashCode(callSuper = false, of = {"libraryNm", "cityEntity", "countryEntity", "libraryTypeEntity"})
 @AttributeOverride(name = "id", column = @Column(name = "LIBRARY_ID"))
 public class LibraryEntity extends CommonEntity implements Serializable {
 

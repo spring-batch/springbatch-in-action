@@ -14,6 +14,7 @@ import java.io.Serializable;
 @Entity
 @NoArgsConstructor
 @Table(name = "TB_COUNTRY")
+/* cityNm, countryNm 필드로 해당 CountryEntity 를 구분 */
 @EqualsAndHashCode(callSuper = false, of = {"cityNm", "countryNm"})
 public class CountryEntity extends CommonEntity implements Serializable {
 

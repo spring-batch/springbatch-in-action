@@ -1,4 +1,4 @@
-package kr.seok.library.step;
+package kr.seok.library.tasklet;
 
 import kr.seok.library.domain.entity.*;
 import kr.seok.library.domain.repository.*;
@@ -17,8 +17,8 @@ import java.util.Set;
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-public class TaskletStep implements Tasklet {
-    private final TmpRepository tmpRepository;
+public class OneToManyTasklet implements Tasklet {
+    private final LibraryTmpRepository libraryTmpRepository;
     private final CityRepository cityRepository;
     private final CountryRepository countryRepository;
     private final LibraryTypeRepository libraryTypeRepository;
@@ -31,17 +31,22 @@ public class TaskletStep implements Tasklet {
         Set<LibraryTypeEntity> libraryTypeEntitySet = Sets.newHashSet();
         Set<LibraryEntity> libraryEntitySet = Sets.newHashSet();
 
-        List<TmpEntity> totalEntity = tmpRepository.findAll();
+        List<LibraryTmpEntity> totalEntity = libraryTmpRepository.findAll();
 
         totalEntity.forEach(item -> {
+            /* Tmp Entity에서 각 테이블의 유니크한 필드를 가져와 Object로 생성하여 Set 데이터 타입에 저장 */
             String cityNm = item.getCityNm();
             String countryNm = item.getCountryNm();
             String libraryNm = item.getLibraryNm();
             String libraryType = item.getLibraryType();
 
+            /* 유일한 City 값은 총 17건 */
             CityEntity cityEntity = CityEntity.builder().cityNm(cityNm).build();
+            /* 유일한 Country 값은 총 244건 */
             CountryEntity countryEntity = CountryEntity.builder().cityNm(cityNm).countryNm(countryNm).build();
+            /* 유일한 LibraryType 값은 총 6건 */
             LibraryTypeEntity libraryTypeEntity = LibraryTypeEntity.builder().libraryType(libraryType).build();
+            /* */
             LibraryEntity libraryEntity = LibraryEntity.builder()
                     .libraryNm(libraryNm)
                     .cityEntity(cityEntity)

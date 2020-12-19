@@ -1,9 +1,8 @@
 package kr.seok.library.listener;
 
 
-import kr.seok.library.domain.repository.TmpRepository;
+import kr.seok.library.domain.repository.LibraryTmpRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.apachecommons.CommonsLog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepExecution;
@@ -18,17 +17,17 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class TmpEntityStepListener implements StepExecutionListener {
 
-    private final TmpRepository tmpRepository;
+    private final LibraryTmpRepository libraryTmpRepository;
 
     @Override
     public void beforeStep(StepExecution stepExecution) {
-        tmpRepository.deleteAllInBatch();
-        log.info("[LOG] [TB_TMP_LIBRARY] [INITIALIZE] [SIZE] [{}]", tmpRepository.count());
+        libraryTmpRepository.deleteAllInBatch();
+        log.info("[LOG] [TB_TMP_LIBRARY] [INITIALIZE] [SIZE] [{}]", libraryTmpRepository.count());
     }
 
     @Override
     public ExitStatus afterStep(StepExecution stepExecution) {
-        log.info("[LOG] [TB_TMP_LIBRARY] [FINALLY END] [TOTAL_SIZE] [{}]", tmpRepository.count());
+        log.info("[LOG] [TB_TMP_LIBRARY] [FINALLY END] [TOTAL_SIZE] [{}]", libraryTmpRepository.count());
         return ExitStatus.EXECUTING;
     }
 }
