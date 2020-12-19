@@ -2,7 +2,6 @@ package kr.seok.library.step;
 
 import kr.seok.library.domain.entity.CityEntity;
 import kr.seok.library.domain.entity.LibraryTmpEntity;
-import kr.seok.library.listener.CityEntityStepListener;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.utils.Sets;
@@ -40,9 +39,7 @@ public class TmpToCityStep {
         return stepBuilderFactory.get(STEP_NAME + "_STEP")
                 .listener(new StepExecutionListener() {
                     @Override
-                    public void beforeStep(StepExecution stepExecution) {
-
-                    }
+                    public void beforeStep(StepExecution stepExecution) { }
 
                     @Override
                     public ExitStatus afterStep(StepExecution stepExecution) {

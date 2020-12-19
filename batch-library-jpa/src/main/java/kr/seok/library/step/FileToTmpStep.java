@@ -24,9 +24,6 @@ import javax.persistence.EntityManagerFactory;
 
 import static org.springframework.batch.item.file.transform.DelimitedLineTokenizer.DELIMITER_COMMA;
 
-/**
- * 파일 읽어서 임시테이블에 넣는 Step
- */
 @Configuration
 @RequiredArgsConstructor
 public class FileToTmpStep {
