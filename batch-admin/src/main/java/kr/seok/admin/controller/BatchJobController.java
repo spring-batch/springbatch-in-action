@@ -22,16 +22,14 @@ public class BatchJobController {
      */
     @GetMapping("/batchJobInstances")
     public ResponseEntity<?> getInstances(
-            @RequestParam("jobName") String jobName
-    ) {
+            @RequestParam("jobName") String jobName) {
         List<BatchJobInstance> jobList = batchJobExecutionService.getBatchInstances(jobName);
         return ResponseEntity.ok().body(jobList);
     }
 
     @GetMapping("/batchJobExecutions")
     public ResponseEntity<?> getExecutions(
-            @RequestParam("jobName") String jobName
-    ) {
+            @RequestParam("jobName") String jobName) {
         List<BatchJobExecution> jobExecutions = batchJobExecutionService.getJobExecutionsPerJobName(jobName);
         return ResponseEntity.ok().body(jobExecutions);
     }
