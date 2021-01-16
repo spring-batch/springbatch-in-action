@@ -3,7 +3,10 @@ package kr.seok.hospital.domain.dto;
 import kr.seok.hospital.domain.Hospital;
 import lombok.Data;
 
+import java.lang.reflect.Field;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 
 @Data
 public class HospitalFileDto {
@@ -45,23 +48,25 @@ public class HospitalFileDto {
     private Double lon;
     private Double lat;
 
-    private LocalDateTime date;
+    private String date;
 
     public Hospital toEntity() {
+        date = getDate().substring(0, date.length() - 2).replaceFirst("\\s", "T");
         return Hospital.builder()
                 .id(getId())
+                .addr(getAddr())
                 .hosCate(getHosCate())
-                .date(getDate())
+                .hosCateNm(getHosCateNm())
                 .edOperYn(getEdOperYn())
                 .etc(getEtc())
+                .phone1(getPhone1())
                 .edPhone(getEdPhone())
-                .fstAidMedicInsCd(getFstAidMedicInsCd())
-                .hosCateNm(getHosCateNm())
-                .lat(getLat())
-                .lon(getLon())
+                .date(LocalDateTime.parse(date, DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+                .operNm(getOperNm())
 
-                .fstAidMedicInsNm(getFstAidMedicInsNm())
                 .operDescDt(getOperDescDt())
+                .fstAidMedicInsCd(getFstAidMedicInsCd())
+                .fstAidMedicInsNm(getFstAidMedicInsNm())
                 .operHourFriC(getOperHourFriC())
                 .operHourFriS(getOperHourFriS())
                 .operHourHolC(getOperHourHolC())
@@ -69,8 +74,8 @@ public class HospitalFileDto {
                 .operHourMonC(getOperHourMonC())
                 .operHourMonS(getOperHourMonS())
                 .operHourSatC(getOperHourSatC())
-                .operHourSatS(getOperHourSatS())
 
+                .operHourSatS(getOperHourSatS())
                 .operHourSunC(getOperHourSunC())
                 .operHourSunS(getOperHourSunS())
                 .operHourThuC(getOperHourThuC())
@@ -79,14 +84,21 @@ public class HospitalFileDto {
                 .operHourTueS(getOperHourTueS())
                 .operHourWedC(getOperHourWedC())
                 .operHourWedS(getOperHourWedS())
-                .addr(getAddr())
-                .operNm(getOperNm())
-
-                .phone1(getPhone1())
                 .simpleMap(getSimpleMap())
+
                 .zipCode1(getZipCode1())
                 .zipCode2(getZipCode2())
+                .lat(getLat())
+                .lon(getLon())
 
                 .build();
+    }
+
+    /* 엑셀에서 가져올 필드 개수 만큼만 추가해야 함 */
+    public static String[] getFields() {
+        Field[] fields = HospitalFileDto.class.getDeclaredFields();
+        return Arrays.stream(fields)
+                .map(Field::getName)
+                .toArray(String[]::new);
     }
 }

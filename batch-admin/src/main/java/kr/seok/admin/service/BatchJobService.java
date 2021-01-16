@@ -2,21 +2,13 @@ package kr.seok.admin.service;
 
 import kr.seok.admin.domain.BatchJobExecution;
 import kr.seok.admin.domain.BatchJobInstance;
-import kr.seok.admin.dto.BatchJobDto;
-import kr.seok.admin.dto.BatchJobExecutionDto;
-import kr.seok.admin.dto.JobExecutionRequest;
-import kr.seok.admin.dto.JobInstanceRequest;
 import kr.seok.admin.repository.BatchJobExecutionDao;
 import kr.seok.admin.repository.BatchJobInstanceDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @Transactional

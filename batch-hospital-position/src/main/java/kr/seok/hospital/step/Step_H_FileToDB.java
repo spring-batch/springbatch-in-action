@@ -2,13 +2,9 @@ package kr.seok.hospital.step;
 
 import kr.seok.hospital.domain.Hospital;
 import kr.seok.hospital.domain.dto.HospitalFileDto;
-import kr.seok.hospital.repository.HospitalRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.StepExecution;
-import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
@@ -18,7 +14,6 @@ import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 
@@ -34,9 +29,8 @@ public class Step_H_FileToDB {
     /* 38s7ms */
     private final StepBuilderFactory stepBuilderFactory;
     private final EntityManagerFactory entityManagerFactory;
-    private static final String STEP_NAME = "STEP_H_FileToDB";;
+    private static final String STEP_NAME = "STEP_H_FileToDB";
 
-    @Bean(name = STEP_NAME)
     public Step hFileToDbStep() {
         return stepBuilderFactory.get(STEP_NAME)
                 .<HospitalFileDto, Hospital>chunk(1000)
@@ -53,8 +47,8 @@ public class Step_H_FileToDB {
             setLineMapper(new DefaultLineMapper<HospitalFileDto>(){{
                 setLineTokenizer(
                         new DelimitedLineTokenizer(DELIMITER_COMMA) {{
-                            setNames("ORG_ID", "ADDR");
-                            setIncludedFields(0, 1);
+                            /* 필드명 리스트 반환 */
+                            setNames(HospitalFileDto.getFields());
                         }}
                 );
                 setFieldSetMapper(new BeanWrapperFieldSetMapper<HospitalFileDto>() {{

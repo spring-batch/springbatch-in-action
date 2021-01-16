@@ -8,17 +8,18 @@ import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
-import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.persistence.EntityManagerFactory;
-
+/**
+ * seoul_hospital_position_info_utf8.csv 파일 데이터
+ * MySQL: TB_HOSPITAL 테이블에 저장
+ */
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-public class JOB_H_FileToDBConfig {
+public class H_FileToDBConfig {
 
     private final JobBuilderFactory jobBuilderFactory;
     private final Step_H_FileToDB stepHFileToDB;
