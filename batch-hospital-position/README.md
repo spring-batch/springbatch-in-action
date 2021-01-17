@@ -47,6 +47,15 @@
 - 공공데이터에서 제공하는 데이터를 분석하여 사용할 수 있도록 스키마 재정의 및 재가공
 
 ## 배치 프로세스 작성
+0. 파일 인코딩
+   - 파일 인코딩 확인
+      ```shell
+      file -I seoul_hospital_position_info.csv
+      ```
+   - 파일 인코딩 변경
+      ```shell
+      iconv -f `{original_charset}` -t `utf-8` originalfile > newfile
+      ```
 1. 파일 데이터를 읽어 DTO에 저장
     - csv 파일의 필드정보를 갖는 DTO를 작성
     - 해당 DTO 클래스를 `refrect`를 통해 전체 `field`명 조회하는 `getFieldNames()` 작성
