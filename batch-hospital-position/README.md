@@ -60,14 +60,34 @@
 
 ## 코드레벨 전체 아키텍처
 - 특정 작업에 대한 `Job` Prototype 클래스 작성 후 `Step`으로 리펙토링
--
+- 구현 방식 & 속도를 생각하면서 다양하게 구현할 것
 
 ## 개선 사항
-- 배치 리펙토링
+- 배치 bulk 프로세스 
    - 속도 개선
-      - 파일을 읽는 속도는 FlatFileItemReader와 일반 BufferedReader 와의 속도차이는 미미
-      - 파일을 쓰는 속도에서 차이가 발생하고 줄일 수 있는 것을 확인
-      - 
+      - 상황
+         - 파일을 읽는 속도는 FlatFileItemReader와 일반 BufferedReader 와의 속도차이는 미미
+         - 파일을 쓰는 속도에서 차이가 발생하고 줄일 수 있는 것을 확인
+         - 데이터의 PK가 이미 존재하기 때문에 `@GeneratedValue`를 사용하지 않는 상황
+      - jpaItemWriter
+         - 작동 방식
+            - JpaItemWriter를 통한 `write()` 작업이 `merge()`를 기본 Mode로 구현
+            - `usePersist(true)` 의 설정이 없는 경우 `merge()` 작동 방식으로 인하여 select(id 채번) -> insert(data 입력)로 수행
+            - `usePersist(true)`이 설정되어 있는 경우 `persist()`로 작동하여 `select`를 생략, 바로 `insert()` 처리
+            - `persist()`로 사용하는 경우 새로운 객체를 저장할 때만 사용해야함
+         - 단점
+            - 기본적으로 bulk insert를 수행하지 못함
+            - auto-increment가 아닌 경우 batch insert 사용 가능
+        
+      - JdbcItemWriter
+         - 연관관계가 들어가면 insert가 필요한 경우 직접 구현해야 하는 부분이 너무 많음
+         - 컴파일체크, 타입, SQL 쿼리 문자열 문제 발생 가능
+         - 속도가 비교적 빠름
+      
+      - Jdbc & Jpa (연관관계 작성시 해당 방법으로 처리예정)
+         - OneToMany 연관관계 조회하는 경우, 부모 Entity를 조회하여 PK값을 저장
+         - 부모 ID값으로 자식 Entity를 JdbcItemWriter로 batch insert 처리
+
    - [참고](https://jojoldu.tistory.com/507)
    
 
