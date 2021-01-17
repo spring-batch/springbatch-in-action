@@ -107,4 +107,47 @@ public class HospitalFileDto {
                 .map(Field::getName)
                 .toArray(String[]::new);
     }
+    public static HospitalFileDto getSplitData(String line) {
+        String[] s = line.split(",");
+        return HospitalFileDto.builder()
+                .id(s[0])
+                .addr(s[1])
+                .hosCate(s[2])
+                .hosCateNm(s[3])
+                .fstAidMedicInsCd(s[4])
+                .fstAidMedicInsNm(s[5])
+                .edOperYn(s[6])
+                .etc(s[7])
+                .operDescDt(s[8])
+                .simpleMap(s[9])
+
+                .operNm(s[10])
+                .phone1(s[11])
+                .edPhone(s[12])
+                .operHourMonC(s[13])
+                .operHourTueC(s[14])
+                .operHourWedC(s[15])
+                .operHourThuC(s[16])
+                .operHourFriC(s[17])
+                .operHourSatC(s[18])
+                .operHourSunC(s[19])
+
+                .operHourHolC(s[20])
+                .operHourMonS(s[21])
+                .operHourTueS(s[22])
+                .operHourWedS(s[23])
+                .operHourThuS(s[24])
+                .operHourFriS(s[25])
+                .operHourSatS(s[26])
+                .operHourSunS(s[27])
+                .operHourHolS(s[28])
+                .zipCode1(s[29])
+
+                .zipCode2(s[30])
+                .lat(Double.parseDouble(s[31].replaceAll("\"", "")))
+                .lon(Double.parseDouble(s[32].replaceAll("\"", "")))
+                .date(s[33])
+
+                .build();
+    }
 }

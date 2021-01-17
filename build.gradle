@@ -126,7 +126,7 @@ project(":batch-admin") {
 
 project(":batch-hospital-position") {
     dependencies {
-        implementation project(":batch-common")
+        compile project(":batch-common")
     }
 }
 

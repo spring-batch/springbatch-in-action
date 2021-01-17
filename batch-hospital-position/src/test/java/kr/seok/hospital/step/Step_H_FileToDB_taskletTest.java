@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.persistence.EntityManagerFactory;
+import javax.sql.DataSource;
 import java.util.List;
 
 @SpringBootTest
@@ -17,12 +18,14 @@ class Step_H_FileToDB_taskletTest {
     private  StepBuilderFactory stepBuilderFactory;
     @Autowired
     private EntityManagerFactory entityManagerFactory;
+    @Autowired
+    private DataSource dataSource;
 
     Step_H_FileToDB_tasklet fileToDB_tasklet;
 
     @BeforeEach
     public void setUp() {
-        fileToDB_tasklet = new Step_H_FileToDB_tasklet(stepBuilderFactory, entityManagerFactory);
+        fileToDB_tasklet = new Step_H_FileToDB_tasklet(stepBuilderFactory, entityManagerFactory, dataSource);
     }
 
     @Test

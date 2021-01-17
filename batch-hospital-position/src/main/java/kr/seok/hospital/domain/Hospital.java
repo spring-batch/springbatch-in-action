@@ -2,20 +2,21 @@ package kr.seok.hospital.domain;
 
 import lombok.*;
 
-import javax.persistence.*;
+import javax.persistence.AttributeOverride;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Table(name = "TB_HOSPITAL")
 @Entity
 @Getter
-@EqualsAndHashCode(of = {"id"})
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString(of = {"id", "addr", "hosCateNm"})
-public class Hospital implements Serializable {
-    @Id
-    @Column(name = "ORG_ID", unique = true)
-    private String id;
+@AttributeOverride(name = "id", column = @Column(name = "ORG_ID", unique = true))
+public class Hospital extends BaseTimeEntity implements Serializable {
+
     @Column(name = "ADDRESS") /* 주소 */
     private String addr;
     @Column(name = "HOS_CATE") /* 병원분류 */
@@ -90,7 +91,7 @@ public class Hospital implements Serializable {
 
     @Builder
     public Hospital(String id, String addr, String hosCate, String hosCateNm, String fstAidMedicInsCd, String fstAidMedicInsNm, String edOperYn, String etc, String operDescDt, String simpleMap, String operNm, String phone1, String edPhone, String operHourMonC, String operHourTueC, String operHourWedC, String operHourThuC, String operHourFriC, String operHourSatC, String operHourSunC, String operHourHolC, String operHourMonS, String operHourTueS, String operHourWedS, String operHourThuS, String operHourFriS, String operHourSatS, String operHourSunS, String operHourHolS, String zipCode1, String zipCode2, Double lon, Double lat, LocalDateTime date) {
-        this.id = id;
+        super.id = id;
         this.addr = addr;
         this.hosCate = hosCate;
         this.hosCateNm = hosCateNm;

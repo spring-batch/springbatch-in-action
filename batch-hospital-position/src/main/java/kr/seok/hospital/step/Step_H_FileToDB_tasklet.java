@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static kr.seok.hospital.domain.dto.HospitalFileDto.getSplitData;
 
 @Slf4j
 @Configuration
@@ -106,63 +107,17 @@ public class Step_H_FileToDB_tasklet {
 
             while((line = br.readLine()) != null) {
                 if(!(i == 0)) {
-                    HospitalFileDto hospitalFileDto = getSplitData(line);
-                    tmp.add(hospitalFileDto);
+                    tmp.add(getSplitData(line));
                 }
 //                if(i == 1) break;
                 i++;
             }
 
-            log.info("전체 라인 수 : {}", i);
+            log.info("전체 라인 수(헤더라인 제외) : {} ", (i - 1));
         } catch (Exception e) {
             e.printStackTrace();
         }
         return tmp;
-    }
-
-    /* dto로 변경 */
-    private HospitalFileDto getSplitData(String line) {
-        String[] s = line.split(",");
-        return HospitalFileDto.builder()
-                .id(s[0])
-                .addr(s[1])
-                .hosCate(s[2])
-                .hosCateNm(s[3])
-                .fstAidMedicInsCd(s[4])
-                .fstAidMedicInsNm(s[5])
-                .edOperYn(s[6])
-                .etc(s[7])
-                .operDescDt(s[8])
-                .simpleMap(s[9])
-
-                .operNm(s[10])
-                .phone1(s[11])
-                .edPhone(s[12])
-                .operHourMonC(s[13])
-                .operHourTueC(s[14])
-                .operHourWedC(s[15])
-                .operHourThuC(s[16])
-                .operHourFriC(s[17])
-                .operHourSatC(s[18])
-                .operHourSunC(s[19])
-
-                .operHourHolC(s[20])
-                .operHourMonS(s[21])
-                .operHourTueS(s[22])
-                .operHourWedS(s[23])
-                .operHourThuS(s[24])
-                .operHourFriS(s[25])
-                .operHourSatS(s[26])
-                .operHourSunS(s[27])
-                .operHourHolS(s[28])
-                .zipCode1(s[29])
-
-                .zipCode2(s[30])
-                .lat(Double.parseDouble(s[31].replaceAll("\"", "")))
-                .lon(Double.parseDouble(s[32].replaceAll("\"", "")))
-                .date(s[33])
-
-                .build();
     }
 
 }

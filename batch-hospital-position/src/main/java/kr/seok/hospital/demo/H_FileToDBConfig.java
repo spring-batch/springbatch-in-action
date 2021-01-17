@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Configuration;
 public class H_FileToDBConfig {
 
     private final JobBuilderFactory jobBuilderFactory;
-    private final Step_H_FileToDB stepHFileToDB;
+//    private final Step_H_FileToDB stepHFileToDB;
     private final Step_H_FileToDB_tasklet step_h_fileToDB_tasklet;
 
     private final HospitalRepository hospitalRepository;
@@ -44,6 +44,9 @@ public class H_FileToDBConfig {
                     }
                 })
                 .incrementer(new RunIdIncrementer())
+                /* reader -> processor -> writer 프로세스 */
+//                .start(stepHFileToDB.hFileToDbStep())
+                /* tasklet 프로세스 */
                 .start(step_h_fileToDB_tasklet.hFileToDbStep())
                 .build();
     }

@@ -4,7 +4,6 @@ import kr.seok.hospital.domain.Hospital;
 import kr.seok.hospital.repository.HospitalRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -15,8 +14,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
-
-import static org.springframework.batch.core.ExitStatus.COMPLETED;
 
 @Slf4j
 @Configuration
@@ -41,6 +38,7 @@ public class H_DBToDBConfig {
                 .tasklet((contribution, chunkContext) -> {
 
                     List<Hospital> hospitals = hospitalRepository.findAll();
+
                     hospitals.forEach(h -> log.info("hos -> {}", h));
 
                     return RepeatStatus.FINISHED;

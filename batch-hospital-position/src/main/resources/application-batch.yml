@@ -8,6 +8,10 @@ spring:
   main:
     allow-bean-definition-overriding: true
 
-# 배치의 모니터링이 필요 없는 경우 해당 프로젝트가 실행될 때 Tomcat 실행을 하지않기 위한 설정
+  jpa:
+    properties:
+      hibernate:
+        jdbc:
+          batch_size: 1000
 #main:
 #  web-application-type: none
