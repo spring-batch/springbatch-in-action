@@ -1,6 +1,7 @@
 package kr.seok.hospital.domain.dto;
 
 import kr.seok.hospital.domain.Hospital;
+import lombok.Builder;
 import lombok.Data;
 
 import java.lang.reflect.Field;
@@ -8,7 +9,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
+/* 엑셀 컬럼 순으로 정렬된 필드로 순서 주의 */
 @Data
+@Builder
 public class HospitalFileDto {
     private String id;
     private String addr;
@@ -51,7 +54,10 @@ public class HospitalFileDto {
     private String date;
 
     public Hospital toEntity() {
-        date = getDate().substring(0, date.length() - 2).replaceFirst("\\s", "T");
+        date = getDate()
+                .replaceAll("\"", "")
+                .substring(0, date.length() - 2)
+                .replaceFirst("\\s", "T");
         return Hospital.builder()
                 .id(getId())
                 .addr(getAddr())

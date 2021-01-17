@@ -9,3 +9,8 @@ logging:
     org:
       # SpringFramework Logging
       springframework: info
+      # jpa 쿼리를 로그 파일로 출력
+#      hibernate:
+#        SQL: debug
+        # 로그 파라미터까지 확인
+#        type: trace

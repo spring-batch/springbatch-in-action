@@ -33,7 +33,7 @@
     5) [One Reader Multi Writer](https://www.javaer101.com/ko/article/5094462.html)
 
 ## 스터디 회의록
-- [2020.08.22 ~ 현재](docs/README.md)
+- [2020.08 ~ 11](docs/README.md)
 
 ## 스프링 배치 문서 정리
 1. [Intro](docs/batch/1.introduction.md)
@@ -41,43 +41,17 @@
 
 ## 스프링 배치 관리
 - [Airflow](https://airbnb.io/projects/airflow/)
-
 - [Apache Airflow](https://bcho.tistory.com/1184)
 - [Spring Batch 관리 도구로서의 Jenkins](https://jojoldu.tistory.com/489)
 - [Airflow VS Jenkins](https://dodonam.tistory.com/157)
 - [Airflow를 이용한 데이터 Workflow 관리](https://www.slideshare.net/YoungHeonKim1/airflow-workflow)
 - [Airflow 워크플로우 모니터링 플랫폼](https://118k.tistory.com/860)
 
-
-
-## 프로젝트 Spec
+## [프로젝트 Spec](build.gradle)
 - SpringFramework
-
-|libraryTmp|version|
-|:-----|:-----|
-|spring-boot-starter-batch|2.1.9|
-
 - Excel
-
-|libraryTmp|version|
-|:-----|:-----|
-|poi-ooxml|4.1.2|
-|poi|4.1.2|
-
 - DBMS
-
-|libraryTmp|version|
-|:-----|:-----|
-|h2|1.4.119|
-|ojdbc8-production|19.7.0.0|
-|mysql-connector-java|8.0.17|
-
 - ORM Framework
-
-|libraryTmp|version|
-|:-----|:-----|
-|spring-boot-starter-batch|2.1.9|
-|mybatis-spring-boot-starter|2.1.1|
 
 ### 해당 프로젝스 설정 시 db_mysql, db_oracle 내용
 - MySQL
@@ -133,5 +107,4 @@ spring:
       password: {db_password}
       driver-class-name: oracle.jdbc.OracleDriver
       sql-script-encoding: UTF-8
-
 ```

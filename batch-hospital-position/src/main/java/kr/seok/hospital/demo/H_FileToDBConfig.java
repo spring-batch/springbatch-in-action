@@ -2,6 +2,7 @@ package kr.seok.hospital.demo;
 
 import kr.seok.hospital.repository.HospitalRepository;
 import kr.seok.hospital.step.Step_H_FileToDB;
+import kr.seok.hospital.step.Step_H_FileToDB_tasklet;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -23,6 +24,7 @@ public class H_FileToDBConfig {
 
     private final JobBuilderFactory jobBuilderFactory;
     private final Step_H_FileToDB stepHFileToDB;
+    private final Step_H_FileToDB_tasklet step_h_fileToDB_tasklet;
 
     private final HospitalRepository hospitalRepository;
     private final String JOB_NAME = "JOB_H_FileToDB";
@@ -42,7 +44,7 @@ public class H_FileToDBConfig {
                     }
                 })
                 .incrementer(new RunIdIncrementer())
-                .start(stepHFileToDB.hFileToDbStep())
+                .start(step_h_fileToDB_tasklet.hFileToDbStep())
                 .build();
     }
 }

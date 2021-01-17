@@ -26,6 +26,8 @@ import static org.springframework.batch.item.file.transform.DelimitedLineTokeniz
 @RequiredArgsConstructor
 public class Step_H_FileToDB {
 
+    public static final int CHUNK_SIZE = 1000;
+
     /* 38s7ms */
     private final StepBuilderFactory stepBuilderFactory;
     private final EntityManagerFactory entityManagerFactory;
@@ -33,7 +35,7 @@ public class Step_H_FileToDB {
 
     public Step hFileToDbStep() {
         return stepBuilderFactory.get(STEP_NAME)
-                .<HospitalFileDto, Hospital>chunk(1000)
+                .<HospitalFileDto, Hospital>chunk(CHUNK_SIZE)
                 .reader(fileReader())
                 .processor(fileToDbProcessor())
                 .writer(dbWriter())
