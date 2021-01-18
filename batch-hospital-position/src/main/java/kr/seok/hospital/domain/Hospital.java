@@ -2,16 +2,18 @@ package kr.seok.hospital.domain;
 
 import lombok.*;
 
-import javax.persistence.*;
-import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Table(name = "TB_HOSPITAL")
-@EqualsAndHashCode(of = {"id"}, callSuper = false)
+@EqualsAndHashCode(of = {"id"}, callSuper = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Hospital extends BaseTimeEntity implements Serializable {
+public class Hospital extends BaseTimeEntity {
 
     @Id
     @Column(name = "ORG_ID", unique = true)

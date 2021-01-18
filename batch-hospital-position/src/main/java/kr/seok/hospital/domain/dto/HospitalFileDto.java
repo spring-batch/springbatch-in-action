@@ -55,7 +55,6 @@ public class HospitalFileDto {
 
     public Hospital toEntity() {
         date = getDate()
-                .replaceAll("\"", "")
                 .substring(0, date.length() - 2)
                 .replaceFirst("\\s", "T");
         return Hospital.builder()
@@ -108,7 +107,9 @@ public class HospitalFileDto {
                 .toArray(String[]::new);
     }
     public static HospitalFileDto getSplitData(String line) {
-        String[] s = line.split(",");
+        String[] s = line
+                .replaceAll("\"", "")
+                .split(",");
         return HospitalFileDto.builder()
                 .id(s[0])
                 .addr(s[1])
@@ -144,8 +145,8 @@ public class HospitalFileDto {
                 .zipCode1(s[29])
 
                 .zipCode2(s[30])
-                .lat(Double.parseDouble(s[31].replaceAll("\"", "")))
-                .lon(Double.parseDouble(s[32].replaceAll("\"", "")))
+                .lat(Double.parseDouble(s[31]))
+                .lon(Double.parseDouble(s[32]))
                 .date(s[33])
 
                 .build();

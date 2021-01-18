@@ -57,15 +57,18 @@
       iconv -f `{original_charset}` -t `utf-8` originalfile > newfile
       ```
 1. 파일 데이터를 읽어 DTO에 저장
-    - csv 파일의 필드정보를 갖는 DTO를 작성
-    - 해당 DTO 클래스를 `refrect`를 통해 전체 `field`명 조회하는 `getFieldNames()` 작성
-    - 파일에서 chunk 단위로 읽어와 저장한 `dto`의 데이터를 `entity`로 저장하는 `toEntity()` 메서드 작성
+   - csv 파일의 필드정보를 갖는 DTO를 작성
+   - 데이터 호출 시 `"(double quote)`삭제 필요 
+   - 해당 DTO 클래스를 `refrect`를 통해 전체 `field`명 조회하는 `getFieldNames()` 작성
+   - 파일에서 chunk 단위로 읽어와 저장한 `dto`의 데이터를 `entity`로 저장하는 `toEntity()` 메서드 작성
 
 2. 임시 테이블을 필요한 중요 정보와 세부 정보로 구분하여 테이블관리
-   - 기관 코드를 기준으로 병원 `기본정보`, `위치`, `시간` 필드로 분류하여 해당 테이블로 정의한다. 
-   - 병원기본정보: TB_HOSPITAL_INF
-   - 병원위치정보: TB_HOSPITAL_POS
-   - 병원시간정보: TB_HOSPITAL_DTT
+   - 기관 코드를 기준으로 병원 `기본정보`, `위치`, `시간`, `그 외` 필드로 분류하여 해당 테이블로 정의한다. 
+      - 병원기본정보: TB_HOSPITAL_INF
+      - 병원위치정보: TB_HOSPITAL_POS
+      - 병원시간정보: TB_HOSPITAL_DTT
+      - 병원기관분류: TB_MEDIC_AID_INS
+   - 전체 데이터를 읽어와 여러 테이블에 저장할 때 멀티 스레드 방식으로 개선할 수 있는지 생각하기
 
 ## 코드레벨 전체 아키텍처
 - 특정 작업에 대한 `Job` Prototype 클래스 작성 후 `Step`으로 리펙토링

@@ -1,7 +1,6 @@
 package kr.seok.hospital.demo;
 
 import kr.seok.hospital.repository.HospitalRepository;
-import kr.seok.hospital.step.Step_H_FileToDB;
 import kr.seok.hospital.step.Step_H_FileToDB_tasklet;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,11 +26,11 @@ public class H_FileToDBConfig {
     private final Step_H_FileToDB_tasklet step_h_fileToDB_tasklet;
 
     private final HospitalRepository hospitalRepository;
-    private final String JOB_NAME = "JOB_H_FileToDB";
+    private final String JOB_NAME = "H_FileToDB";
 
-    @Bean(name = JOB_NAME)
+    @Bean(name = JOB_NAME + "_JOB")
     public Job hFileToDb() {
-        return jobBuilderFactory.get(JOB_NAME)
+        return jobBuilderFactory.get(JOB_NAME + "_JOB")
                 .listener(new JobExecutionListener() {
                     @Override
                     public void beforeJob(JobExecution jobExecution) {

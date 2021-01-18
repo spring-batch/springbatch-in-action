@@ -45,9 +45,9 @@ public class Step_H_FileToDB_tasklet {
                     List<Hospital> hospitals = getDtoToEntity(dto);
 
                     /* jpaItemWriter 30s 초반 대 */
-//                    jpaItemWriterProcess(hospitals);
+                    jpaItemWriterProcess(hospitals);
                     /* jdbcItemWriter 20s 중반 대 */
-                    jdbcItemWriter(hospitals);
+//                    jdbcItemWriter(hospitals);
 
                     return RepeatStatus.FINISHED;
                 })
