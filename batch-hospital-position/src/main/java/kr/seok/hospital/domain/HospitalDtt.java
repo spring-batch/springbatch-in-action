@@ -1,16 +1,21 @@
 package kr.seok.hospital.domain;
 
 import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "TB_HOSPITAL_DTT")
+@EqualsAndHashCode(of = {"id"}, callSuper = false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AttributeOverride(name = "id", column = @Column(name = "ORG_ID", unique = true))
 public class HospitalDtt extends BaseTimeEntity {
 
+    @Id
+    @Column(name = "ORG_ID", unique = true)
+    private String id;
     @Column(name = "OPER_HOUR_MON_C") /* 진료시간(월요일)C */
     private String operHourMonC;
     @Column(name = "OPER_HOUR_TUE_C") /* 진료시간(화요일)C */
@@ -44,4 +49,25 @@ public class HospitalDtt extends BaseTimeEntity {
     private String operHourSunS;
     @Column(name = "OPER_HOUR_HOL_S") /* 진료시간(공휴일)S */
     private String operHourHolS;
+
+    @Builder
+    public HospitalDtt(String id, String operHourMonC, String operHourTueC, String operHourWedC, String operHourThuC, String operHourFriC, String operHourSatC, String operHourSunC, String operHourHolC, String operHourMonS, String operHourTueS, String operHourWedS, String operHourThuS, String operHourFriS, String operHourSatS, String operHourSunS, String operHourHolS) {
+        this.id = id;
+        this.operHourMonC = operHourMonC;
+        this.operHourTueC = operHourTueC;
+        this.operHourWedC = operHourWedC;
+        this.operHourThuC = operHourThuC;
+        this.operHourFriC = operHourFriC;
+        this.operHourSatC = operHourSatC;
+        this.operHourSunC = operHourSunC;
+        this.operHourHolC = operHourHolC;
+        this.operHourMonS = operHourMonS;
+        this.operHourTueS = operHourTueS;
+        this.operHourWedS = operHourWedS;
+        this.operHourThuS = operHourThuS;
+        this.operHourFriS = operHourFriS;
+        this.operHourSatS = operHourSatS;
+        this.operHourSunS = operHourSunS;
+        this.operHourHolS = operHourHolS;
+    }
 }

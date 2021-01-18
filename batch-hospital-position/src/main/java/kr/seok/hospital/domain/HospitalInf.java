@@ -1,16 +1,19 @@
 package kr.seok.hospital.domain;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
+@Getter
 @Table(name = "TB_HOSPITAL_INF")
+@EqualsAndHashCode(of = {"id"}, callSuper = false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AttributeOverride(name = "id", column = @Column(name = "ORG_ID", unique = true))
 public class HospitalInf extends BaseTimeEntity {
 
+    @Id
+    @Column(name = "ORG_ID", unique = true)
+    private String id;
     @Column(name = "HOS_CATE") /* 병원분류 */
     private String hosCate;
     @Column(name = "HOS_CATE_NM") /* 병원분류명 */
@@ -41,4 +44,21 @@ public class HospitalInf extends BaseTimeEntity {
     @Column(name = "ZIP_CODE2") /* 우편번호2 */
     private String zipCode2;
 
+    @Builder
+    public HospitalInf(String id, String hosCate, String hosCateNm, String fstAidMedicInsCd, String fstAidMedicInsNm, String edOperYn, String etc, String operDescDt, String operNm, String phone1, String edPhone, String addr, String zipCode1, String zipCode2) {
+        this.id = id;
+        this.hosCate = hosCate;
+        this.hosCateNm = hosCateNm;
+        this.fstAidMedicInsCd = fstAidMedicInsCd;
+        this.fstAidMedicInsNm = fstAidMedicInsNm;
+        this.edOperYn = edOperYn;
+        this.etc = etc;
+        this.operDescDt = operDescDt;
+        this.operNm = operNm;
+        this.phone1 = phone1;
+        this.edPhone = edPhone;
+        this.addr = addr;
+        this.zipCode1 = zipCode1;
+        this.zipCode2 = zipCode2;
+    }
 }
