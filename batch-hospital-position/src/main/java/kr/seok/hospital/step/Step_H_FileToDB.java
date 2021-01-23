@@ -14,6 +14,7 @@ import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 
@@ -26,16 +27,21 @@ import static org.springframework.batch.item.file.transform.DelimitedLineTokeniz
 @RequiredArgsConstructor
 public class Step_H_FileToDB {
 
-    public static final int CHUNK_SIZE = 1000;
+    public int chunkSize;
 
     /* 38s7ms */
     private final StepBuilderFactory stepBuilderFactory;
     private final EntityManagerFactory entityManagerFactory;
     private static final String STEP_NAME = "STEP_H_FileToDB";
 
+    @Value("${chunkSize:1000}")
+    public void setCHUNK_SIZE(int chunkSize) {
+        this.chunkSize = chunkSize;
+    }
+
     public Step hFileToDbStep() {
         return stepBuilderFactory.get(STEP_NAME)
-                .<HospitalFileDto, Hospital>chunk(CHUNK_SIZE)
+                .<HospitalFileDto, Hospital>chunk(chunkSize)
                 .reader(fileReader())
                 .processor(fileToDbProcessor())
                 .writer(dbWriter())

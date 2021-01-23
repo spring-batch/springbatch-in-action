@@ -1,19 +1,14 @@
-package kr.seok.hospital.demo;
+package kr.seok.hospital.step;
 
 import com.google.common.collect.Sets;
 import kr.seok.hospital.domain.*;
+import kr.seok.hospital.listener.Listener_H_DB;
 import kr.seok.hospital.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobExecution;
-import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
-import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.repeat.RepeatStatus;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
@@ -22,33 +17,7 @@ import java.util.Set;
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-public class H_DBToDBConfig {
-    private static final String JOB_NAME = "H_DBToDB";
-    private final JobBuilderFactory jobBuilderFactory;
-
-    @Bean(name = JOB_NAME + "_JOB")
-    public Job hDbToDb() {
-        return jobBuilderFactory.get(JOB_NAME + "_JOB")
-                .listener(new JobExecutionListener() {
-                    @Override
-                    public void beforeJob(JobExecution jobExecution) {
-                        hospitalInfRepository.deleteAllInBatch();
-                        hospitalDttRepository.deleteAllInBatch();
-                        hospitalPosRepository.deleteAllInBatch();
-                        medicAidInsRepository.deleteAllInBatch();
-
-                        log.info("JOB 실행 테이블 비우기 : TB_HOSPITAL_INF({})", hospitalInfRepository.count());
-                        log.info("JOB 실행 테이블 비우기 : TB_HOSPITAL_DTT({})", hospitalDttRepository.count());
-                        log.info("JOB 실행 테이블 비우기 : TB_HOSPITAL_POS({})", hospitalPosRepository.count());
-                        log.info("JOB 실행 테이블 비우기 : TB_MEDIC_AID_INS({})", medicAidInsRepository.count());
-                    }
-                    @Override
-                    public void afterJob(JobExecution jobExecution) { }
-                })
-                .incrementer(new RunIdIncrementer())
-                .start(hDbToDbStep())
-                .build();
-    }
+public class Step_H_DbToDb_tasklet {
 
     private final StepBuilderFactory stepBuilderFactory;
     private final HospitalRepository hospitalRepository;
@@ -57,8 +26,13 @@ public class H_DBToDBConfig {
     private final HospitalPosRepository hospitalPosRepository;
     private final MedicAidInsRepository medicAidInsRepository;
 
+    private final Listener_H_DB listenerHDb;
+
+    private static final String STEP_NAME = "STEP_H_DbToDb";
+
     public Step hDbToDbStep() {
-        return stepBuilderFactory.get(JOB_NAME + "_STEP")
+        return stepBuilderFactory.get(STEP_NAME + "_STEP")
+                .listener(listenerHDb)
                 .tasklet((contribution, chunkContext) -> {
                     List<Hospital> hospitals = hospitalRepository.findAll();
 
@@ -68,8 +42,9 @@ public class H_DBToDBConfig {
                     Set<HospitalPos> hospitalPos = Sets.newHashSet();
 
                     hospitals.forEach(h -> {
-                        medicAidIns.add(toMedicEntity(h));
-                        hospitalInfSet.add(toHospitalInfEntity(h));
+                        MedicAidIns m = toMedicEntity(h);
+                        medicAidIns.add(m);
+                        hospitalInfSet.add(toHospitalInfEntity(h, m));
                         hospitalDttSet.add(toHospitalDttEntity(h));
                         hospitalPos.add(toHospitalPosEntity(h));
                     });
@@ -128,15 +103,14 @@ public class H_DBToDBConfig {
                 .build();
     }
 
-    private HospitalInf toHospitalInfEntity(Hospital hospital) {
+    private HospitalInf toHospitalInfEntity(Hospital hospital, MedicAidIns medicEntity) {
         return HospitalInf.builder()
                 .id(hospital.getId())
                 .addr(hospital.getAddr())
                 .edOperYn(hospital.getEdOperYn())
                 .edPhone(hospital.getEdPhone())
                 .etc(hospital.getEtc())
-                .fstAidMedicInsCd(hospital.getFstAidMedicInsCd())
-                .fstAidMedicInsNm(hospital.getFstAidMedicInsNm())
+                .medicAidIns(medicEntity)
                 .hosCate(hospital.getHosCate())
                 .hosCateNm(hospital.getHosCateNm())
                 .operDescDt(hospital.getOperDescDt())

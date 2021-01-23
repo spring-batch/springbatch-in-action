@@ -18,10 +18,12 @@ public class HospitalInf extends BaseTimeEntity {
     private String hosCate;
     @Column(name = "HOS_CATE_NM") /* 병원분류명 */
     private String hosCateNm;
-    @Column(name = "FST_AID_MEDIC_INS_CD") /* 응급의료기관코드 */
-    private String fstAidMedicInsCd;
-    @Column(name = "FST_AID_MEDIC_INS_NM") /* 응급의료기관코드명 */
-    private String fstAidMedicInsNm;
+
+    // 단방향 연관관계
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "AID_MEDIC_INS_ID")
+    private MedicAidIns medicAidIns;
+
     @Column(name = "ED_OPER_YN") /* 응급실운영여부(1/2) */
     private String edOperYn;
     @Column(name = "ETC") /* 비고 */
@@ -45,12 +47,11 @@ public class HospitalInf extends BaseTimeEntity {
     private String zipCode2;
 
     @Builder
-    public HospitalInf(String id, String hosCate, String hosCateNm, String fstAidMedicInsCd, String fstAidMedicInsNm, String edOperYn, String etc, String operDescDt, String operNm, String phone1, String edPhone, String addr, String zipCode1, String zipCode2) {
+    public HospitalInf(String id, String hosCate, String hosCateNm, MedicAidIns medicAidIns, String edOperYn, String etc, String operDescDt, String operNm, String phone1, String edPhone, String addr, String zipCode1, String zipCode2) {
         this.id = id;
         this.hosCate = hosCate;
         this.hosCateNm = hosCateNm;
-        this.fstAidMedicInsCd = fstAidMedicInsCd;
-        this.fstAidMedicInsNm = fstAidMedicInsNm;
+        this.medicAidIns = medicAidIns;
         this.edOperYn = edOperYn;
         this.etc = etc;
         this.operDescDt = operDescDt;

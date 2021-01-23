@@ -13,10 +13,10 @@ import javax.persistence.*;
 public class MedicAidIns extends BaseTimeEntity {
 
     @Id
-    @Column(name = "AID_MEDIC_INS_ID", unique = true)
+    @Column(name = "AID_MEDIC_INS_ID", unique = true)  /* 응급의료기관코드 */
     private String id;
 
-    @Column(name = "AID_MEDIC_INS_NM")
+    @Column(name = "AID_MEDIC_INS_NM")  /* 응급의료기관코드명 */
     private String aid_medic_ins_nm;
 
     @Builder

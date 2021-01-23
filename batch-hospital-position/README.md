@@ -68,10 +68,26 @@
         - 병원위치정보: TB_HOSPITAL_POS
         - 병원시간정보: TB_HOSPITAL_DTT
         - 병원기관분류: TB_MEDIC_AID_INS
-    - 전체 데이터를 읽어와 여러 테이블에 저장할 때 멀티 스레드 방식으로 개선할 수 있는지 생각하기
+
+    - 전체 데이터를 읽어와 여러 테이블에 저장할 때 `멀티 스레드` 또는 `병렬 처리` 방식으로 개선할 수 있는지 생각하기
         - reader, writer가 thread-safe 한지 확인
         - `multi thread`를 통해 step 작업 시 `retry` 기능을 사용할 수 없는데 그래도 되는지
     
+    - `Parallel Step` 활용한 처리 흐름 제어
+        - Parallel을 이용하여 전체 병원정보를 읽어 DataShareBean이라는 ConcurrentHashMap 기반 빈에 넣는다.
+        - 기본적으로 Step을 선형으로 실행하는 방식을 Flow를 이용하여 분리하여 DB 저장
+
+    - 배치 시간 확인 
+        - `Serial Step` [프로세스](src/main/java/kr/seok/hospital/demo/Serial_H_DBToDBConfig.java)
+            - step: 3m9s272ms
+        - `Parallel Step` [프로세스](src/main/java/kr/seok/hospital/demo/Parallel_H_DbToDbConfig.java)
+            - 데이터 조회
+                - flow1: 967ms
+            - 데이터 입력 (Parallel Process)
+                - flow4: 1m11s965ms
+                - flow3: 1m13s480ms
+                - flow2: 1m15s271ms
+
 ## 코드레벨 전체 아키텍처
 - 특정 작업에 대한 `Job` Prototype 클래스 작성 후 `Step`으로 리펙토링
 - 구현 방식 & 속도를 생각하면서 다양하게 구현할 것
@@ -110,4 +126,8 @@
 
    - [참고](https://jojoldu.tistory.com/507)
    
+- Step 간 데이터 공유
+   - StepExecution 을 사용하여 Batch Meta-data를 저장하면서 성능 이슈가 발생하여 StepExecution을 사용하지 않고 Step간 데이터 공유하는 방법
+   - 싱글톤 빈을 하나 만들어 멤버 변수에 Map을 두어 데이터를 공유하는 방식
 
+   - [참고](https://wckhg89.github.io/archivers/springbatch3)
