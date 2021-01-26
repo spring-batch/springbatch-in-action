@@ -29,8 +29,8 @@ public class Flow_H_DBToPos implements Tasklet {
     @Override
     public RepeatStatus execute(
             StepContribution contribution, ChunkContext chunkContext) {
-        log.info("parallelStep4");
-        log.info("hospital size : {}", dataShareBean.getSize());
+
+        log.info("parallelStep4 : {}", dataShareBean.getSize());
 
         List<Hospital> hospitals = dataShareBean.getData("hospital");
 

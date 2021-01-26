@@ -77,16 +77,23 @@
         - Parallel을 이용하여 전체 병원정보를 읽어 DataShareBean이라는 ConcurrentHashMap 기반 빈에 넣는다.
         - 기본적으로 Step을 선형으로 실행하는 방식을 Flow를 이용하여 분리하여 DB 저장
 
-    - 배치 시간 확인 
+    - 배치 시간 확인
+        - 실행 환경
+            - 운영체제: MacBook Pro
+            - 프로세서: 2 GHz 쿼드 코어 Intel Core i5
+            - 메모리:  16GB
         - `Serial Step` [프로세스](src/main/java/kr/seok/hospital/demo/Serial_H_DBToDBConfig.java)
             - step: 3m9s272ms
         - `Parallel Step` [프로세스](src/main/java/kr/seok/hospital/demo/Parallel_H_DbToDbConfig.java)
             - 데이터 조회
                 - flow1: 967ms
             - 데이터 입력 (Parallel Process)
-                - flow4: 1m11s965ms
-                - flow3: 1m13s480ms
-                - flow2: 1m15s271ms
+                - flow4: 1m11s965ms ~ 1m21s455ms
+                - flow3: 1m13s480ms ~ 1m23s39ms
+                - flow2: 1m15s271ms ~ 1m23s528ms
+            - 최대 시간 (전체 건수 17,479)
+                - 1m30s 이내
+
 
 ## 코드레벨 전체 아키텍처
 - 특정 작업에 대한 `Job` Prototype 클래스 작성 후 `Step`으로 리펙토링

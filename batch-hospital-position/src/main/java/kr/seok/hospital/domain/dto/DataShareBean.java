@@ -6,11 +6,15 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
+/**
+ *
+ * 배치 프로세스 실행 시 Step 간 데이터 공유를 위한 ConcurrentMap 기반 Bean
+ */
 @Slf4j
 @Component
 public class DataShareBean<T> {
 
-    private Map<String, T> shareDataMap;
+    private final Map<String, T> shareDataMap;
 
     public DataShareBean () {
         this.shareDataMap = Maps.newConcurrentMap();
@@ -21,16 +25,13 @@ public class DataShareBean<T> {
             log.error("Map is not initialize");
             return;
         }
-
         shareDataMap.put(key, data);
     }
 
     public T getData (String key) {
-
         if (shareDataMap == null) {
             return null;
         }
-
         return shareDataMap.get(key);
     }
 
@@ -39,7 +40,6 @@ public class DataShareBean<T> {
             log.error("Map is not initialize");
             return 0;
         }
-
         return shareDataMap.size();
     }
 

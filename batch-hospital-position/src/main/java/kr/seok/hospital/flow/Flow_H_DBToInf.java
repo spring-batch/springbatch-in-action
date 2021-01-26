@@ -33,7 +33,8 @@ public class Flow_H_DBToInf implements Tasklet {
     @Override
     public RepeatStatus execute(
             StepContribution contribution, ChunkContext chunkContext) {
-        log.info("hospital size : {}", dataShareBean.getSize());
+        log.info("parallelStep2 : {}", dataShareBean.getSize());
+
         List<Hospital> hospitals = dataShareBean.getData("hospital");
 
         if(hospitals.isEmpty()) return RepeatStatus.FINISHED;
@@ -47,6 +48,7 @@ public class Flow_H_DBToInf implements Tasklet {
         log.info("MedicAidIns 사이즈: {}", medicAidIns.size());
         log.info("hospitalInfSet 사이즈: {}", hospitalInfSet.size());
 
+         // 단방향 연관관계가 걸려 있어서 HospitalInf 엔티티를 저장한다고해서 한 번에 저장되지 않음
         medicAidInsRepository.saveAll(medicAidIns);
         hospitalInfRepository.saveAll(hospitalInfSet);
 
