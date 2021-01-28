@@ -64,7 +64,7 @@ subprojects {
 
 /* Querydsl 프로젝트 리스트 */
 def querydslProjects = [
-        project(":batch-hospital-position")
+        project(":batch-hospital")
 ]
 
 configure(querydslProjects) {
@@ -91,7 +91,9 @@ configure(querydslProjects) {
 
     clean.doLast {
         file(generated).deleteDir()
+        file('out').deleteDir()
     }
+
 }
 
 project(":batch-common") {
@@ -124,9 +126,19 @@ project(":batch-admin") {
     }
 }
 
-project(":batch-hospital-position") {
+project(":batch-hospital") {
     dependencies {
-        compile project(":batch-common")
+        implementation project(":batch-common")
+    }
+}
+
+project(":batch-hospital-es") {
+    dependencies {
+        implementation project(":batch-common")
+        implementation 'org.springframework.data:spring-data-elasticsearch'
+//        // https://mvnrepository.com/artifact/org.elasticsearch/elasticsearch
+        implementation 'org.elasticsearch:elasticsearch:7.6.2'
+        implementation 'org.elasticsearch.client:elasticsearch-rest-high-level-client:7.6.2'
     }
 }
 

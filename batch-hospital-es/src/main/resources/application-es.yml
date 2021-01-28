@@ -1,0 +1,6 @@
+spring.profiles: es
+
+elasticsearch:
+  clustername: docker-cluster
+  host: localhost
+  port: 9200

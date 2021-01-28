@@ -1,0 +1,15 @@
+spring.profiles: local
+spring.profiles.include: log, db, batch
+
+spring:
+  jpa:
+    # spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+    open-in-view: false
+
+server:
+  port: 8081
+
+elasticsearch:
+  clustername: docker-cluster
+  host: localhost
+  port: 9200
