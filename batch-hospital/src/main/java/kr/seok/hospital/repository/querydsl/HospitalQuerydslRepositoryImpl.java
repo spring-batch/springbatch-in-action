@@ -32,7 +32,7 @@ public class HospitalQuerydslRepositoryImpl implements HospitalQuerydslRepositor
     }
 
     @Override
-    public List<HospitalEsEntity> findFetchAll() {
+    public List<HospitalEsEntity> findLeftJoinAll() {
         return queryFactory
                 .select(new QHospitalEsEntity(
                         hospitalInf.id,
@@ -48,28 +48,30 @@ public class HospitalQuerydslRepositoryImpl implements HospitalQuerydslRepositor
                         hospitalInf.operNm,
                         hospitalInf.phone1,
                         hospitalInf.edPhone,
-//                        hospitalDtt.operHourMonC,
-//                        hospitalDtt.operHourTueC,
-//                        hospitalDtt.operHourWedC,
-//                        hospitalDtt.operHourThuC,
-//                        hospitalDtt.operHourFriC,
-//                        hospitalDtt.operHourSatC,
-//                        hospitalDtt.operHourSunC,
-//                        hospitalDtt.operHourHolC,
-//                        hospitalDtt.operHourMonS,
-//                        hospitalDtt.operHourTueS,
-//                        hospitalDtt.operHourWedS,
-//                        hospitalDtt.operHourThuS,
-//                        hospitalDtt.operHourFriS,
-//                        hospitalDtt.operHourSatS,
-//                        hospitalDtt.operHourSunS,
-//                        hospitalDtt.operHourHolS,
+                        hospitalDtt.operHourMonC,
+                        hospitalDtt.operHourTueC,
+                        hospitalDtt.operHourWedC,
+                        hospitalDtt.operHourThuC,
+                        hospitalDtt.operHourFriC,
+                        hospitalDtt.operHourSatC,
+                        hospitalDtt.operHourSunC,
+                        hospitalDtt.operHourHolC,
+                        hospitalDtt.operHourMonS,
+                        hospitalDtt.operHourTueS,
+                        hospitalDtt.operHourWedS,
+                        hospitalDtt.operHourThuS,
+                        hospitalDtt.operHourFriS,
+                        hospitalDtt.operHourSatS,
+                        hospitalDtt.operHourSunS,
+                        hospitalDtt.operHourHolS,
                         hospitalInf.zipCode1,
-                        hospitalInf.zipCode2))
+                        hospitalInf.zipCode2,
+                        hospitalInf.date
+                ))
                 .from(hospitalInf)
                 .leftJoin(hospitalInf.medicAidIns, medicAidIns)
-                .leftJoin(hospitalInf).on(hospitalDtt.id.eq(hospitalInf.id))
-                .leftJoin(hospitalInf).on(hospitalPos.id.eq(hospitalInf.id))
+                .leftJoin(hospitalInf.hospitalDtt, hospitalDtt)
+                .leftJoin(hospitalInf.hospitalPos, hospitalPos)
                 .fetch();
     }
 }

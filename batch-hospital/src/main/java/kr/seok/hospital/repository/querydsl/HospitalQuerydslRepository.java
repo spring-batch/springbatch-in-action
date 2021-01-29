@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface HospitalQuerydslRepository {
     List<Hospital> groupByCore();
-    List<HospitalEsEntity> findFetchAll();
+    List<HospitalEsEntity> findLeftJoinAll();
 }

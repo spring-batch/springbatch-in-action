@@ -77,6 +77,7 @@ public class Flow_H_DBToInf implements Tasklet {
                 .phone1(hospital.getPhone1())
                 .zipCode1(hospital.getZipCode1())
                 .zipCode2(hospital.getZipCode2())
+                .date(hospital.getDate())
                 .build();
     }
 }

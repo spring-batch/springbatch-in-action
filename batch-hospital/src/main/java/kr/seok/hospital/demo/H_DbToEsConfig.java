@@ -1,6 +1,5 @@
 package kr.seok.hospital.demo;
 
-import kr.seok.hospital.domain.HospitalInf;
 import kr.seok.hospital.domain.dto.HospitalEsEntity;
 import kr.seok.hospital.repository.HospitalInfJpaRepository;
 import lombok.RequiredArgsConstructor;
@@ -37,8 +36,8 @@ public class H_DbToEsConfig {
         return stepBuilderFactory.get(JOB_NAME + "_STEP")
                 .tasklet((contribution, chunkContext) -> {
 
-                    List<HospitalEsEntity> top3ById = hospitalInfJpaRepository.findFetchAll();
-//                    top3ById.forEach(hospitalInf -> System.out.println(hospitalInf));
+                    List<HospitalEsEntity> esEntities = hospitalInfJpaRepository.findLeftJoinAll();
+//                    esEntities.forEach(hosEs -> System.out.println(hosEs));
 
                     return RepeatStatus.FINISHED;
                 })

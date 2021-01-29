@@ -1,5 +1,6 @@
 package kr.seok.hospital.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import javax.persistence.Column;
@@ -88,6 +89,7 @@ public class Hospital extends BaseTimeEntity {
     private Double lat;
 
     @Column(name = "DATE")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime date;
 
     @Builder

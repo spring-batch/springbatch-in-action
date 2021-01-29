@@ -1,8 +1,10 @@
 package kr.seok.hospital.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -15,15 +17,24 @@ public class HospitalInf extends BaseTimeEntity {
     @Id
     @Column(name = "ORG_ID", unique = true)
     private String id;
-    @Column(name = "HOS_CATE") /* 병원분류 */
-    private String hosCate;
-    @Column(name = "HOS_CATE_NM") /* 병원분류명 */
-    private String hosCateNm;
 
     // 단방향 연관관계
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "AID_MEDIC_INS_ID")
     private MedicAidIns medicAidIns;
+
+    @JoinColumn(name = "ORG_ID")
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private HospitalDtt hospitalDtt;
+
+    @JoinColumn(name = "ORG_ID")
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private HospitalPos hospitalPos;
+
+    @Column(name = "HOS_CATE") /* 병원분류 */
+    private String hosCate;
+    @Column(name = "HOS_CATE_NM") /* 병원분류명 */
+    private String hosCateNm;
 
     @Column(name = "ED_OPER_YN") /* 응급실운영여부(1/2) */
     private String edOperYn;
@@ -47,12 +58,18 @@ public class HospitalInf extends BaseTimeEntity {
     @Column(name = "ZIP_CODE2") /* 우편번호2 */
     private String zipCode2;
 
+    @Column(name = "DATE")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
+    private LocalDateTime date;
+
     @Builder
-    public HospitalInf(String id, String hosCate, String hosCateNm, MedicAidIns medicAidIns, String edOperYn, String etc, String operDescDt, String operNm, String phone1, String edPhone, String addr, String zipCode1, String zipCode2) {
+    public HospitalInf(String id, MedicAidIns medicAidIns, HospitalDtt hospitalDtt, HospitalPos hospitalPos, String hosCate, String hosCateNm, String edOperYn, String etc, String operDescDt, String operNm, String phone1, String edPhone, String addr, String zipCode1, String zipCode2, LocalDateTime date) {
         this.id = id;
+        this.medicAidIns = medicAidIns;
+        this.hospitalDtt = hospitalDtt;
+        this.hospitalPos = hospitalPos;
         this.hosCate = hosCate;
         this.hosCateNm = hosCateNm;
-        this.medicAidIns = medicAidIns;
         this.edOperYn = edOperYn;
         this.etc = etc;
         this.operDescDt = operDescDt;
@@ -62,5 +79,6 @@ public class HospitalInf extends BaseTimeEntity {
         this.addr = addr;
         this.zipCode1 = zipCode1;
         this.zipCode2 = zipCode2;
+        this.date = date;
     }
 }

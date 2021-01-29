@@ -1,5 +1,5 @@
 # Batch log
-logging.level.org.springframework.batch: debug
+logging.level.org.springframework.batch: info
 
 
 logging:
