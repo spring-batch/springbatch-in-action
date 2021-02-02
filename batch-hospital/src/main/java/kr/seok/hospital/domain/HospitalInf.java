@@ -59,7 +59,7 @@ public class HospitalInf extends BaseTimeEntity {
     private String zipCode2;
 
     @Column(name = "DATE")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "YYYY-MM-DD HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime date;
 
     @Builder

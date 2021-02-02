@@ -1,5 +1,6 @@
 package kr.seok.hospital.domain.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.*;
 
@@ -10,8 +11,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class HospitalEsEntity {
 
-    private String id;
-
+//    private String id;
+//
     private String orgId;
 
     private String addr;
@@ -69,13 +70,18 @@ public class HospitalEsEntity {
 
     private String zipCode2;
 
-    private LocalDateTime date;
+//    private Double latitude;
+//
+//    private Double longitude;
+
+//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "YYYY-MM-DD HH:mm:ss", timezone = "Asia/Seoul")
+//    private LocalDateTime docDate;
 
     @Builder
     @QueryProjection
-    public HospitalEsEntity(String id, String orgId, String addr, String hosCate, String hosCateNm, String fstAidMedicInsCd, String fstAidMedicInsNm, String edOperYn, String etc, String operDescDt, String operNm, String phone1, String edPhone, String operHourMonC, String operHourTueC, String operHourWedC, String operHourThuC, String operHourFriC, String operHourSatC, String operHourSunC, String operHourHolC, String operHourMonS, String operHourTueS, String operHourWedS, String operHourThuS, String operHourFriS, String operHourSatS, String operHourSunS, String operHourHolS, String zipCode1, String zipCode2, LocalDateTime date) {
-        this.id = id;
-        this.orgId = orgId;
+    public HospitalEsEntity(String id, String addr, String hosCate, String hosCateNm, String fstAidMedicInsCd, String fstAidMedicInsNm, String edOperYn, String etc, String operDescDt, String operNm, String phone1, String edPhone, String operHourMonC, String operHourTueC, String operHourWedC, String operHourThuC, String operHourFriC, String operHourSatC, String operHourSunC, String operHourHolC, String operHourMonS, String operHourTueS, String operHourWedS, String operHourThuS, String operHourFriS, String operHourSatS, String operHourSunS, String operHourHolS, String zipCode1, String zipCode2) {
+//        this.id = id;
+        this.orgId = id;
         this.addr = addr;
         this.hosCate = hosCate;
         this.hosCateNm = hosCateNm;
@@ -105,6 +111,8 @@ public class HospitalEsEntity {
         this.operHourHolS = operHourHolS;
         this.zipCode1 = zipCode1;
         this.zipCode2 = zipCode2;
-        this.date = date;
+//        this.latitude = latitude;
+//        this.longitude = longitude;
+//        this.docDate = docDate;
     }
 }

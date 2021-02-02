@@ -129,6 +129,12 @@ project(":batch-admin") {
 project(":batch-hospital") {
     dependencies {
         implementation project(":batch-common")
+        implementation 'org.apache.httpcomponents:httpclient:4.5.13'
+        /* https://mvnrepository.com/artifact/org.modelmapper.extensions/modelmapper-spring */
+        implementation 'org.modelmapper.extensions:modelmapper-spring:1.1.0'
+        // es 의존성 추가시 배치가 끝나지 않는 문제 발생
+//        implementation 'org.elasticsearch:elasticsearch:7.6.2'
+//        implementation 'org.elasticsearch.client:elasticsearch-rest-high-level-client:7.6.2'
     }
 }
 
@@ -136,7 +142,7 @@ project(":batch-hospital-es") {
     dependencies {
         implementation project(":batch-common")
         implementation 'org.springframework.data:spring-data-elasticsearch'
-//        // https://mvnrepository.com/artifact/org.elasticsearch/elasticsearch
+        // https://mvnrepository.com/artifact/org.elasticsearch/elasticsearch
         implementation 'org.elasticsearch:elasticsearch:7.6.2'
         implementation 'org.elasticsearch.client:elasticsearch-rest-high-level-client:7.6.2'
     }

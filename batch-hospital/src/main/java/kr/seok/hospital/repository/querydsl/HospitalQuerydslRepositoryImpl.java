@@ -36,7 +36,6 @@ public class HospitalQuerydslRepositoryImpl implements HospitalQuerydslRepositor
         return queryFactory
                 .select(new QHospitalEsEntity(
                         hospitalInf.id,
-                        hospitalInf.id,
                         hospitalInf.addr,
                         hospitalInf.hosCate,
                         hospitalInf.hosCateNm,
@@ -65,8 +64,10 @@ public class HospitalQuerydslRepositoryImpl implements HospitalQuerydslRepositor
                         hospitalDtt.operHourSunS,
                         hospitalDtt.operHourHolS,
                         hospitalInf.zipCode1,
-                        hospitalInf.zipCode2,
-                        hospitalInf.date
+                        hospitalInf.zipCode2
+//                        hospitalPos.lat,
+//                        hospitalPos.lon
+//                        hospitalInf.date
                 ))
                 .from(hospitalInf)
                 .leftJoin(hospitalInf.medicAidIns, medicAidIns)
