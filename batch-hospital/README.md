@@ -94,6 +94,12 @@
             - 최대 시간 (전체 건수 17,479)
                 - 1m30s 이내
 
+3. 여러 테이블로 정규화된 테이블의 데이터를 ES로 등록
+    - 정규화된 데이터를 Querydsl을 통하여 [Q Type 클래스 생성](/src/main/java/kr/seok/hospital/domain/dto/HospitalEsEntity.java) 및 [조회 쿼리 작성](src/main/java/kr/seok/hospital/repository/querydsl/HospitalQuerydslRepositoryImpl.java)
+    - `spring-data-elasticsearch`, `elasticsearch-rest-high-level-client` 라이브러리를 이용한 bulk API 호출로 시간을 줄여야 함
+    - 위 `high-level-client`라이브러리 사용시 배치가 종료가 안되는 문제점이 있음
+    - `spring-data-elasticsearch` 라이브러리 등록시 jpa 라이브러리와 충돌 문제 있음
+    - 임시로 `ClosableHttpClient`를 사용하여 curl 요청, 입력 시간차이가 어마어마함 안쓰는 것만 못함
 
 ## 코드레벨 전체 아키텍처
 - 특정 작업에 대한 `Job` Prototype 클래스 작성 후 `Step`으로 리펙토링
@@ -104,10 +110,12 @@
    - 코드 변경하는 일이 빈번하지 않은 값
    - 단순 코드 테이블을 꼭 테이블에 가지고 있어야 하는지?
    - 그게 아닌 경우 `enum`으로 적용하기
+- 복잡한 비즈니스 로직에 대한 쿼리는 Querydsl로 작성하되 [Custom](src/main/java/kr/seok/hospital/repository/querydsl/HospitalQuerydslRepositoryImpl.java) 클래스를 따로 작성
+- ES에 데이터 등록용 DTO 작성, ES 어노테이션을 통한 데이터 명세화
 
 ## 개선 사항
 - 배치 bulk 프로세스 
-   - 속도 개선
+   - 속도 개선(Single Table Insert)
       - 상황
          - 파일을 읽는 속도는 FlatFileItemReader와 일반 BufferedReader 와의 속도차이는 미미
          - 파일을 쓰는 속도에서 차이가 발생하고 줄일 수 있는 것을 확인
@@ -133,8 +141,12 @@
 
    - [참고](https://jojoldu.tistory.com/507)
    
+    - 속도 개선 2 (Multi Table Insert)
+        - `Parallel Step`을 홣용한 각 테이블 별 Step 구성 및 병렬 처리
+    
 - Step 간 데이터 공유
    - StepExecution 을 사용하여 Batch Meta-data를 저장하면서 성능 이슈가 발생하여 StepExecution을 사용하지 않고 Step간 데이터 공유하는 방법
-   - 싱글톤 빈을 하나 만들어 멤버 변수에 Map을 두어 데이터를 공유하는 방식
+   - [싱글톤 빈](/src/main/java/kr/seok/HospitalApplication.java)을 하나 만들어 멤버 변수에 [Map](src/main/java/kr/seok/hospital/domain/dto/DataShareBean.java)을 두어 데이터를 공유하는 방식
 
    - [참고](https://wckhg89.github.io/archivers/springbatch3)
+

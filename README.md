@@ -35,10 +35,6 @@
 ## 스터디 회의록
 - [2020.08 ~ 11](docs/README.md)
 
-## 스프링 배치 문서 정리
-1. [Intro](docs/batch/1.introduction.md)
-2. [Domain](docs/batch/2.BatchDomain.md)
-
 ## 스프링 배치 관리
 - [Airflow](https://airbnb.io/projects/airflow/)
 - [Apache Airflow](https://bcho.tistory.com/1184)

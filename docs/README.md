@@ -25,3 +25,12 @@
 8. [1 - 5주차](11/20201114.md "2020.11.14")
     - 배치 구현 시 이슈를 중점으로 다룸
     - 문서 정리로 기본적인 내용 리마인드
+
+## Spring Batch Component
+- Job, JobInstance, JobExecution
+- Step, StepInstance, StepExecution
+- Task, Chunk
+- ItemReader, ItemWriter, ItemProcessor
+- Listener
+- JobParameters
+- @JobScope, @StepScope
