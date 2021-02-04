@@ -1,6 +1,7 @@
 logging:
   level:
     root: info
+    web: info
     org:
       # SpringFramework Logging
-      springframework: debug
+      springframework: info

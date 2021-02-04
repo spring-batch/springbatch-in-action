@@ -1,5 +1,5 @@
 spring.profiles: db
-spring.profiles.include: db_mysql #db_h2 #, db_oracle
+spring.profiles.include: db_mysql #db_h2 #db_mysql, #db_oracle
 
 logging:
   level:
@@ -7,6 +7,5 @@ logging:
       hibernate:
         type:
           descriptor:
-
             # DB Query Logging
             sql: debug

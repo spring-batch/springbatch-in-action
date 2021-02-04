@@ -49,6 +49,9 @@
 - DBMS
 - ORM Framework
 
+## SpringBatch Schema ERD
+![erd](docs/batch/img/springbatch_schema_erd.png)
+
 ### 해당 프로젝스 설정 시 db_mysql, db_oracle 내용
 - MySQL
 ```yaml
