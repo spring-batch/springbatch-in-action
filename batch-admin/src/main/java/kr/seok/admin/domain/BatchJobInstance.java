@@ -23,4 +23,12 @@ public class BatchJobInstance implements Serializable {
     private String jobName;
     @Column(name = "JOB_KEY")
     private String jobKey;
+
+    @Builder
+    public BatchJobInstance(Long jobInstanceId, Long version, String jobName, String jobKey) {
+        this.jobInstanceId = jobInstanceId;
+        this.version = version;
+        this.jobName = jobName;
+        this.jobKey = jobKey;
+    }
 }

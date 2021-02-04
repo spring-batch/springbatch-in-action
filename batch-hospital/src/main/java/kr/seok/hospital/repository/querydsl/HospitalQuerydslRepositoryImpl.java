@@ -6,6 +6,7 @@ import kr.seok.hospital.domain.HospitalInf;
 import kr.seok.hospital.domain.QHospitalDtt;
 import kr.seok.hospital.domain.dto.HospitalEsEntity;
 import kr.seok.hospital.domain.dto.QHospitalEsEntity;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -16,6 +17,7 @@ import static kr.seok.hospital.domain.QHospitalInf.hospitalInf;
 import static kr.seok.hospital.domain.QHospitalPos.hospitalPos;
 import static kr.seok.hospital.domain.QMedicAidIns.medicAidIns;
 
+@RequiredArgsConstructor
 public class HospitalQuerydslRepositoryImpl implements HospitalQuerydslRepository {
 
     private final JPAQueryFactory queryFactory;

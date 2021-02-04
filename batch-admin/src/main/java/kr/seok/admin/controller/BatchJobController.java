@@ -1,5 +1,6 @@
 package kr.seok.admin.controller;
 
+import kr.seok.admin.dto.JobInstanceDto;
 import kr.seok.admin.service.BatchJobService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+import java.util.Set;
+
 @RestController
 @RequestMapping(value = "/api")
 @RequiredArgsConstructor
@@ -15,12 +19,10 @@ public class BatchJobController {
 
     private final BatchJobService batchJobService;
 
-    /**
-     *  JOB_NAME을 기준으로 배치 인스턴스의 리스트를 가져온다.
-     */
     @GetMapping("/batchJobInstances")
     public ResponseEntity<?> getInstances() {
-        return ResponseEntity.ok().body(batchJobService.getJobInstance());
+        Map<String, Set<JobInstanceDto>> findGroupByJobName = batchJobService.getJobInstanceGroupByJobName();
+        return ResponseEntity.ok().body(findGroupByJobName);
     }
 
     @GetMapping("/batchJobExecutions")
