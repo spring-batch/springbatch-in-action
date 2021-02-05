@@ -1,0 +1,16 @@
+spring:
+  batch:
+    job:
+      # job.name 기본 값 설정
+      names: ${job.name:None}
+
+  # 아래 오류로 인한 설정
+  # The bean 'transactionManager', defined in class path resource [org/springframework/batch/core/configuration/annotation/SimpleBatchConfiguration.class], could not be registered.
+  # A bean with that name has already been defined in class path resource [kr/seok/config/BatchAppConfig.class] and overriding is disabled.
+  #
+  # 해결책
+  # Consider renaming one of the beans or enabling overriding by setting
+  # spring.main.allow-bean-definition-overriding=true
+  main:
+    allow-bean-definition-overriding: true
+

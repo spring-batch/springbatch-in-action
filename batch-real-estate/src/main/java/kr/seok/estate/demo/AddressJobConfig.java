@@ -1,11 +1,11 @@
-package kr.seok.area.job;
+package kr.seok.estate.demo;
 
-import kr.seok.area.domain.FileLineDto;
-import kr.seok.area.domain.entity.AreaEntity;
+import kr.seok.estate.domain.dto.FileLineDto;
+import kr.seok.estate.domain.entity.AreaEntity;
+import kr.seok.estate.repository.AreaRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.Step;
+import org.springframework.batch.core.*;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
@@ -25,15 +25,20 @@ import javax.persistence.EntityManagerFactory;
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-public class AreaJobConfig {
+public class AddressJobConfig {
 
-    private final String JOB_NAME = "JPA_AREA";
+    private static final String JOB_NAME = "AREA";
+    private static final Integer CHUNK_SIZE = 10000;
+
+    @Value("${file.area}")
+    private String filePath;
+
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
     private final EntityManagerFactory entityManagerFactory;
 
-    @Value("${file.area}")
-    private String filePath;
+    private final AreaRepository areaRepository;
+
 
     @Bean
     public Job areaJob() {
@@ -46,7 +51,21 @@ public class AreaJobConfig {
     /* File Reader -> File :: Entity -> Entity 프로세스 Step */
     private Step areaStep() {
         return stepBuilderFactory.get(JOB_NAME + "_STEP")
-                .<FileLineDto, AreaEntity>chunk(1000)
+                .listener(new StepExecutionListener() {
+                    @Override
+                    public void beforeStep(StepExecution stepExecution) {
+                        areaRepository.deleteAllInBatch();
+                        log.info("[LOG] [INIT] [TB_AREA] [{}]", areaRepository.count());
+                    }
+
+                    @Override
+                    public ExitStatus afterStep(StepExecution stepExecution) {
+                        log.info("[LOG] [COMMIT_CNT] [TB_AREA] [{}]", stepExecution.getCommitCount());
+                        log.info("[LOG] [WRITE_CNT] [TB_AREA] [{}]", stepExecution.getWriteCount());
+                        return ExitStatus.COMPLETED;
+                    }
+                })
+                .<FileLineDto, AreaEntity>chunk(CHUNK_SIZE)
                 .reader(txtFlatFileReader())
                 .processor((ItemProcessor<FileLineDto, AreaEntity>) FileLineDto::toAreaEntity)
                 .writer(areaWriter())
@@ -68,6 +87,5 @@ public class AreaJobConfig {
         return new JpaItemWriterBuilder<>()
                 .entityManagerFactory(entityManagerFactory)
                 .build();
-
     }
 }

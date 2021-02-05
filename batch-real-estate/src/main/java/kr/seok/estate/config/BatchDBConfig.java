@@ -1,4 +1,4 @@
-package kr.seok.config;
+package kr.seok.estate.config;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -18,18 +18,16 @@ import javax.sql.DataSource;
 @Configuration
 @EnableTransactionManagement
 /* Repository */
-@EnableJpaRepositories(
-        basePackages = { "kr.seok.library.domain.repository" }
-)
+@EnableJpaRepositories(basePackages = { "kr.seok.estate.repository" })
 public class BatchDBConfig {
 
     /* Entity 관리 경로 */
     String[] packages = {
-            "kr.seok.library.domain.entity"
+            "kr.seok.estate.domain.entity"
     };
 
     @Bean(name = "dataSource")
-    @ConfigurationProperties(prefix = "spring.datasource")
+    @ConfigurationProperties(prefix = "spring.datasource.batch")
     public DataSource datasource() {
         return DataSourceBuilder.create().build();
     }
