@@ -25,7 +25,7 @@
         - DB 조회시 공통 코드 조회쿼리가 항상 추가되어야 하는 경우
     - 사전 조건
         - CI가 구축되어 있어 하루에 몇번 씩 배포할 수 있는 상황
-    - [적용 예시 테스트 클래스](src/test/java/kr/seok/hospital/domain/enums/HospitalCategoryTest.java)
+    - [적용 예시 테스트 클래스](/src/test/java/kr/seok/hospital/domain/enums/HospitalCategoryTest.java)
         - 해당 코드 리스트 조회 메서드 테스트
         - 해당 코드명 리스트 조회 메서드 테스트
         - 특정 코드 확인 및 코드가 매핑된 코드명 반환 테스트
