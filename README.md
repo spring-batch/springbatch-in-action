@@ -1,5 +1,13 @@
 # SpringBatch Saturday Study
 
+## 추가적 진행
+- [x] txt 파일 reader 기능 추가 (csv, txt, excel)
+- [x] 배치 프로세스상에서 Step 간의 `데이터 공유`하는 방법 개선(외부 모듈 사용 X)
+- [x] 속도를 줄이기 위해  Parallel Step or MultiThread로 구현해보기
+- [x] JPA Querydsl를 활용하여 조인쿼리로 수정하기
+- [x] JPA, Jdbc 속도 비교 (속도를 어느정도 포기하고 코드양을 줄일 것인지..?)
+- [ ] 엘라스틱 서치 스택을 추가하여 배치와 연동
+
 ## 스터디
 - 일자: 2020.08 ~ 11
 - 장소: 홍대 입구역 스터디 룸
