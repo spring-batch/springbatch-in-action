@@ -2,6 +2,7 @@
 
 ## 추가적 진행
 - [x] txt 파일 reader 기능 추가 (csv, txt, excel)
+- [x] excel Report 모듈 참고 구현
 - [x] 배치 프로세스상에서 Step 간의 `데이터 공유`하는 방법 개선(외부 모듈 사용 X)
 - [x] 속도를 줄이기 위해  Parallel Step or MultiThread로 구현해보기
 - [x] JPA Querydsl를 활용하여 조인쿼리로 수정하기
