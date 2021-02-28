@@ -113,6 +113,8 @@
 - 복잡한 비즈니스 로직에 대한 쿼리는 Querydsl로 작성하되 [Custom](src/main/java/kr/seok/hospital/repository/querydsl/HospitalQuerydslRepositoryImpl.java) 클래스를 따로 작성
 - ES에 데이터 등록용 DTO 작성, ES 어노테이션을 통한 데이터 명세화
 
+![프로세스 아키텍처](../img/batchprocess/Hospiatal_batch.png)
+
 ## 개선 사항
 - 배치 bulk 프로세스 
    - 속도 개선(Single Table Insert)

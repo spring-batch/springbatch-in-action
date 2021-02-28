@@ -9,4 +9,4 @@ logging:
           descriptor:
 
             # DB Query Logging
-            sql: debug
+            sql: info

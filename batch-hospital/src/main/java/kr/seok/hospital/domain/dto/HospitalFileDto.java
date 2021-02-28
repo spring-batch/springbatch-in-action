@@ -1,8 +1,10 @@
 package kr.seok.hospital.domain.dto;
 
 import kr.seok.hospital.domain.Hospital;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
@@ -11,7 +13,7 @@ import java.util.Arrays;
 
 /* 엑셀 컬럼 순으로 정렬된 필드로 순서 주의 */
 @Data
-@Builder
+@NoArgsConstructor
 public class HospitalFileDto {
     private String id;
     private String addr;
@@ -52,6 +54,44 @@ public class HospitalFileDto {
     private Double lat;
 
     private String date;
+
+    @Builder
+    public HospitalFileDto(String id, String addr, String hosCate, String hosCateNm, String fstAidMedicInsCd, String fstAidMedicInsNm, String edOperYn, String etc, String operDescDt, String simpleMap, String operNm, String phone1, String edPhone, String operHourMonC, String operHourTueC, String operHourWedC, String operHourThuC, String operHourFriC, String operHourSatC, String operHourSunC, String operHourHolC, String operHourMonS, String operHourTueS, String operHourWedS, String operHourThuS, String operHourFriS, String operHourSatS, String operHourSunS, String operHourHolS, String zipCode1, String zipCode2, Double lon, Double lat, String date) {
+        this.id = id;
+        this.addr = addr;
+        this.hosCate = hosCate;
+        this.hosCateNm = hosCateNm;
+        this.fstAidMedicInsCd = fstAidMedicInsCd;
+        this.fstAidMedicInsNm = fstAidMedicInsNm;
+        this.edOperYn = edOperYn;
+        this.etc = etc;
+        this.operDescDt = operDescDt;
+        this.simpleMap = simpleMap;
+        this.operNm = operNm;
+        this.phone1 = phone1;
+        this.edPhone = edPhone;
+        this.operHourMonC = operHourMonC;
+        this.operHourTueC = operHourTueC;
+        this.operHourWedC = operHourWedC;
+        this.operHourThuC = operHourThuC;
+        this.operHourFriC = operHourFriC;
+        this.operHourSatC = operHourSatC;
+        this.operHourSunC = operHourSunC;
+        this.operHourHolC = operHourHolC;
+        this.operHourMonS = operHourMonS;
+        this.operHourTueS = operHourTueS;
+        this.operHourWedS = operHourWedS;
+        this.operHourThuS = operHourThuS;
+        this.operHourFriS = operHourFriS;
+        this.operHourSatS = operHourSatS;
+        this.operHourSunS = operHourSunS;
+        this.operHourHolS = operHourHolS;
+        this.zipCode1 = zipCode1;
+        this.zipCode2 = zipCode2;
+        this.lon = lon;
+        this.lat = lat;
+        this.date = date;
+    }
 
     public Hospital toEntity() {
         date = getDate()

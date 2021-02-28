@@ -22,8 +22,8 @@ import org.springframework.context.annotation.Configuration;
 public class H_FileToDBConfig {
 
     private final JobBuilderFactory jobBuilderFactory;
-//    private final Step_H_FileToDB stepHFileToDB;
-    private final Step_H_FileToDB_tasklet step_h_fileToDB_tasklet;
+//    private final Step_H_FileToDB stepHFileToDB; // 53s526ms
+    private final Step_H_FileToDB_tasklet step_h_fileToDB_tasklet; // 22s
 
     private final HospitalJpaRepository hospitalJpaRepository;
     private final String JOB_NAME = "H_FileToDB";

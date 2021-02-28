@@ -7,6 +7,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @SpringBootTest
 class HospitalFileDtoTest {
 
@@ -14,6 +16,7 @@ class HospitalFileDtoTest {
     @DisplayName("reflect 필드 리스트 반환 테스트")
     void testCase2() {
         String[] fields = HospitalFileDto.getFields();
+        assertThat(fields.length).isEqualTo(34);
         for(String item : fields) {
             System.out.println(item);
         }
