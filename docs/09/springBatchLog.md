@@ -1,6 +1,7 @@
 ## 스프링 실행 시 로그 분석하기
 
 ### 스프링 로그 레벨
+
 - 로그 레벨 설정
 
 ```properties
@@ -10,17 +11,18 @@ logging.level.org.springframework.batch: debug
 ```
 
 - 로그 포맷 설정
-[logback-spring.xml](/src/main/resources/logback-spring.xml)
+  [logback-spring.xml](/src/main/resources/logback-spring.xml)
 
-### 스프링 debugging 
+### 스프링 debugging
+
 - **로그순서는 Job과 Step 의 구성에 따라 달라질 수 있음**
 - LIBRARY_FILE_TO_TMP_JOB 프로세스
-![LIBRARY_FILE_TO_TMP_JOB](/img/batchprocess/library-batch-debug-file-to-tmp.png "file to tmp process")
+  ![LIBRARY_FILE_TO_TMP_JOB](/img/batchprocess/library-batch-debug-file-to-tmp.png "file to tmp process")
 
 - 체크 포인트
-    1. process flow 시 배치 이력은 어떻게 쌓고 있는지
-    2. transaction 구간 확인
-    
+	1. process flow 시 배치 이력은 어떻게 쌓고 있는지
+	2. transaction 구간 확인
+
 ```
 [2020-09-08 10:43:26.345] DEBUG [o.s.o.j.JpaTransactionManager.doBegin:393] - Opened new EntityManager [SessionImpl(1687227181<open>)] for JPA transaction
 

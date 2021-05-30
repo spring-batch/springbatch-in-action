@@ -10,5 +10,6 @@ import java.lang.annotation.Target;
 public @interface EntityField {
 
     String fieldName() default "";
+
     String columnName() default "";
 }

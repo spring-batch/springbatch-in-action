@@ -25,6 +25,7 @@ public enum SidoFields {
                 .map(SidoFields::getFieldNm)
                 .toArray(String[]::new);
     }
+
     public static String[] getDbFieldNmArrays() {
         return Arrays.stream(SidoFields.values())
                 .map(SidoFields::getDbFieldNm)

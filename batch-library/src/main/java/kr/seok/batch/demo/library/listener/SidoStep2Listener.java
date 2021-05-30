@@ -20,7 +20,7 @@ public class SidoStep2Listener implements StepExecutionListener {
         sidoEntityRepository.deleteAll();
         int sidoTableSize = sidoEntityRepository.findAll().size();
         log.info("[LOG] [TB_SIDO] [INITIALIZE] [SIZE] [{}]", sidoTableSize);
-        if(sidoTableSize != 0) throw new RuntimeException("데이터 삭제 오류");
+        if (sidoTableSize != 0) throw new RuntimeException("데이터 삭제 오류");
     }
 
     @Override

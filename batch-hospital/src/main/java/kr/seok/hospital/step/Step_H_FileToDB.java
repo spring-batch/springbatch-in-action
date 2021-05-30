@@ -52,7 +52,7 @@ public class Step_H_FileToDB {
         return new FlatFileItemReader<HospitalFileDto>() {{
             setResource(new ClassPathResource("files/seoul_hospital_position_info_utf8.csv"));
             setLinesToSkip(1);
-            setLineMapper(new DefaultLineMapper<HospitalFileDto>(){{
+            setLineMapper(new DefaultLineMapper<HospitalFileDto>() {{
                 setLineTokenizer(
                         new DelimitedLineTokenizer(DELIMITER_COMMA) {{
                             /* 필드명 리스트 반환 */

@@ -1,9 +1,9 @@
 package kr.seok.es.domain;
 
 import lombok.Getter;
-import org.springframework.data.elasticsearch.annotations.*;
 
 import javax.persistence.Id;
+import java.text.DateFormat;
 
 @Getter
 @Document(

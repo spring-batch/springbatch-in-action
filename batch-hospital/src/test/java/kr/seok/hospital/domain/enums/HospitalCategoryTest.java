@@ -54,6 +54,7 @@ class HospitalCategoryTest {
         List<String> codeList = HospitalCategory.getCodeList();
         codeList.forEach(System.out::println);
     }
+
     @Test
     @DisplayName("코드명 리스트 조회")
     void testCase4() {

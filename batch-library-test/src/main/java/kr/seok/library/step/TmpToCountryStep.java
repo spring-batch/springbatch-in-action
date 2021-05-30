@@ -10,7 +10,6 @@ import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.JpaItemWriter;
 import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
-import org.springframework.batch.item.database.orm.JpaNativeQueryProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -64,7 +63,7 @@ public class TmpToCountryStep {
             String countryKey = item.getCityNm() + " " + item.getCountryNm();
 
             /* Set에 키 값이 포함되어 있으면 넘어가기*/
-            if(countryKeySet.contains(countryKey)) return null;
+            if (countryKeySet.contains(countryKey)) return null;
             /* 값이 포함되지 않은 경우 set에 설정 및 Entity에 저장 */
             countryKeySet.add(countryKey);
 

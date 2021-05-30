@@ -14,7 +14,8 @@ public class HospitalApplication {
         enumMapper.put("HospitalCate", HospitalCategory.class);
         return enumMapper;
     }
+
     public static void main(String[] args) {
-        SpringApplication.run(HospitalApplication.class, args);
+        SpringApplication.run(HospitalApplication.class, args).close();
     }
 }

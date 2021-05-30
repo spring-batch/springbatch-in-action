@@ -4,7 +4,10 @@ import kr.seok.hospital.domain.enums.EnumMapperType;
 import kr.seok.hospital.domain.enums.EnumMapperValue;
 import lombok.NoArgsConstructor;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -30,7 +33,7 @@ public class EnumMapper {
     }
 
     public Map<String, List<EnumMapperValue>> get(List<String> keys) {
-        if(keys == null || keys.size() == 0) {
+        if (keys == null || keys.size() == 0) {
             return new LinkedHashMap<>();
         }
         return keys.stream()
@@ -38,5 +41,7 @@ public class EnumMapper {
                 .collect(Collectors.toMap(Function.identity(), key -> factory.get(key)));
     }
 
-    public Map<String, List<EnumMapperValue>> getAll() {return factory; }
+    public Map<String, List<EnumMapperValue>> getAll() {
+        return factory;
+    }
 }

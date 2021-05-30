@@ -1,7 +1,6 @@
 package kr.seok.library.domain.entity;
 
 import lombok.Builder;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 

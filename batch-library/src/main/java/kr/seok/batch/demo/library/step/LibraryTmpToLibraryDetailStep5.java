@@ -1,11 +1,11 @@
 package kr.seok.batch.demo.library.step;
 
 
+import kr.seok.batch.demo.library.domain.*;
 import kr.seok.batch.demo.library.repository.LibraryEntityRepository;
 import kr.seok.batch.demo.library.repository.SidoEntityRepository;
 import kr.seok.batch.demo.library.repository.SignguEntityRepository;
 import kr.seok.common.utils.StringUtils;
-import kr.seok.batch.demo.library.domain.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Step;
@@ -60,49 +60,51 @@ public class LibraryTmpToLibraryDetailStep5 {
     @StepScope
     @Bean(name = STEP_NAME + "_READER")
     public JdbcPagingItemReader<? extends LibraryTmpEntity> libraryTmpToLibraryDetailReader() {
-        return new JdbcPagingItemReader<LibraryTmpEntity>() {{
-            setName(STEP_NAME + "_READER");
-            setPageSize(1000);
-            setFetchSize(1000);
-            setDataSource(dataSource);
-            setQueryProvider(dbToDbProvider());
-            setRowMapper(new BeanPropertyRowMapper<>(LibraryTmpEntity.class));
-        }
-        private MySqlPagingQueryProvider dbToDbProvider() {
+        return new JdbcPagingItemReader<LibraryTmpEntity>() {
+            {
+                setName(STEP_NAME + "_READER");
+                setPageSize(1000);
+                setFetchSize(1000);
+                setDataSource(dataSource);
+                setQueryProvider(dbToDbProvider());
+                setRowMapper(new BeanPropertyRowMapper<>(LibraryTmpEntity.class));
+            }
 
-            StringBuffer selectClause = new StringBuffer();
-            StringBuffer fromClause = new StringBuffer();
+            private MySqlPagingQueryProvider dbToDbProvider() {
 
-            selectClause.append("LBRRY_NM,");
-            selectClause.append("CTPRVN_NM,");
-            selectClause.append("SIGNGU_NM,");
-            selectClause.append("PLOT_AR,");
-            selectClause.append("BULD_AR,");
-            selectClause.append("LATITUDE,");
-            selectClause.append("LONGITUDE,");
+                StringBuffer selectClause = new StringBuffer();
+                StringBuffer fromClause = new StringBuffer();
 
-            selectClause.append("REFERENCE_DATE,");
-            selectClause.append("INSTT_CODE,");
-            selectClause.append("INSTT_NM");
+                selectClause.append("LBRRY_NM,");
+                selectClause.append("CTPRVN_NM,");
+                selectClause.append("SIGNGU_NM,");
+                selectClause.append("PLOT_AR,");
+                selectClause.append("BULD_AR,");
+                selectClause.append("LATITUDE,");
+                selectClause.append("LONGITUDE,");
 
-            fromClause.append("CSV_TABLE");
+                selectClause.append("REFERENCE_DATE,");
+                selectClause.append("INSTT_CODE,");
+                selectClause.append("INSTT_NM");
 
-            Map<String, Order> sortKeys = new HashMap<>(1);
-            sortKeys.put("LBRRY_NM", Order.DESCENDING);
+                fromClause.append("CSV_TABLE");
 
-            return new MySqlPagingQueryProvider() {{
-                setSelectClause(selectClause.toString());
-                setFromClause(fromClause.toString());
-                setSortKeys(sortKeys);
-            }};
-        }};
+                Map<String, Order> sortKeys = new HashMap<>(1);
+                sortKeys.put("LBRRY_NM", Order.DESCENDING);
+
+                return new MySqlPagingQueryProvider() {{
+                    setSelectClause(selectClause.toString());
+                    setFromClause(fromClause.toString());
+                    setSortKeys(sortKeys);
+                }};
+            }
+        };
     }
-
 
 
     @StepScope
     @Bean(name = STEP_NAME + "_PROCESSOR")
-    public ItemProcessor<? super LibraryTmpEntity,? extends LibraryDetailEntity> tmpProcessor() {
+    public ItemProcessor<? super LibraryTmpEntity, ? extends LibraryDetailEntity> tmpProcessor() {
         return item -> {
             Sido sido = sidoEntityRepository.findByCtprvnNm(item.getCtprvnNm());
             Signgu signgu = signguEntityRepository.findBySignguNmAndCtprvnCode(item.getSignguNm(), sido.getCtprvnCode());

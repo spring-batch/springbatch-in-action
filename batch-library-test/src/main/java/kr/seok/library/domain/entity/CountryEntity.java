@@ -1,6 +1,9 @@
 package kr.seok.library.domain.entity;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.Column;

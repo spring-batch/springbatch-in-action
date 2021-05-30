@@ -1,11 +1,11 @@
 package kr.seok.batch.demo;
 
 
+import kr.seok.batch.demo.library.domain.*;
 import kr.seok.batch.demo.library.repository.LibraryDetailEntityRepository;
 import kr.seok.batch.demo.library.repository.SidoEntityRepository;
 import kr.seok.batch.demo.library.repository.SignguEntityRepository;
 import kr.seok.batch.demo.library.writer.CustomExcelItemWriter;
-import kr.seok.batch.demo.library.domain.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -66,14 +66,16 @@ public class LibraryToReportFileJobDemo {
     @StepScope
     @Bean(name = JOB_NAME + "_READER")
     public JdbcPagingItemReader<? extends LibraryEntity> libraryTotalReader() {
-        return new JdbcPagingItemReader<LibraryEntity>() {{
-            setName(JOB_NAME + "_READER");
-            setPageSize(CHUNK_SIZE);
-            setFetchSize(CHUNK_SIZE);
-            setDataSource(dataSource);
-            setQueryProvider(libraryTmpProvider());
-            setRowMapper(new BeanPropertyRowMapper<>(LibraryEntity.class));
-        }
+        return new JdbcPagingItemReader<LibraryEntity>() {
+            {
+                setName(JOB_NAME + "_READER");
+                setPageSize(CHUNK_SIZE);
+                setFetchSize(CHUNK_SIZE);
+                setDataSource(dataSource);
+                setQueryProvider(libraryTmpProvider());
+                setRowMapper(new BeanPropertyRowMapper<>(LibraryEntity.class));
+            }
+
             public MySqlPagingQueryProvider libraryTmpProvider() {
                 StringBuffer selectClause = new StringBuffer();
                 StringBuffer fromClause = new StringBuffer();
@@ -110,12 +112,13 @@ public class LibraryToReportFileJobDemo {
                     setFromClause(fromClause.toString());
                     setSortKeys(sortKeys);
                 }};
-            }};
+            }
+        };
     }
 
     @StepScope
     @Bean(name = JOB_NAME + "_PROCESSOR")
-    public ItemProcessor<? super LibraryEntity,? extends LibraryTotalEntity> libraryToLibraryTotalProcessor() {
+    public ItemProcessor<? super LibraryEntity, ? extends LibraryTotalEntity> libraryToLibraryTotalProcessor() {
         return item -> {
             Sido sido = sidoEntityRepository.findByCtprvnCode(item.getCtprvnCode())
                     .orElseThrow(RuntimeException::new);

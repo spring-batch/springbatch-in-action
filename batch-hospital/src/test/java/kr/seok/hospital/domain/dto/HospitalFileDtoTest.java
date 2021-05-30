@@ -17,7 +17,7 @@ class HospitalFileDtoTest {
     void testCase2() {
         String[] fields = HospitalFileDto.getFields();
         assertThat(fields.length).isEqualTo(34);
-        for(String item : fields) {
+        for (String item : fields) {
             System.out.println(item);
         }
     }

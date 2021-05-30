@@ -18,7 +18,7 @@ import static kr.seok.admin.domain.QBatchJobInstance.batchJobInstance;
  */
 public class BatchJobInstanceQuerydslRepositoryImpl implements BatchJobInstanceQuerydslRepository {
 
-    private JPAQueryFactory queryFactory;
+    private final JPAQueryFactory queryFactory;
 
     public BatchJobInstanceQuerydslRepositoryImpl(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);

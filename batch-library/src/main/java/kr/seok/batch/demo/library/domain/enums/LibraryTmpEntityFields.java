@@ -48,6 +48,7 @@ public enum LibraryTmpEntityFields {
                 .map(LibraryTmpEntityFields::getClassFieldNm)
                 .toArray(String[]::new);
     }
+
     public static String[] getDBFieldArrays() {
         return Arrays.stream(LibraryTmpEntityFields.values())
                 .map(LibraryTmpEntityFields::getDbFieldNm)

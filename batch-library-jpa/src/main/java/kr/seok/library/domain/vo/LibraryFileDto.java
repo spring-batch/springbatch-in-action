@@ -1,7 +1,10 @@
 package kr.seok.library.domain.vo;
 
 import kr.seok.library.domain.entity.LibraryTmpEntity;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.Arrays;
 

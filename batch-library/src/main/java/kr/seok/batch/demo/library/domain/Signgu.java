@@ -34,6 +34,7 @@ public class Signgu {
                     .map(SignguFields::getFieldNm)
                     .toArray(String[]::new);
         }
+
         public static String[] getDbFieldNmArrays() {
             return Arrays.stream(SignguFields.values())
                     .map(SignguFields::getDbFieldNm)

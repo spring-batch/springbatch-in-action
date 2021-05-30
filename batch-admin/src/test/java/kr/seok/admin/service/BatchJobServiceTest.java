@@ -1,42 +1,53 @@
 package kr.seok.admin.service;
 
-import kr.seok.admin.repository.*;
+import kr.seok.admin.domain.BatchJobInstance;
+import kr.seok.admin.repository.BatchJobInstanceJpaRepository;
 import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 public class BatchJobServiceTest {
-//
-//    private BatchJobService batchJobExecutionService;
-//
+
+    private BatchJobService batchJobService;
+    //
 //    @Mock
 //    private BatchJobExecutionRepository batchJobExecutionRepository;
 //    @Mock
 //    private BatchJobExecutionContextRepository batchJobExecutionContextRepository;
 //    @Mock
 //    private BatchJobExecutionParamsRepository batchJobExecutionParamsRepository;
-//    @Mock
-//    private BatchJobInstanceRepository batchJobInstanceRepository;
-//    @Mock
+    @Mock
+    private BatchJobInstanceJpaRepository batchJobInstanceRepository;
+
+    //    @Mock
 //    private BatchStepExecutionRepository batchStepExecutionRepository;
 //    @Mock
 //    private BatchStepExecutionContextRepository batchStepExecutionContextRepository;
 //
-//    @Before
-//    public void setUp() {
-//        MockitoAnnotations.initMocks(this);
-//        batchJobExecutionService = new BatchJobService(
+    @Before
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
+        batchJobService = new BatchJobService(
 //                batchJobExecutionRepository,
 //                batchJobExecutionContextRepository,
 //                batchJobExecutionParamsRepository,
-//                batchJobInstanceRepository,
+                batchJobInstanceRepository
 //                batchStepExecutionRepository,
-//                batchStepExecutionContextRepository);
-//    }
+//                batchStepExecutionContextRepository
+        );
+    }
 //
 //    @Test
 //    public void list() {
 //
 //    }
+
+    @Test
+    @DisplayName("테스트")
+    void testCase2() {
+        BatchJobInstance jobInstances = batchJobService.getJobInstances(1393L);
+        System.out.println(jobInstances);
+    }
 }

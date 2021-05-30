@@ -32,8 +32,8 @@ import javax.persistence.EntityManagerFactory;
 import static org.springframework.batch.item.file.transform.DelimitedLineTokenizer.DELIMITER_COMMA;
 
 /**
- *  도서관 csv 파일을 읽어 CSV_TABLE(임시 저장 테이블) 테이블에 저장
- *      - CSV 파일에 저장되어 있는 Raw 데이터 저장
+ * 도서관 csv 파일을 읽어 CSV_TABLE(임시 저장 테이블) 테이블에 저장
+ * - CSV 파일에 저장되어 있는 Raw 데이터 저장
  */
 @Slf4j
 @Configuration
@@ -105,9 +105,9 @@ public class LibraryFileToDbJobDemo {
                 setLineTokenizer(
                         /* [DelimitedLineTokenizer 클래스의 필수 값] delimiter 설정 */
                         new DelimitedLineTokenizer(DELIMITER_COMMA) {{
-                    /*  LibraryEntitys의 key 값 매핑을 위한 Name 설정 */
-                    setNames(LibraryTmpEntityFields.getDBFieldArrays());
-                }});
+                            /*  LibraryEntitys의 key 값 매핑을 위한 Name 설정 */
+                            setNames(LibraryTmpEntityFields.getDBFieldArrays());
+                        }});
                 /* [LineMapper 필수 설정] FieldSet을 Entity와 매핑 설정*/
                 setFieldSetMapper(new BeanWrapperFieldSetMapper<LibraryDTO>() {{
                     /* CSV 파일의 값 부분을 Vo로 매핑 하기 위한 설정 */

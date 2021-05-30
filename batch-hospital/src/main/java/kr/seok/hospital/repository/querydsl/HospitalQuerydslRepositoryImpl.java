@@ -4,8 +4,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.seok.hospital.domain.Hospital;
 import kr.seok.hospital.domain.dto.HospitalEsEntity;
 import kr.seok.hospital.domain.dto.QHospitalEsEntity;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 import javax.persistence.EntityManager;
 import java.util.List;

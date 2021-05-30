@@ -15,7 +15,7 @@ import java.util.List;
 class Step_H_FileToDB_taskletTest {
 
     @Autowired
-    private  StepBuilderFactory stepBuilderFactory;
+    private StepBuilderFactory stepBuilderFactory;
     @Autowired
     private EntityManagerFactory entityManagerFactory;
     @Autowired

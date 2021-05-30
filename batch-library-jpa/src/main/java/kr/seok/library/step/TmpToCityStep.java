@@ -39,7 +39,8 @@ public class TmpToCityStep {
         return stepBuilderFactory.get(STEP_NAME + "_STEP")
                 .listener(new StepExecutionListener() {
                     @Override
-                    public void beforeStep(StepExecution stepExecution) { }
+                    public void beforeStep(StepExecution stepExecution) {
+                    }
 
                     @Override
                     public ExitStatus afterStep(StepExecution stepExecution) {
@@ -69,12 +70,13 @@ public class TmpToCityStep {
         return (ItemProcessor<LibraryTmpEntity, CityEntity>) item -> {
             CityEntity cityEntity = CityEntity.builder().cityNm(item.getCityNm()).build();
             /* Set에 키 값이 포함되어 있으면 넘어가기*/
-            if(cityKeySet.contains(cityEntity)) return null;
+            if (cityKeySet.contains(cityEntity)) return null;
             /* 값이 포함되지 않은 경우 set에 설정 및 Entity에 저장 */
             cityKeySet.add(cityEntity);
             return cityEntity;
         };
     }
+
     /* JPA ItemWriter */
     private ItemWriter<? super CityEntity> jpaCityWriter() {
         return new JpaItemWriterBuilder<CityEntity>()

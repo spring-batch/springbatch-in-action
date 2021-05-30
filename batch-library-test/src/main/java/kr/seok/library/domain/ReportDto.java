@@ -5,7 +5,6 @@ import kr.seok.common.excel.annotation.DefaultBodyStyle;
 import kr.seok.common.excel.annotation.DefaultHeaderStyle;
 import kr.seok.common.excel.annotation.ExcelColumn;
 import kr.seok.common.excel.annotation.ExcelColumnStyle;
-import kr.seok.common.excel.style.CustomExcelCellStyle;
 import kr.seok.common.excel.style.DefaultExcelCellStyle;
 import lombok.Data;
 

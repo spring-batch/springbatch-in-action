@@ -1,7 +1,6 @@
 package kr.seok.hospital.domain.dto;
 
 import kr.seok.hospital.domain.Hospital;
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -146,6 +145,7 @@ public class HospitalFileDto {
                 .map(Field::getName)
                 .toArray(String[]::new);
     }
+
     public static HospitalFileDto getSplitData(String line) {
         String[] s = line
                 .replaceAll("\"", "")

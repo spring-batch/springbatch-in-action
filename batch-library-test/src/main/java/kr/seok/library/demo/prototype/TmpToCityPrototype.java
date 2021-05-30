@@ -26,7 +26,10 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import static kr.seok.library.common.Constants.CHUNK_SIZE;
 
@@ -90,7 +93,7 @@ public class TmpToCityPrototype {
     private ItemReader<? extends TmpEntity> tmpDbJdbcCursorReader() {
         /* TB_TMP_LIBRARY 테이블의 컬럼리스트를 작성 */
         StringBuilder sb = new StringBuilder();
-        for(String fields : TmpEntity.TmpFields.getFields())
+        for (String fields : TmpEntity.TmpFields.getFields())
             sb.append(fields).append(", ");
 
         return new JdbcCursorItemReader<TmpEntity>() {{
@@ -124,7 +127,7 @@ public class TmpToCityPrototype {
     private ItemProcessor<? super TmpEntity, ? extends CommonEntity> tmpToCityProcessor() {
         return (ItemProcessor<TmpEntity, CityEntity>) item -> {
             /* Set에 키 값이 포함되어 있으면 넘어가기*/
-            if(cityKeySet.contains(item.getCityNm())) return null;
+            if (cityKeySet.contains(item.getCityNm())) return null;
             /* 값이 포함되지 않은 경우 set에 설정 및 Entity에 저장 */
             cityKeySet.add(item.getCityNm());
             return CityEntity.builder().cityNm(item.getCityNm()).build();

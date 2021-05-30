@@ -80,7 +80,7 @@ public class FileToTmpStep {
     }
 
     /* 파일 데이터를 읽어서 TmpEntity로 매핑하여 Persistence Context에 저장 */
-    private ItemProcessor<? super FileDto,? extends TmpEntity> fileToTmpProcessor() {
+    private ItemProcessor<? super FileDto, ? extends TmpEntity> fileToTmpProcessor() {
         return FileDto::toEntity;
     }
 

@@ -4,8 +4,6 @@ import kr.seok.library.domain.entity.*;
 import kr.seok.library.domain.repository.CityRepository;
 import kr.seok.library.domain.repository.CountryRepository;
 import kr.seok.library.domain.repository.LibraryTypeRepository;
-import kr.seok.library.listener.CityEntityStepListener;
-import kr.seok.library.listener.LibraryStepListener;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.utils.Sets;
@@ -44,7 +42,7 @@ public class TmpToLibraryStep {
 
     @Bean(name = STEP_NAME + "_STEP")
     public Step jpaTmpToLibraryStep() {
-        return stepBuilderFactory.get(STEP_NAME+ "_STEP")
+        return stepBuilderFactory.get(STEP_NAME + "_STEP")
                 .listener(new StepExecutionListener() {
                     @Override
                     public void beforeStep(StepExecution stepExecution) {

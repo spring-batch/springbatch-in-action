@@ -21,7 +21,7 @@ public class SignguStep3Listener implements StepExecutionListener {
         signguEntityRepository.deleteAll();
         int signguTableSize = signguEntityRepository.findAll().size();
         log.info("[LOG] [TB_SIGNGU] [INITIALIZE] [SIZE] [{}]", signguTableSize);
-        if(signguTableSize != 0) throw new RuntimeException("데이터 삭제 오류");
+        if (signguTableSize != 0) throw new RuntimeException("데이터 삭제 오류");
     }
 
     @Override

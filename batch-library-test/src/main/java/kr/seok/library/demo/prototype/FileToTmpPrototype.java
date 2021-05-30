@@ -56,12 +56,13 @@ public class FileToTmpPrototype {
                         /* 테이블 비우기 */
                         tmpRepository.deleteAllInBatch();
                         long entityCnt = tmpRepository.count();
-                        if(entityCnt < 1) {
+                        if (entityCnt < 1) {
                             log.debug("테이블 비우기: {}", entityCnt);
                         } else {
                             log.debug("테이블 비우기 실패: {}", entityCnt);
                         }
                     }
+
                     @Override
                     public void afterJob(JobExecution jobExecution) {
                     }
@@ -85,11 +86,11 @@ public class FileToTmpPrototype {
 
     private ItemWriter<? super TmpEntity> tmpWriter() {
         return new JpaItemWriter<TmpEntity>() {{
-           setEntityManagerFactory(entityManagerFactory);
+            setEntityManagerFactory(entityManagerFactory);
         }};
     }
 
-    private ItemProcessor<? super FileDto,? extends TmpEntity> fileToTmpProcessor() {
+    private ItemProcessor<? super FileDto, ? extends TmpEntity> fileToTmpProcessor() {
         return FileDto::toEntity;
     }
 

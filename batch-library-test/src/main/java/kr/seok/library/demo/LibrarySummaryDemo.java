@@ -40,7 +40,7 @@ public class LibrarySummaryDemo {
     private final CountryRepository countryRepository;
     private final LibraryRepository libraryRepository;
 
-    @Bean(name  = JOB_NAME + "_JOB")
+    @Bean(name = JOB_NAME + "_JOB")
     public Job tmpToMultiJob() {
         return jobBuilderFactory.get(JOB_NAME + "_JOB")
                 .incrementer(new RunIdIncrementer())

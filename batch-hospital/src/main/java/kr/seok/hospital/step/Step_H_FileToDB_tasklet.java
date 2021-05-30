@@ -74,9 +74,9 @@ public class Step_H_FileToDB_tasklet {
     private void jpaItemWriterProcess(List<Hospital> hospitals) throws Exception {
         JpaItemWriter<Hospital> jpaItemWriterBuilder =
                 new JpaItemWriterBuilder<Hospital>()
-                .usePersist(true)
-                .entityManagerFactory(entityManagerFactory)
-                .build();
+                        .usePersist(true)
+                        .entityManagerFactory(entityManagerFactory)
+                        .build();
 
         jpaItemWriterBuilder.afterPropertiesSet();
         jpaItemWriterBuilder.write(hospitals);
@@ -98,15 +98,15 @@ public class Step_H_FileToDB_tasklet {
         try {
             File file = new File(classPathResource.getURI());
 
-            if(!file.exists()) throw new FileNotFoundException("파일이 존재하지 않습니다.");
-            if(!file.canRead()) throw new Exception("읽을 수 없는 파일 입니다.");
+            if (!file.exists()) throw new FileNotFoundException("파일이 존재하지 않습니다.");
+            if (!file.canRead()) throw new Exception("읽을 수 없는 파일 입니다.");
 
             BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), UTF_8));
             String line = "";
             int i = 0;
 
-            while((line = br.readLine()) != null) {
-                if(!(i == 0)) {
+            while ((line = br.readLine()) != null) {
+                if (!(i == 0)) {
                     tmp.add(getSplitData(line));
                 }
 //                if(i == 1) break;

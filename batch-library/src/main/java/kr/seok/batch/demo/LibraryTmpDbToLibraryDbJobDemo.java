@@ -33,7 +33,7 @@ import java.util.Map;
 
 /**
  * 임시 테이블에 저장된 Raw 데이터를 도서관 테이블(TB_LBRRY)에 저장
- *  - JdbcPagingItemWReader to JpaItemWriter
+ * - JdbcPagingItemWReader to JpaItemWriter
  */
 @Slf4j
 @Configuration
@@ -150,7 +150,7 @@ public class LibraryTmpDbToLibraryDbJobDemo {
 
     @Bean(name = JOB_NAME + "_PROCESSOR")
     @StepScope
-    public ItemProcessor<? super LibraryTmpEntity,? extends LibraryEntity> tmpProcessor() {
+    public ItemProcessor<? super LibraryTmpEntity, ? extends LibraryEntity> tmpProcessor() {
         return item -> {
             Sido sido = sidoEntityRepository.findByCtprvnNm(item.getCtprvnNm());
             Signgu signgu = signguEntityRepository.findBySignguNmAndCtprvnCode(item.getSignguNm(), sido.getCtprvnCode());

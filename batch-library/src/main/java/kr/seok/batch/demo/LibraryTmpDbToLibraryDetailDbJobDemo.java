@@ -1,12 +1,12 @@
 package kr.seok.batch.demo;
 
+import kr.seok.batch.demo.library.domain.*;
 import kr.seok.batch.demo.library.repository.LibraryEntityRepository;
 import kr.seok.batch.demo.library.repository.SidoEntityRepository;
 import kr.seok.batch.demo.library.repository.SignguEntityRepository;
 import kr.seok.common.listener.CustomItemProcessorListener;
 import kr.seok.common.listener.CustomItemReaderListener;
 import kr.seok.common.listener.CustomItemWriterListener;
-import kr.seok.batch.demo.library.domain.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -132,7 +132,7 @@ public class LibraryTmpDbToLibraryDetailDbJobDemo {
     /* Sido, Signgu, Library -> LibraryDetail */
     @Bean
     @StepScope
-    public ItemProcessor<? super LibraryTmpEntity,? extends LibraryDetailEntity> tmpProcessor() {
+    public ItemProcessor<? super LibraryTmpEntity, ? extends LibraryDetailEntity> tmpProcessor() {
         return item -> {
             /* Sido의 key 값이 필요하기 때문에 Entity 자체를 조회할 필요가 없음 */
             Sido sido = sidoEntityRepository.findByCtprvnNm(item.getCtprvnNm());

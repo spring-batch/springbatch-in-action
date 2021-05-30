@@ -19,20 +19,20 @@ public class FileLineDto {
     public AreaEntity toAreaEntity() {
         String[] splitLine = line.split("\\s");
         /* 각 라인을 space로 split하여 토큰 값을 Entity의 필드에 저장 */
-        if(splitLine.length == 3) {
+        if (splitLine.length == 3) {
             return AreaEntity.builder()
                     .id(Long.parseLong(splitLine[0]))
                     .depth1Nm(splitLine[1])
                     .useYn("존재".equals(splitLine[2]))
                     .build();
-        } else if(splitLine.length == 4) {
+        } else if (splitLine.length == 4) {
             return AreaEntity.builder()
                     .id(Long.parseLong(splitLine[0]))
                     .depth1Nm(splitLine[1])
                     .depth2Nm(splitLine[2])
                     .useYn("존재".equals(splitLine[3]))
                     .build();
-        } else if(splitLine.length == 5) {
+        } else if (splitLine.length == 5) {
             return AreaEntity.builder()
                     .id(Long.parseLong(splitLine[0]))
                     .depth1Nm(splitLine[1])

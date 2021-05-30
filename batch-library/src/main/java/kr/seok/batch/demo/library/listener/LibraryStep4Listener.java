@@ -20,7 +20,7 @@ public class LibraryStep4Listener implements StepExecutionListener {
         libraryEntityRepository.deleteAll();
         int libEntityTableSize = libraryEntityRepository.findAll().size();
         log.info("[LOG] [TB_SIGNGU] [INITIALIZE] [SIZE] [{}]", libEntityTableSize);
-        if(libEntityTableSize != 0) throw new RuntimeException("데이터 삭제 오류");
+        if (libEntityTableSize != 0) throw new RuntimeException("데이터 삭제 오류");
     }
 
     @Override

@@ -63,11 +63,11 @@ public class Parallel_H_DbToDbConfig {
         return jobBuilderFactory.get(JOB_NAME + "_JOB")
                 .listener(listener_h_db)
                 .incrementer(new RunIdIncrementer())
-                    // 데이터 조회
-                    .start(flow1)
-                    // DB 데이터 쓰기
-                    .next(parallelStepFlow)
-                    .build() // flowJobBuilder instance
+                // 데이터 조회
+                .start(flow1)
+                // DB 데이터 쓰기
+                .next(parallelStepFlow)
+                .build() // flowJobBuilder instance
                 .build(); // job instance
     }
 

@@ -76,8 +76,8 @@ public class LibraryTmpEntity {
 
     public Sido toSido() {
         Integer code = 0;
-        for(SidoCodeFields nm : SidoCodeFields.values())
-            if(nm.getFieldNm().equals(ctprvnNm)) code = nm.getFieldCode();
+        for (SidoCodeFields nm : SidoCodeFields.values())
+            if (nm.getFieldNm().equals(ctprvnNm)) code = nm.getFieldCode();
 
         return Sido.builder()
                 .ctprvnCode(code)

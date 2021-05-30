@@ -2,7 +2,6 @@ package kr.seok.library.step;
 
 import kr.seok.library.domain.entity.LibraryTmpEntity;
 import kr.seok.library.domain.entity.LibraryTypeEntity;
-import kr.seok.library.listener.LibraryTypeStepListener;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.utils.Sets;
@@ -10,7 +9,6 @@ import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.StepExecutionListener;
-import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
@@ -74,7 +72,7 @@ public class TmpToLibraryTypeStep {
             LibraryTypeEntity libraryTypeEntity = LibraryTypeEntity.builder()
                     .libraryType(item.getLibraryType())
                     .build();
-            if(libraryTypeKeySet.contains(libraryTypeEntity)) return null;
+            if (libraryTypeKeySet.contains(libraryTypeEntity)) return null;
             libraryTypeKeySet.add(libraryTypeEntity);
             return libraryTypeEntity;
         };

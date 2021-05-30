@@ -4,15 +4,14 @@ import kr.seok.library.domain.entity.CityEntity;
 import kr.seok.library.domain.entity.CountryEntity;
 import kr.seok.library.domain.entity.LibraryTmpEntity;
 import kr.seok.library.domain.repository.CityRepository;
-import kr.seok.library.domain.repository.CountryRepository;
-import kr.seok.library.listener.CountryEntityStepListener;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.utils.Sets;
-import org.springframework.batch.core.*;
-import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
+import org.springframework.batch.core.ExitStatus;
+import org.springframework.batch.core.Step;
+import org.springframework.batch.core.StepExecution;
+import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
-import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
@@ -78,7 +77,7 @@ public class TmpToCountryStep {
                     .countryNm(item.getCountryNm())
                     .cityEntity(cityEntity)
                     .build();
-            if(countryKeySet.contains(countryEntity)) return null;
+            if (countryKeySet.contains(countryEntity)) return null;
             countryKeySet.add(countryEntity);
             return countryEntity;
         };

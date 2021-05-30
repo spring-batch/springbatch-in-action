@@ -4,7 +4,7 @@ import kr.seok.library.domain.entity.LibraryTmpEntity;
 import kr.seok.library.domain.vo.LibraryFileDto;
 import kr.seok.library.listener.TmpEntityStepListener;
 import lombok.RequiredArgsConstructor;
-import org.springframework.batch.core.*;
+import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
@@ -74,7 +74,7 @@ public class FileToTmpStep {
     }
 
     /* 파일 데이터를 읽어서 TmpEntity로 매핑하여 Persistence Context에 저장 */
-    private ItemProcessor<? super LibraryFileDto,? extends LibraryTmpEntity> fileToTmpProcessor() {
+    private ItemProcessor<? super LibraryFileDto, ? extends LibraryTmpEntity> fileToTmpProcessor() {
         return LibraryFileDto::toEntity;
     }
 

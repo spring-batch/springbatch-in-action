@@ -32,7 +32,8 @@ public class ExcelItemWriter<T> extends AbstractExcelItemWriter implements ItemS
     }
 
     @Override
-    public void update(ExecutionContext executionContext) throws ItemStreamException { }
+    public void update(ExecutionContext executionContext) throws ItemStreamException {
+    }
 
     @Override
     public void close() throws ItemStreamException {
@@ -45,7 +46,7 @@ public class ExcelItemWriter<T> extends AbstractExcelItemWriter implements ItemS
 
     @Override
     public void write(List<? extends ReportDto> items) {
-        if(items.isEmpty()) {
+        if (items.isEmpty()) {
             return;
         }
         validateData(items);

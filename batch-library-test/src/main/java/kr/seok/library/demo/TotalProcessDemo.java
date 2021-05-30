@@ -5,7 +5,6 @@ import kr.seok.library.repository.CountryRepository;
 import kr.seok.library.repository.LibraryRepository;
 import kr.seok.library.repository.TmpRepository;
 import kr.seok.library.step.*;
-import kr.seok.library.writer.ExcelItemWriter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
@@ -15,7 +14,6 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;

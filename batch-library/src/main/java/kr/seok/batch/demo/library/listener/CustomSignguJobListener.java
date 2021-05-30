@@ -19,7 +19,7 @@ public class CustomSignguJobListener implements JobExecutionListener {
         signguEntityRepository.deleteAll();
         int deletedTableSize = signguEntityRepository.findAll().size();
         log.info("[LOG] [TB_SIDO] [DELETE_ALL] [CHECK SIZE:{}]", deletedTableSize);
-        if(deletedTableSize != 0) throw new RuntimeException("데이터가 안 지워짐");
+        if (deletedTableSize != 0) throw new RuntimeException("데이터가 안 지워짐");
     }
 
     @Override

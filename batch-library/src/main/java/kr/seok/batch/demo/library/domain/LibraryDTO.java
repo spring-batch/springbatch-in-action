@@ -44,7 +44,7 @@ public class LibraryDTO {
     private String signguCode;                    /* 시군구코드          */
 
     @Builder
-    public LibraryTmpEntity toEntity () {
+    public LibraryTmpEntity toEntity() {
         return LibraryTmpEntity.builder()
                 .lbrryNm(lbrryNm)
                 .ctprvnNm(ctprvnNm)

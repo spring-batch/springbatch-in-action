@@ -8,28 +8,28 @@ import java.util.Map;
 
 public class ExcelRenderResource {
 
-	private PreCalculatedCellStyleMap styleMap;
+    private PreCalculatedCellStyleMap styleMap;
 
-	private Map<String, String> excelHeaderNames;
-	private List<String> dataFieldNames;
+    private Map<String, String> excelHeaderNames;
+    private List<String> dataFieldNames;
 
-	public ExcelRenderResource(PreCalculatedCellStyleMap styleMap,
+    public ExcelRenderResource(PreCalculatedCellStyleMap styleMap,
                                Map<String, String> excelHeaderNames, List<String> dataFieldNames) {
-		this.styleMap = styleMap;
-		this.excelHeaderNames = excelHeaderNames;
-		this.dataFieldNames = dataFieldNames;
-	}
+        this.styleMap = styleMap;
+        this.excelHeaderNames = excelHeaderNames;
+        this.dataFieldNames = dataFieldNames;
+    }
 
-	public CellStyle getCellStyle(String dataFieldName, ExcelRenderLocation excelRenderLocation) {
-		return styleMap.get(ExcelCellKey.of(dataFieldName, excelRenderLocation));
-	}
+    public CellStyle getCellStyle(String dataFieldName, ExcelRenderLocation excelRenderLocation) {
+        return styleMap.get(ExcelCellKey.of(dataFieldName, excelRenderLocation));
+    }
 
-	public String getExcelHeaderName(String dataFieldName) {
-		return excelHeaderNames.get(dataFieldName);
-	}
+    public String getExcelHeaderName(String dataFieldName) {
+        return excelHeaderNames.get(dataFieldName);
+    }
 
-	public List<String> getDataFieldNames() {
-		return dataFieldNames;
-	}
+    public List<String> getDataFieldNames() {
+        return dataFieldNames;
+    }
 
 }

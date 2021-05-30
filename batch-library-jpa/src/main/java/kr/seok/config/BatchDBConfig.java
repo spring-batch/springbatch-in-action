@@ -19,7 +19,7 @@ import javax.sql.DataSource;
 @EnableTransactionManagement
 /* Repository */
 @EnableJpaRepositories(
-        basePackages = { "kr.seok.library.domain.repository" }
+        basePackages = {"kr.seok.library.domain.repository"}
 )
 public class BatchDBConfig {
 

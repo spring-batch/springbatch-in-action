@@ -93,14 +93,16 @@ public class LibraryTmpDbToSignguDbJobDemo {
     @StepScope
     @Bean(name = "LIBRARY_TMP_TO_SIGNGU_READER")
     public JdbcPagingItemReader<? extends LibraryTmpEntity> tmpDbToSignguReader() {
-        return new JdbcPagingItemReader<LibraryTmpEntity>() {{
-            setName("LIBRARY_TMP_TO_SIGNGU_READER");
-            setPageSize(1000);
-            setFetchSize(1000);
-            setDataSource(dataSource);
-            setQueryProvider(dbToDbProvider());
-            setRowMapper(new BeanPropertyRowMapper<>(LibraryTmpEntity.class));
-        }
+        return new JdbcPagingItemReader<LibraryTmpEntity>() {
+            {
+                setName("LIBRARY_TMP_TO_SIGNGU_READER");
+                setPageSize(1000);
+                setFetchSize(1000);
+                setDataSource(dataSource);
+                setQueryProvider(dbToDbProvider());
+                setRowMapper(new BeanPropertyRowMapper<>(LibraryTmpEntity.class));
+            }
+
             private MySqlPagingQueryProvider dbToDbProvider() {
 
                 StringBuffer selectClause = new StringBuffer();
@@ -123,13 +125,14 @@ public class LibraryTmpDbToSignguDbJobDemo {
                     setGroupClause(groupByClause.toString());
                     setSortKeys(sortKeys);
                 }};
-            }};
+            }
+        };
     }
 
     /* 임시테이블 조회 및 Sido Entity 조회해서 Signgu Entity에 저장 */
     @StepScope
     @Bean(name = "LIBRARY_TMP_TO_SIGNGU_PROCESSOR")
-    public ItemProcessor<? super LibraryTmpEntity,? extends Signgu> tmpDbToSignguDbProcessor() {
+    public ItemProcessor<? super LibraryTmpEntity, ? extends Signgu> tmpDbToSignguDbProcessor() {
         return item -> {
             Sido sido = sidoEntityRepository.findByCtprvnNm(item.getCtprvnNm());
             return Signgu.builder()

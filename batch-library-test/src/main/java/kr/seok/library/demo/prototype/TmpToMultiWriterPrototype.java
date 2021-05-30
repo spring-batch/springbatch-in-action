@@ -7,10 +7,6 @@ import kr.seok.library.domain.entity.TmpEntity;
 import kr.seok.library.repository.CityRepository;
 import kr.seok.library.repository.CountryRepository;
 import kr.seok.library.repository.LibraryRepository;
-import kr.seok.library.repository.TmpRepository;
-import kr.seok.library.step.FileToTmpStep;
-import kr.seok.library.step.MultiDBToReportStep;
-import kr.seok.library.step.TmpToMultiDbStep;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -61,7 +57,7 @@ public class TmpToMultiWriterPrototype {
     private static Set<String> countryKeySet = new HashSet<>();
     private static Set<String> libraryKeySet = new HashSet<>();
 
-    @Bean(name  = JOB_NAME + "_JOB")
+    @Bean(name = JOB_NAME + "_JOB")
     public Job tmpToMultiJob() {
         return jobBuilderFactory.get(JOB_NAME + "_JOB")
                 .incrementer(new RunIdIncrementer())
@@ -93,7 +89,7 @@ public class TmpToMultiWriterPrototype {
     public ItemReader<? extends TmpEntity> tmpOneReader() {
         /* TB_TMP_LIBRARY 테이블의 컬럼리스트를 작성 */
         StringBuilder sb = new StringBuilder();
-        for(String fields : TmpEntity.TmpFields.getFields())
+        for (String fields : TmpEntity.TmpFields.getFields())
             sb.append(fields).append(", ");
 
         return new JdbcCursorItemReader<TmpEntity>() {{
@@ -127,10 +123,10 @@ public class TmpToMultiWriterPrototype {
         return items -> {
             List<CityEntity> cityList = new ArrayList<>();
 
-            for(TmpEntity item : items) {
+            for (TmpEntity item : items) {
                 String cityKey = item.getCityNm();
 
-                if(cityKeySet.contains(cityKey)) continue;
+                if (cityKeySet.contains(cityKey)) continue;
                 cityKeySet.add(cityKey);
 
                 cityList.add(
@@ -148,12 +144,12 @@ public class TmpToMultiWriterPrototype {
         return items -> {
             List<CountryEntity> countryList = new ArrayList<>();
 
-            for(TmpEntity item : items) {
+            for (TmpEntity item : items) {
                 String countryKey = item.getCityNm() + " " + item.getCountryNm();
                 String cityNm = item.getCityNm();
                 String countryNm = item.getCountryNm();
 
-                if(countryKeySet.contains(countryKey)) continue;
+                if (countryKeySet.contains(countryKey)) continue;
                 countryKeySet.add(countryKey);
 
                 Long cityId = cityRepository.findByCityNm(cityNm).get().getId();
@@ -172,11 +168,11 @@ public class TmpToMultiWriterPrototype {
     public ItemWriter<? super TmpEntity> libraryWriter() {
         return items -> {
             List<LibraryEntity> libraryList = new ArrayList<>();
-            for(TmpEntity item : items) {
+            for (TmpEntity item : items) {
                 String libraryKey = item.getCityNm() + " " + item.getCountryNm() + " " + item.getLibraryNm();
 
                 /* Unique 데이터 Filtering */
-                if(libraryKeySet.contains(libraryKey)) continue;
+                if (libraryKeySet.contains(libraryKey)) continue;
                 libraryKeySet.add(libraryKey);
 
                 /* Entity 만들기 */

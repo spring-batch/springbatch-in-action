@@ -18,7 +18,7 @@ import javax.sql.DataSource;
 @Configuration
 @EnableTransactionManagement
 /* Repository */
-@EnableJpaRepositories(basePackages = { "kr.seok.estate.repository" })
+@EnableJpaRepositories(basePackages = {"kr.seok.estate.repository"})
 public class BatchDBConfig {
 
     /* Entity 관리 경로 */

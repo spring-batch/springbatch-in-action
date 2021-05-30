@@ -56,60 +56,62 @@ public class LibraryTmpToSidoStep2 {
     @Bean(name = STEP_NAME + "_READER")
     @StepScope
     public JdbcPagingItemReader<? extends LibraryTmpEntity> libraryTmpStep2Reader() {
-        return new JdbcPagingItemReader<LibraryTmpEntity>() {{
-            setName("tmpDbReader");
-            setPageSize(CHUNK_SIZE);
-            setFetchSize(CHUNK_SIZE);
-            setDataSource(dataSource);
-            setQueryProvider(dbToDbProvider());
-            setRowMapper(new BeanPropertyRowMapper<>(LibraryTmpEntity.class));
-        }
+        return new JdbcPagingItemReader<LibraryTmpEntity>() {
+            {
+                setName("tmpDbReader");
+                setPageSize(CHUNK_SIZE);
+                setFetchSize(CHUNK_SIZE);
+                setDataSource(dataSource);
+                setQueryProvider(dbToDbProvider());
+                setRowMapper(new BeanPropertyRowMapper<>(LibraryTmpEntity.class));
+            }
 
-        private MySqlPagingQueryProvider dbToDbProvider() {
+            private MySqlPagingQueryProvider dbToDbProvider() {
 
-            StringBuffer selectClause = new StringBuffer();
-            StringBuffer fromClause = new StringBuffer();
+                StringBuffer selectClause = new StringBuffer();
+                StringBuffer fromClause = new StringBuffer();
 
-            selectClause.append("	LBRRY_NM,");
-            selectClause.append("	CTPRVN_NM,");
-            selectClause.append("	SIGNGU_NM,");
-            selectClause.append("	LBRRY_SE,");
-            selectClause.append("	CLOSE_DAY,");
-            selectClause.append("	WEEKDAY_OPER_OPEN_HHMM,");
-            selectClause.append("	WEEKDAY_OPER_CLOSE_HHMM,");
-            selectClause.append("	SAT_OPER_OPEN_HHMM,");
-            selectClause.append("	SAT_OPER_CLOSE_HHMM,");
-            selectClause.append("	HOLIDAY_OPER_OPEN_HHMM,");
-            selectClause.append("	HOLIDAY_OPER_CLOSE_HHMM,");
-            selectClause.append("	SEAT_CO,");
-            selectClause.append("	BOOK_CO,");
-            selectClause.append("	PBLICTN_CO,");
-            selectClause.append("	NONEBOOK_CO,");
-            selectClause.append("	LON_CO,");
-            selectClause.append("	LONDAY_CNT,");
-            selectClause.append("	RDNM_ADR,");
-            selectClause.append("	OPERINSTITUTION_NM,");
-            selectClause.append("	LBRRY_PHONENUMBER,");
-            selectClause.append("	PLOT_AR,");
-            selectClause.append("	BULD_AR,");
-            selectClause.append("	HOMEPAGEURL,");
-            selectClause.append("	LATITUDE,");
-            selectClause.append("	LONGITUDE,");
-            selectClause.append("	REFERENCE_DATE,");
-            selectClause.append("	INSTT_CODE,");
-            selectClause.append("	INSTT_NM");
+                selectClause.append("	LBRRY_NM,");
+                selectClause.append("	CTPRVN_NM,");
+                selectClause.append("	SIGNGU_NM,");
+                selectClause.append("	LBRRY_SE,");
+                selectClause.append("	CLOSE_DAY,");
+                selectClause.append("	WEEKDAY_OPER_OPEN_HHMM,");
+                selectClause.append("	WEEKDAY_OPER_CLOSE_HHMM,");
+                selectClause.append("	SAT_OPER_OPEN_HHMM,");
+                selectClause.append("	SAT_OPER_CLOSE_HHMM,");
+                selectClause.append("	HOLIDAY_OPER_OPEN_HHMM,");
+                selectClause.append("	HOLIDAY_OPER_CLOSE_HHMM,");
+                selectClause.append("	SEAT_CO,");
+                selectClause.append("	BOOK_CO,");
+                selectClause.append("	PBLICTN_CO,");
+                selectClause.append("	NONEBOOK_CO,");
+                selectClause.append("	LON_CO,");
+                selectClause.append("	LONDAY_CNT,");
+                selectClause.append("	RDNM_ADR,");
+                selectClause.append("	OPERINSTITUTION_NM,");
+                selectClause.append("	LBRRY_PHONENUMBER,");
+                selectClause.append("	PLOT_AR,");
+                selectClause.append("	BULD_AR,");
+                selectClause.append("	HOMEPAGEURL,");
+                selectClause.append("	LATITUDE,");
+                selectClause.append("	LONGITUDE,");
+                selectClause.append("	REFERENCE_DATE,");
+                selectClause.append("	INSTT_CODE,");
+                selectClause.append("	INSTT_NM");
 
-            fromClause.append("FROM CSV_TABLE ");
+                fromClause.append("FROM CSV_TABLE ");
 
-            Map<String, Order> sortKeys = new HashMap<>(1);
-            sortKeys.put("LBRRY_NM", Order.DESCENDING);
+                Map<String, Order> sortKeys = new HashMap<>(1);
+                sortKeys.put("LBRRY_NM", Order.DESCENDING);
 
-            return new MySqlPagingQueryProvider() {{
-                setSelectClause(selectClause.toString());
-                setFromClause(fromClause.toString());
-                setSortKeys(sortKeys);
-            }};
-        }};
+                return new MySqlPagingQueryProvider() {{
+                    setSelectClause(selectClause.toString());
+                    setFromClause(fromClause.toString());
+                    setSortKeys(sortKeys);
+                }};
+            }
+        };
     }
 
     @Bean(name = STEP_NAME + "PROCESSOR")

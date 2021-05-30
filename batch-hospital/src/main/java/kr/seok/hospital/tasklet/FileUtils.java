@@ -19,8 +19,8 @@ public class FileUtils {
         try {
             file = new File(classPathResource.getURI());
 
-            if(!file.exists()) throw new FileNotFoundException("파일이 존재하지 않습니다.");
-            if(!file.canRead()) throw new Exception("읽을 수 없는 파일 입니다.");
+            if (!file.exists()) throw new FileNotFoundException("파일이 존재하지 않습니다.");
+            if (!file.canRead()) throw new Exception("읽을 수 없는 파일 입니다.");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -35,8 +35,8 @@ public class FileUtils {
         String line = "";
         int i = 0;
 
-        while((line = br.readLine()) != null) {
-            if(!(i == 0)) {
+        while ((line = br.readLine()) != null) {
+            if (!(i == 0)) {
                 tmp.add(line);
             }
             i++;

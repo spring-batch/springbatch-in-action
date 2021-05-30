@@ -10,7 +10,8 @@ import javax.persistence.*;
 @EntityListeners(AuditingEntityListener.class)
 public abstract class CommonEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(updatable = false, nullable = false)
     private Long id;
 }

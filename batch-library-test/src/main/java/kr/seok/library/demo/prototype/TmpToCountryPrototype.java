@@ -88,7 +88,7 @@ public class TmpToCountryPrototype {
     private ItemReader<? extends TmpEntity> tmpDbJdbcCursorReader() {
         /* TB_TMP_LIBRARY 테이블의 컬럼리스트를 작성 */
         StringBuilder sb = new StringBuilder();
-        for(String fields : TmpEntity.TmpFields.getFields())
+        for (String fields : TmpEntity.TmpFields.getFields())
             sb.append(fields).append(", ");
 
         return new JdbcCursorItemReader<TmpEntity>() {{
@@ -132,7 +132,7 @@ public class TmpToCountryPrototype {
             String countryKey = item.getCityNm() + " " + item.getCountryNm();
 
             /* Set에 키 값이 포함되어 있으면 넘어가기*/
-            if(countryKeySet.contains(countryKey)) return null;
+            if (countryKeySet.contains(countryKey)) return null;
             /* 값이 포함되지 않은 경우 set에 설정 및 Entity에 저장 */
             countryKeySet.add(countryKey);
 
@@ -144,6 +144,7 @@ public class TmpToCountryPrototype {
                     .build();
         };
     }
+
     private ItemWriter<CountryEntity> countryWriter() {
         return new JpaItemWriter<CountryEntity>() {{
             setEntityManagerFactory(entityManagerFactory);

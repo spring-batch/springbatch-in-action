@@ -26,7 +26,7 @@ import static kr.seok.common.utils.SuperClassReflectionUtils.getField;
  * 1. validateData()
  * 2. renderHeadersWithNewSheet()
  * 3. renderBody()
- *  3.1 renderCellValue()
+ * 3.1 renderCellValue()
  * 4. write()
  */
 public abstract class AbstractExcelItemWriter {

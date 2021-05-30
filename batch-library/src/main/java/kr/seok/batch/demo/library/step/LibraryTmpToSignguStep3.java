@@ -61,14 +61,15 @@ public class LibraryTmpToSignguStep3 {
     @StepScope
     @Bean(name = STEP_NAME + "_READER")
     public JdbcPagingItemReader<? extends LibraryTmpEntity> libraryTmpStep3Reader() {
-        return new JdbcPagingItemReader<LibraryTmpEntity>() {{
-            setName("LIBRARY_TMP_STEP3_READER");
-            setPageSize(1000);
-            setFetchSize(1000);
-            setDataSource(dataSource);
-            setQueryProvider(dbToDbProvider());
-            setRowMapper(new BeanPropertyRowMapper<>(LibraryTmpEntity.class));
-        }
+        return new JdbcPagingItemReader<LibraryTmpEntity>() {
+            {
+                setName("LIBRARY_TMP_STEP3_READER");
+                setPageSize(1000);
+                setFetchSize(1000);
+                setDataSource(dataSource);
+                setQueryProvider(dbToDbProvider());
+                setRowMapper(new BeanPropertyRowMapper<>(LibraryTmpEntity.class));
+            }
 
             private MySqlPagingQueryProvider dbToDbProvider() {
 
@@ -92,12 +93,13 @@ public class LibraryTmpToSignguStep3 {
                     setGroupClause(groupByClause.toString());
                     setSortKeys(sortKeys);
                 }};
-            }};
+            }
+        };
     }
 
     @Bean(name = STEP_NAME + "PROCESSOR")
     @StepScope
-    public ItemProcessor<? super LibraryTmpEntity,? extends Signgu> libraryTmpToSignguStep3Processor() {
+    public ItemProcessor<? super LibraryTmpEntity, ? extends Signgu> libraryTmpToSignguStep3Processor() {
         return item -> {
             Sido sido = sidoEntityRepository.findByCtprvnNm(item.getCtprvnNm());
             return Signgu.builder()

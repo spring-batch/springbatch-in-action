@@ -89,7 +89,7 @@ public class TmpToLibraryPrototype {
     private ItemReader<? extends TmpEntity> tmpDbJdbcCursorReader() {
         /* TB_TMP_LIBRARY 테이블의 컬럼리스트를 작성 */
         StringBuilder sb = new StringBuilder();
-        for(String fields : TmpEntity.TmpFields.getFields())
+        for (String fields : TmpEntity.TmpFields.getFields())
             sb.append(fields).append(", ");
 
         return new JdbcCursorItemReader<TmpEntity>() {{
@@ -133,7 +133,7 @@ public class TmpToLibraryPrototype {
             String libraryKey = item.getCityNm() + " " + item.getCountryNm() + " " + item.getLibraryNm();
 
             /* Set에 키 값이 포함되어 있으면 넘어가기*/
-            if(libraryKeySet.contains(libraryKey)) return null;
+            if (libraryKeySet.contains(libraryKey)) return null;
             /* 값이 포함되지 않은 경우 set에 설정 및 Entity에 저장 */
             libraryKeySet.add(libraryKey);
 
@@ -151,6 +151,7 @@ public class TmpToLibraryPrototype {
                     .build();
         };
     }
+
     private ItemWriter<LibraryEntity> libraryWriter() {
         return new JpaItemWriter<LibraryEntity>() {{
             setEntityManagerFactory(entityManagerFactory);

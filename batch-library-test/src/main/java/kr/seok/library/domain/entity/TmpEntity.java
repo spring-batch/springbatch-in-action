@@ -29,7 +29,8 @@ import java.util.Arrays;
 public class TmpEntity {
 
     /* 테이블 */
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "TMP_ID")
     private Long tmpId;
 

@@ -1,17 +1,14 @@
 package kr.seok.hospital.domain.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.*;
-
-import java.time.LocalDateTime;
 
 @Getter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class HospitalEsEntity {
 
-//    private String id;
+    //    private String id;
 //
     private String orgId;
 

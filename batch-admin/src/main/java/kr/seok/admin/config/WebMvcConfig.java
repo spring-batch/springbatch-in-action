@@ -7,8 +7,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
 @Configuration
 public class WebMvcConfig extends WebMvcConfigurationSupport {
     private final int CACHE_PERIOD = 31556926;
+
     /**
      * Swagger UI 설정
+     *
      * @param registry Spring 정적 리소스 설정
      */
     @Override

@@ -10,7 +10,7 @@ import java.util.Arrays;
 @NoArgsConstructor
 @AllArgsConstructor
 public enum LibraryDBFields {
-    lbrryCode("lbrryCode","LBRRY_CODE"),
+    lbrryCode("lbrryCode", "LBRRY_CODE"),
     lbrryNm("lbrryNm", "LBRRY_NM"),                     /* 도서관명 */
     ctprvnCode("ctprvnCode", "CTPRVN_CODE"),            /* 시도 코드  */
     signguCode("signguCode", "SIGNGU_CODE"),            /* 시군구 코드 */
@@ -41,6 +41,7 @@ public enum LibraryDBFields {
                 .map(LibraryDBFields::getClassFieldNm)
                 .toArray(String[]::new);
     }
+
     public static String[] getDBFieldArrays() {
         return Arrays.stream(LibraryDBFields.values())
                 .map(LibraryDBFields::getDbFieldNm)

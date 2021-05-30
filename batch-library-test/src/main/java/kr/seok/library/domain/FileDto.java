@@ -24,8 +24,7 @@ public class FileDto {
         libraryNm("libraryNm", "LIBRARY_NM"),
         cityNm("cityNm", "CITY_NM"),
         countryNM("countryNm", "COUNTRY_NM"),
-        libraryType("libraryType", "LIBRARY_TYPE")
-        ;
+        libraryType("libraryType", "LIBRARY_TYPE");
 
         private String fieldNm;
         private String dbNm;

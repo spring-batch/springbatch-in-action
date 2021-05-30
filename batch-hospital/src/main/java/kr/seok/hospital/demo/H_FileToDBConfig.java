@@ -22,7 +22,7 @@ import org.springframework.context.annotation.Configuration;
 public class H_FileToDBConfig {
 
     private final JobBuilderFactory jobBuilderFactory;
-//    private final Step_H_FileToDB stepHFileToDB; // 53s526ms
+    //    private final Step_H_FileToDB stepHFileToDB; // 53s526ms
     private final Step_H_FileToDB_tasklet step_h_fileToDB_tasklet; // 22s
 
     private final HospitalJpaRepository hospitalJpaRepository;
@@ -37,6 +37,7 @@ public class H_FileToDBConfig {
                         hospitalJpaRepository.deleteAllInBatch();
                         log.info("JOB 실행 전 : TB_HOSPITAL({})", hospitalJpaRepository.count());
                     }
+
                     @Override
                     public void afterJob(JobExecution jobExecution) {
                         log.info("JOB 실행 후 : TB_HOSPITAL({})", hospitalJpaRepository.count());

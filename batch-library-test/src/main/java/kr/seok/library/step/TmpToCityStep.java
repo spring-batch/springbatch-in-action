@@ -10,7 +10,6 @@ import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.JpaItemWriter;
 import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
-import org.springframework.batch.item.database.orm.JpaNativeQueryProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -67,7 +66,7 @@ public class TmpToCityStep {
     private ItemProcessor<? super TmpEntity, CityEntity> tmpToCityProcessor() {
         return (ItemProcessor<TmpEntity, CityEntity>) item -> {
             /* Set에 키 값이 포함되어 있으면 넘어가기*/
-            if(cityKeySet.contains(item.getCityNm())) return null;
+            if (cityKeySet.contains(item.getCityNm())) return null;
             /* 값이 포함되지 않은 경우 set에 설정 및 Entity에 저장 */
             cityKeySet.add(item.getCityNm());
             return CityEntity.builder().cityNm(item.getCityNm()).build();
