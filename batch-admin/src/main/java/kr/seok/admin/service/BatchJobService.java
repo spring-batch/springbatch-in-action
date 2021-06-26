@@ -18,14 +18,28 @@ public class BatchJobService {
 
     private final BatchJobInstanceJpaRepository batchJobInstanceJpaRepository;
 
+    /**
+     * JobName을 기준으로 JobInstance 조회
+     * @return
+     */
     public Map<String, Set<JobInstanceDto>> getJobInstanceGroupByJobName() {
         return batchJobInstanceJpaRepository.findJobInstanceGroupByJobName();
     }
 
+    /**
+     * JobInstanceId로 Job Instance 조회
+     * @param jobInstanceId
+     * @return JobInstance 조회
+     */
     public BatchJobInstance getJobInstances(Long jobInstanceId) {
         return batchJobInstanceJpaRepository.findByJobInstanceId(jobInstanceId);
     }
 
+    /**
+     * JobName으로 JobInstance 조회
+     * @param jobName JobName
+     * @return JobInstance 조회
+     */
     public List<BatchJobInstance> getJobInstanceByJobName(String jobName) {
         return batchJobInstanceJpaRepository.findAllByJobName(jobName);
     }

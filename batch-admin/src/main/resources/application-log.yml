@@ -3,5 +3,5 @@ logging:
     root: info
     web: info
     org:
-      # SpringFramework Logging
+#       SpringFramework Logging
       springframework: info

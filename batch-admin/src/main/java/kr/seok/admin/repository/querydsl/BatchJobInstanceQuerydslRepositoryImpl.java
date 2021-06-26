@@ -45,4 +45,6 @@ public class BatchJobInstanceQuerydslRepositoryImpl implements BatchJobInstanceQ
                         groupingBy(JobInstanceDto::getJobName, toSet())
                 );
     }
+
+
 }

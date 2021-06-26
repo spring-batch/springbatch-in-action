@@ -34,7 +34,7 @@ public class Step_H_FileToDB {
     private final EntityManagerFactory entityManagerFactory;
     private static final String STEP_NAME = "STEP_H_FileToDB";
 
-    @Value("${chunkSize:1000}")
+    @Value("${chunkSize:50}")
     public void setCHUNK_SIZE(int chunkSize) {
         this.chunkSize = chunkSize;
     }

@@ -45,4 +45,13 @@ public class BatchJobExecution implements Serializable {
 
     @Column(name = "JOB_CONFIGURATION_LOCATION")
     private String jobConfigurationLocation;
+
+    @Override
+    public String toString() {
+        return "BatchJobExecution{" +
+                "jobExecutionId=" + jobExecutionId +
+                ", version=" + version +
+                ", jobInstanceId=" + jobInstanceId.getJobInstanceId() +
+                '}';
+    }
 }

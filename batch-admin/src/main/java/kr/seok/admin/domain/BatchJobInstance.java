@@ -34,4 +34,14 @@ public class BatchJobInstance implements Serializable {
         this.jobName = jobName;
         this.jobKey = jobKey;
     }
+
+    @Override
+    public String toString() {
+        return "BatchJobInstance{" +
+                "jobInstanceId=" + jobInstanceId +
+                ", version=" + version +
+                ", jobName='" + jobName + '\'' +
+                ", jobKey='" + jobKey + '\'' +
+                '}';
+    }
 }

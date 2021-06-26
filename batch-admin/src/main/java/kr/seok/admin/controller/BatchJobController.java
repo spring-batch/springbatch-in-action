@@ -1,5 +1,7 @@
 package kr.seok.admin.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import kr.seok.admin.domain.BatchJobInstance;
 import kr.seok.admin.dto.JobInstanceDto;
 import kr.seok.admin.service.BatchJobService;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 import java.util.Set;
 
+@Api(value = "BatchJobExecution")
 @RestController
 @RequestMapping(value = "/api")
 @RequiredArgsConstructor
@@ -17,12 +20,14 @@ public class BatchJobController {
 
     private final BatchJobService batchJobService;
 
+    @ApiOperation(value = "JobName 별 JobInstance 조회")
     @GetMapping("/batchJobInstances")
     public ResponseEntity<?> getInstances() {
         Map<String, Set<JobInstanceDto>> findGroupByJobName = batchJobService.getJobInstanceGroupByJobName();
         return ResponseEntity.ok().body(findGroupByJobName);
     }
 
+    @ApiOperation(value = "단일 Job Instance 조회")
     @GetMapping("/jobInstance/jobInstanceId/{jobInstanceId}")
     public ResponseEntity<?> findJobInstanceByJobInstanceId(@PathVariable("jobInstanceId") Long jobInstanceId) {
 
