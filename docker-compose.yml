@@ -1,0 +1,49 @@
+version: "3.7"
+services:
+  # 엘라스틱 서치 설정
+  elasticsearch:
+    # 엘라스틱 서치 도커 이미지 현재 버전 6.4.3
+    # https://www.docker.elastic.co/r/elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.6.2
+    # 컨테이너 명
+    container_name: elasticsearch
+    # 환경설정 (SingleNode 모드, 자바 heap 설정)
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+    # 컨테이너 다시 시작할 때 영속성을 보장하기 위한 볼륨 설정
+    volumes:
+      - data01:/usr/share/elasticsearch/data
+    # 엘라스틱 서치 포트 9200, 노드간 통신 포트는 9300을 사용
+    ports:
+      - 9200:9200
+    # 도커의 다른 네트워크로부터 보안을 유지하기 위한 kibana 및 elasticsearch에 대한 공통 네트워크 설정
+    networks:
+      - elastic
+
+  kibana:
+    # 키바나 이미지로 엘라스틱 서치와 호환되는 동일한 버전을 사용
+    # https://www.docker.elastic.co/r/kibana
+    image: docker.elastic.co/kibana/kibana:7.6.2
+    # 키바나 컨테이너 명
+    container_name: kibana
+    # 환경설정 키바나는 서비스 이름과 포트로 컨테이너 엘라스틱서치에 연결한다.
+    environment:
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+    # 키바나 기본 포트
+    ports:
+      - 5601:5601
+    # 엘라스틱 서치 작동 후 키바나 서비스가 올라가도록 설정
+    depends_on:
+      - elasticsearch
+    networks:
+      - elastic
+
+volumes:
+  data01:
+    driver: local
+
+networks:
+  elastic:
+    driver: bridge

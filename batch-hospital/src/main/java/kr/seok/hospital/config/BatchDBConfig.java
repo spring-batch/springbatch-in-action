@@ -22,7 +22,6 @@ import javax.sql.DataSource;
 @EnableJpaRepositories(basePackages = "kr.seok.hospital.repository")
 public class BatchDBConfig extends DefaultBatchConfigurer {
 
-    /* Spring Batch가 실행되기 위한 DataSource 우선순위 설정 */
     @Primary
     @Bean(name = "dataSource")
     @ConfigurationProperties(prefix = "spring.datasource.batch")
@@ -41,6 +40,7 @@ public class BatchDBConfig extends DefaultBatchConfigurer {
                 .build();
     }
 
+    @Primary
     @Bean(name = "transactionManager")
     public PlatformTransactionManager transactionManager(
             @Qualifier("entityManagerFactory") EntityManagerFactory entityManagerFactory) {

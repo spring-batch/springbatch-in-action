@@ -27,6 +27,7 @@ import static org.springframework.batch.item.file.transform.DelimitedLineTokeniz
 @RequiredArgsConstructor
 public class Step_H_FileToDB {
 
+    @Value("${chunkSize:50}")
     public int chunkSize;
 
     /* 38s7ms */
@@ -34,23 +35,18 @@ public class Step_H_FileToDB {
     private final EntityManagerFactory entityManagerFactory;
     private static final String STEP_NAME = "STEP_H_FileToDB";
 
-    @Value("${chunkSize:50}")
-    public void setCHUNK_SIZE(int chunkSize) {
-        this.chunkSize = chunkSize;
-    }
-
-    public Step hFileToDbStep() {
+    public Step hFileToDbStep(String filePath) {
         return stepBuilderFactory.get(STEP_NAME)
                 .<HospitalFileDto, Hospital>chunk(chunkSize)
-                .reader(fileReader())
+                .reader(fileReader(filePath))
                 .processor(fileToDbProcessor())
                 .writer(dbWriter())
                 .build();
     }
 
-    private ItemReader<? extends HospitalFileDto> fileReader() {
+    private ItemReader<? extends HospitalFileDto> fileReader(@Value("${file.path}") String filePath) {
         return new FlatFileItemReader<HospitalFileDto>() {{
-            setResource(new ClassPathResource("files/seoul_hospital_position_info_utf8.csv"));
+            setResource(new ClassPathResource(filePath));
             setLinesToSkip(1);
             setLineMapper(new DefaultLineMapper<HospitalFileDto>() {{
                 setLineTokenizer(

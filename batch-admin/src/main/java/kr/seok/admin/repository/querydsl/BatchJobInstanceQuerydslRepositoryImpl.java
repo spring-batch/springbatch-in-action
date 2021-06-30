@@ -14,7 +14,7 @@ import static java.util.stream.Collectors.toSet;
 import static kr.seok.admin.domain.QBatchJobInstance.batchJobInstance;
 
 /**
- * 쿼리 조회 시 Querydsl은 QType Dto를 사용하고, Java8 lambda stream()을 이용하여 데이터 조작을 하도록 한다.
+ * BatchJobInstance 엔티티 관련 Querydsl 클래스
  */
 public class BatchJobInstanceQuerydslRepositoryImpl implements BatchJobInstanceQuerydslRepository {
 
@@ -45,6 +45,4 @@ public class BatchJobInstanceQuerydslRepositoryImpl implements BatchJobInstanceQ
                         groupingBy(JobInstanceDto::getJobName, toSet())
                 );
     }
-
-
 }

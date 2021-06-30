@@ -15,3 +15,6 @@ spring:
       hibernate:
         jdbc:
           batch_size: 1000
+
+file:
+  path: files/seoul_hospital_position_info_utf8.csv
