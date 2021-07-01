@@ -6,11 +6,11 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Objects;
 
-@Entity
+@Entity(name = "medicAidIns")
 @Getter
 @Table(name = "TB_MEDIC_AID_INS")
-@EqualsAndHashCode(of = {"id"}, callSuper = false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(of = {"id", "aid_medic_ins_nm"})
 public class MedicAidIns extends BaseTimeEntity {
@@ -26,5 +26,18 @@ public class MedicAidIns extends BaseTimeEntity {
     public MedicAidIns(String id, String aid_medic_ins_nm) {
         this.id = id;
         this.aid_medic_ins_nm = aid_medic_ins_nm;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MedicAidIns)) return false;
+        final MedicAidIns that = (MedicAidIns) o;
+        return Objects.equals(getId(), that.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }

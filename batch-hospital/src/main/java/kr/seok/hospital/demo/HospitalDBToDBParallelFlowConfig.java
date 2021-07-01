@@ -22,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-public class Parallel_H_DbToDbConfig {
+public class HospitalDBToDBParallelFlowConfig {
 
     private static final String JOB_NAME = "FLOW_H_DbToDb";
 
@@ -36,7 +36,6 @@ public class Parallel_H_DbToDbConfig {
     private final Flow_H_DBToDtt flow_h_dbToDtt;
     private final Flow_H_DBToPos flow_h_dbToPos;
 
-    @Transactional
     @Bean(name = JOB_NAME + "_JOB")
     public Job hDbToDb() {
 

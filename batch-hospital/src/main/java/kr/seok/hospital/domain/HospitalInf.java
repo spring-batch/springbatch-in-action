@@ -6,7 +6,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity
+@Entity(name = "hospitalInf")
 @Getter
 @Table(name = "TB_HOSPITAL_INF")
 @ToString(exclude = "medicAidIns")

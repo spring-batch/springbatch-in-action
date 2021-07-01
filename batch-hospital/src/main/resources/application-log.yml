@@ -1,13 +1,11 @@
 # Batch log
-logging.level.org.springframework.batch: info
-
-
 logging:
   level:
     root: info
     org:
       # SpringFramework Logging
-      springframework: info
+      springframework: # info
+        batch: info
       # jpa 쿼리를 로그 파일로 출력
       hibernate:
         SQL: info

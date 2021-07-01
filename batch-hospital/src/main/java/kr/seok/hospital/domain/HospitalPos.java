@@ -7,7 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Entity
+@Entity(name = "hospitalPos")
 @Getter
 @Table(name = "TB_HOSPITAL_POS")
 @EqualsAndHashCode(of = {"id"}, callSuper = false)

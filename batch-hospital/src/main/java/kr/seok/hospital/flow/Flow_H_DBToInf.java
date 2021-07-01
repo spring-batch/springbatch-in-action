@@ -33,17 +33,17 @@ public class Flow_H_DBToInf implements Tasklet {
     @Override
     public RepeatStatus execute(
             StepContribution contribution, ChunkContext chunkContext) {
-        log.info("parallelStep2 : {}", dataShareBean.getSize());
+        log.info("parallelStep2 ::  Data is {}", dataShareBean.getSize() != 0);
 
         List<Hospital> hospitals = dataShareBean.getData("hospital");
 
         if (hospitals.isEmpty()) return RepeatStatus.FINISHED;
 
-        hospitals.forEach(h -> {
-            MedicAidIns m = toMedicEntity(h);
+        for(Hospital item : hospitals) {
+            MedicAidIns m = toMedicEntity(item);
             medicAidIns.add(m);
-            hospitalInfSet.add(toHospitalInfEntity(h, m));
-        });
+            hospitalInfSet.add(toHospitalInfEntity(item, m));
+        }
 
         log.info("MedicAidIns 사이즈: {}", medicAidIns.size());
         log.info("hospitalInfSet 사이즈: {}", hospitalInfSet.size());

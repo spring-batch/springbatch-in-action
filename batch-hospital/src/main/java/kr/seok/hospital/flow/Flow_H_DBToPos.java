@@ -29,13 +29,13 @@ public class Flow_H_DBToPos implements Tasklet {
     public RepeatStatus execute(
             StepContribution contribution, ChunkContext chunkContext) {
 
-        log.info("parallelStep4 : {}", dataShareBean.getSize());
+        log.info("parallelStep4 :: Data is {}", dataShareBean.getSize() != 0);
 
         List<Hospital> hospitals = dataShareBean.getData("hospital");
 
-        hospitals.forEach(h -> {
-            hospitalPos.add(toHospitalPosEntity(h));
-        });
+        for(Hospital item : hospitals) {
+            hospitalPos.add(toHospitalPosEntity(item));
+        }
 
         log.info("hospitalPos 사이즈: {}", hospitalPos.size());
         hospitalPosJpaRepository.saveAll(hospitalPos);

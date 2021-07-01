@@ -15,15 +15,19 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 
+/**
+ * DB to ES Job 생성 클래스
+ */
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
 public class H_DbToEsConfig {
-    public static final String CREATE_DOCUMENT_URL = "http://localhost:9200/hospital_index/_doc/";
 
-    private static final String JOB_NAME = "H_DbToEs";
     private final StepBuilderFactory stepBuilderFactory;
     private final JobBuilderFactory jobBuilderFactory;
+
+    public static final String CREATE_DOCUMENT_URL = "http://localhost:9200/hospital_index/_doc/";
+    private static final String JOB_NAME = "H_DbToEs";
 
     private final HospitalInfJpaRepository hospitalInfJpaRepository;
 

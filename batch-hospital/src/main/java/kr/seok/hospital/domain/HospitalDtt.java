@@ -6,11 +6,11 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Objects;
 
 @Entity(name = "hospitalDtt")
 @Getter
 @Table(name = "TB_HOSPITAL_DTT")
-@EqualsAndHashCode(of = {"id"}, callSuper = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class HospitalDtt extends BaseTimeEntity {
 
@@ -70,5 +70,18 @@ public class HospitalDtt extends BaseTimeEntity {
         this.operHourSatS = operHourSatS;
         this.operHourSunS = operHourSunS;
         this.operHourHolS = operHourHolS;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof HospitalDtt)) return false;
+        final HospitalDtt that = (HospitalDtt) o;
+        return Objects.equals(getId(), that.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }

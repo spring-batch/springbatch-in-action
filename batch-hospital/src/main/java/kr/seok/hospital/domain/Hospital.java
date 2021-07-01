@@ -8,11 +8,11 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
-@Entity
+@Entity(name = "hospital")
 @Getter
 @Table(name = "TB_HOSPITAL")
-@EqualsAndHashCode(of = {"id"}, callSuper = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Hospital extends BaseTimeEntity {
 
@@ -128,5 +128,18 @@ public class Hospital extends BaseTimeEntity {
         this.lon = lon;
         this.lat = lat;
         this.date = date;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Hospital)) return false;
+        final Hospital hospital = (Hospital) o;
+        return Objects.equals(getId(), hospital.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }

@@ -11,7 +11,8 @@ import org.springframework.batch.item.database.JpaItemWriter;
 import org.springframework.batch.item.database.builder.JdbcBatchItemWriterBuilder;
 import org.springframework.batch.item.database.builder.JpaItemWriterBuilder;
 import org.springframework.batch.repeat.RepeatStatus;
-import org.springframework.context.annotation.Bean;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 
@@ -28,25 +29,25 @@ import static kr.seok.hospital.domain.dto.HospitalFileDto.getSplitData;
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-public class Step_H_FileToDB_tasklet {
+public class HospitalFileToDBJdbcTaskletStep {
 
-    /* 38s7ms */
     private final StepBuilderFactory stepBuilderFactory;
-    private final EntityManagerFactory entityManagerFactory;
     private final DataSource dataSource;
 
-    @Bean(name = "STEP_H_FileToDB")
-    public Step hFileToDbStep() {
+    /**
+     * Hospital File to DB Tasklet 기반 Step
+     *
+     * @param filePath 외부에서 파일 경로 주입
+     * @return the step
+     */
+    public Step hFileToDbStep(@Value("${file.path}") String filePath) {
         return stepBuilderFactory.get("STEP_H_FileToDB")
                 .tasklet((contribution, chunkContext) -> {
 
                     /* 데이터 */
-                    List<HospitalFileDto> dto = readFile();
+                    List<HospitalFileDto> dto = readFile(filePath);
                     List<Hospital> hospitals = getDtoToEntity(dto);
 
-                    /* jpaItemWriter 30s 초반 대 */
-//                    jpaItemWriterProcess(hospitals);
-                    /* jdbcItemWriter 20s 중반 대 */
                     jdbcItemWriter(hospitals);
 
                     return RepeatStatus.FINISHED;
@@ -55,31 +56,22 @@ public class Step_H_FileToDB_tasklet {
     }
 
     private void jdbcItemWriter(List<Hospital> hospitals) throws Exception {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append("insert ");
+        stringBuilder.append("TB_HOSPITAL ");
+        stringBuilder.append("(ORG_ID, ADDRESS, ED_OPER_YN, ED_PHONE, ETC, FST_AID_MEDIC_INS_CD, FST_AID_MEDIC_INS_NM, HOS_CATE, HOS_CATE_NM, LATITUDE, LONGITUDE, OPER_DESC_DT, OPER_HOUR_FRI_C, OPER_HOUR_FRI_S, OPER_HOUR_HOL_C, OPER_HOUR_HOL_S, OPER_HOUR_MON_C, OPER_HOUR_MON_S, OPER_HOUR_SAT_C, OPER_HOUR_SAT_S, OPER_HOUR_SUN_C, OPER_HOUR_SUN_S, OPER_HOUR_THU_C, OPER_HOUR_THU_S, OPER_HOUR_TUE_C, OPER_HOUR_TUE_S, OPER_HOUR_WED_C, OPER_HOUR_WED_S, OPER_NM, PHONE1, SIMPLE_MAP, ZIP_CODE1, ZIP_CODE2, DATE) ");
+        stringBuilder.append("values ");
+        stringBuilder.append("(:id, :addr, :edOperYn, :edPhone, :etc, :fstAidMedicInsCd, :fstAidMedicInsNm, :hosCate, :hosCateNm, :lat, :lon, :operDescDt, :operHourFriC, :operHourFriS, :operHourHolC, :operHourHolS, :operHourMonC, :operHourMonS, :operHourSatC, :operHourSatS, :operHourSunC, :operHourSunS, :operHourThuC, :operHourThuS, :operHourThuC, :operHourThuS, :operHourWedC, :operHourWedS, :operNm, :phone1, :simpleMap, :zipCode1, :zipCode2, :date)");
+
         JdbcBatchItemWriter<Hospital> writerBuilder = new JdbcBatchItemWriterBuilder<Hospital>()
                 .dataSource(dataSource)
                 .beanMapped()
-                .sql("insert \n" +
-                        "    into\n" +
-                        "        TB_HOSPITAL\n" +
-                        "        (ORG_ID, ADDRESS, ED_OPER_YN, ED_PHONE, ETC, FST_AID_MEDIC_INS_CD, FST_AID_MEDIC_INS_NM, HOS_CATE, HOS_CATE_NM, LATITUDE, LONGITUDE, OPER_DESC_DT, OPER_HOUR_FRI_C, OPER_HOUR_FRI_S, OPER_HOUR_HOL_C, OPER_HOUR_HOL_S, OPER_HOUR_MON_C, OPER_HOUR_MON_S, OPER_HOUR_SAT_C, OPER_HOUR_SAT_S, OPER_HOUR_SUN_C, OPER_HOUR_SUN_S, OPER_HOUR_THU_C, OPER_HOUR_THU_S, OPER_HOUR_TUE_C, OPER_HOUR_TUE_S, OPER_HOUR_WED_C, OPER_HOUR_WED_S, OPER_NM, PHONE1, SIMPLE_MAP, ZIP_CODE1, ZIP_CODE2, DATE) \n" +
-                        "    values\n" +
-                        "        (:id, :addr, :edOperYn, :edPhone, :etc, :fstAidMedicInsCd, :fstAidMedicInsNm, :hosCate, :hosCateNm, :lat, :lon, :operDescDt, :operHourFriC, :operHourFriS, :operHourHolC, :operHourHolS, :operHourMonC, :operHourMonS, :operHourSatC, :operHourSatS, :operHourSunC, :operHourSunS, :operHourThuC, :operHourThuS, :operHourThuC, :operHourThuS, :operHourWedC, :operHourWedS, :operNm, :phone1, :simpleMap, :zipCode1, :zipCode2, :date)")
+                .sql(stringBuilder.toString())
                 .build();
 
         writerBuilder.afterPropertiesSet();
         writerBuilder.write(hospitals);
-    }
-
-    /* JPA ItemWriter */
-    private void jpaItemWriterProcess(List<Hospital> hospitals) throws Exception {
-        JpaItemWriter<Hospital> jpaItemWriterBuilder =
-                new JpaItemWriterBuilder<Hospital>()
-                        .usePersist(true)
-                        .entityManagerFactory(entityManagerFactory)
-                        .build();
-
-        jpaItemWriterBuilder.afterPropertiesSet();
-        jpaItemWriterBuilder.write(hospitals);
     }
 
     private List<Hospital> getDtoToEntity(List<HospitalFileDto> dto) {
@@ -90,13 +82,11 @@ public class Step_H_FileToDB_tasklet {
 
 
     /* 파일을 읽어 dto로 변환하여 반환 */
-    public List<HospitalFileDto> readFile() {
-
+    public List<HospitalFileDto> readFile(String filePath) {
         List<HospitalFileDto> tmp = new ArrayList<>();
-        /* resources 아래 경로로 읽기 */
-        ClassPathResource classPathResource = new ClassPathResource("files/seoul_hospital_position_info_utf8.csv");
         try {
-            File file = new File(classPathResource.getURI());
+            /* resources 아래 경로로 읽기 */
+            File file = new File(new ClassPathResource(filePath).getURI());
 
             if (!file.exists()) throw new FileNotFoundException("파일이 존재하지 않습니다.");
             if (!file.canRead()) throw new Exception("읽을 수 없는 파일 입니다.");

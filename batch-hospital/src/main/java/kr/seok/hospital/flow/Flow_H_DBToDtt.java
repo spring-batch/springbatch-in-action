@@ -28,13 +28,13 @@ public class Flow_H_DBToDtt implements Tasklet {
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
 
-        log.info("parallelStep3 : {}", dataShareBean.getSize());
+        log.info("parallelStep3 ::  Data is {}", dataShareBean.getSize() != 0);
 
         List<Hospital> hospital = dataShareBean.getData("hospital");
 
-        hospital.forEach(h -> {
-            hospitalDttSet.add(toHospitalDttEntity(h));
-        });
+        for(Hospital item : hospital) {
+            hospitalDttSet.add(toHospitalDttEntity(item));
+        }
 
         log.info("hospitalDttSet 사이즈: {}", hospitalDttSet.size());
         hospitalDttJpaRepository.saveAll(hospitalDttSet);

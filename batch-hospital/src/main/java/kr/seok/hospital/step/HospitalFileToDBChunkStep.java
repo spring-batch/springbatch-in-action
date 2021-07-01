@@ -25,9 +25,9 @@ import static org.springframework.batch.item.file.transform.DelimitedLineTokeniz
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-public class Step_H_FileToDB {
+public class HospitalFileToDBChunkStep {
 
-    @Value("${chunkSize:50}")
+    @Value("${chunkSize:1000}")
     public int chunkSize;
 
     /* 38s7ms */
@@ -35,6 +35,12 @@ public class Step_H_FileToDB {
     private final EntityManagerFactory entityManagerFactory;
     private static final String STEP_NAME = "STEP_H_FileToDB";
 
+    /**
+     * H file to db step step.
+     *
+     * @param filePath 파일 경로를 파라미터로 받음
+     * @return step
+     */
     public Step hFileToDbStep(String filePath) {
         return stepBuilderFactory.get(STEP_NAME)
                 .<HospitalFileDto, Hospital>chunk(chunkSize)
@@ -44,7 +50,7 @@ public class Step_H_FileToDB {
                 .build();
     }
 
-    private ItemReader<? extends HospitalFileDto> fileReader(@Value("${file.path}") String filePath) {
+    private ItemReader<? extends HospitalFileDto> fileReader(String filePath) {
         return new FlatFileItemReader<HospitalFileDto>() {{
             setResource(new ClassPathResource(filePath));
             setLinesToSkip(1);
