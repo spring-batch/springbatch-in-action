@@ -149,6 +149,7 @@ project(":batch-hospital-es") {
         implementation project(":batch-common")
         implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
 
+        implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
         // https://mvnrepository.com/artifact/org.elasticsearch/elasticsearch
         implementation 'org.elasticsearch:elasticsearch:7.6.2'
         implementation 'org.elasticsearch.client:elasticsearch-rest-high-level-client:7.6.2'
