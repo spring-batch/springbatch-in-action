@@ -188,5 +188,7 @@ project(":batch-real-estate") {
 project(":batch-mail-service") {
     dependencies {
         implementation project(":batch-common")
+        implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
     }
 }
