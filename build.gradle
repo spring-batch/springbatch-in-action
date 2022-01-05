@@ -51,12 +51,9 @@ subprojects {
         implementation "org.springframework.boot:spring-boot-starter-data-jpa"
         implementation "javax.validation:validation-api"
 
+        // 컴파일 단계에서 이미 롬복의 기능을 제공받고, 런타임 단계에서는 해당 라이브러리가 필요하지 않기 때문에 Compile Only로 설정
         compileOnly 'org.projectlombok:lombok'
         annotationProcessor 'org.projectlombok:lombok'
-
-        /* Excel*/
-        implementation "org.apache.poi:poi:5.1.0"          // .xlsx
-        implementation "org.apache.poi:poi-ooxml:5.1.0"    // .xls
 
         runtimeOnly 'com.h2database:h2'
         runtimeOnly 'mysql:mysql-connector-java'
@@ -108,6 +105,12 @@ configure(querydslProjects) {
 }
 
 project(":batch-common") {
+    dependencies {
+        implementation "org.apache.poi:poi:5.1.0"          // .xlsx
+        implementation "org.apache.poi:poi-ooxml:5.1.0"    // .xls
+
+        implementation 'org.springframework.boot:spring-boot-starter-mail'
+    }
     /* DTO, Util 클래스 등등 */
     bootJar { enabled = false }
     jar { enabled = true }
@@ -139,16 +142,16 @@ project(":batch-admin") {
 project(":batch-hospital") {
     dependencies {
         implementation project(":batch-common")
-        implementation 'org.apache.httpcomponents:httpclient:4.5.13'
-        /* https://mvnrepository.com/artifact/org.modelmapper.extensions/modelmapper-spring */
-        implementation 'org.modelmapper.extensions:modelmapper-spring:1.1.0'
-
-        implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
-
-        // es 의존성 추가시 배치가 끝나지 않는 문제 발생
-        implementation 'org.elasticsearch:elasticsearch:7.6.2'
-        implementation 'org.elasticsearch.client:elasticsearch-rest-client:7.6.2'
-        implementation 'org.elasticsearch.client:elasticsearch-rest-high-level-client:7.6.2'
+//        implementation 'org.apache.httpcomponents:httpclient:4.5.13'
+//        /* https://mvnrepository.com/artifact/org.modelmapper.extensions/modelmapper-spring */
+//        implementation 'org.modelmapper.extensions:modelmapper-spring:1.1.0'
+//
+//        implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
+//
+//        // es 의존성 추가시 배치가 끝나지 않는 문제 발생
+//        implementation 'org.elasticsearch:elasticsearch:7.6.2'
+//        implementation 'org.elasticsearch.client:elasticsearch-rest-client:7.6.2'
+//        implementation 'org.elasticsearch.client:elasticsearch-rest-high-level-client:7.6.2'
     }
 }
 
@@ -175,20 +178,22 @@ project(":batch-library-jpa") {
         implementation project(":batch-common")
     }
 }
+
 project(":batch-library-test") {
     dependencies {
         implementation project(":batch-common")
     }
 }
+
 project(":batch-real-estate") {
     dependencies {
         implementation project(":batch-common")
     }
 }
+
 project(":batch-mail-service") {
     dependencies {
         implementation project(":batch-common")
         implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-
     }
 }
