@@ -1,0 +1,23 @@
+spring:
+  profiles:
+    active: local
+
+---
+
+spring.profiles: local
+
+spring:
+  application:
+    name: batch-mail-service
+
+  profiles:
+    include: db
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    database: mysql
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: true
