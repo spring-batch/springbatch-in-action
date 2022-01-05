@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
         HikariDataSource.class
 })
 @ActiveProfiles(value = "application-db.yml")
-class DataSourceConfigTest {
+class BizDataSourceConfigTest {
 
     @Autowired
     private Environment environment;
