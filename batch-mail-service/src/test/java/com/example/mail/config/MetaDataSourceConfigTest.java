@@ -14,9 +14,13 @@ import javax.sql.DataSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
-@ActiveProfiles(value = {"application.yml", "application-db.yml"})
-class BizDataSourceConfigTest {
+
+@SpringBootTest(classes = {
+        MetaDataSourceConfig.class,
+        HikariDataSource.class
+})
+@ActiveProfiles(value = "application-db.yml")
+class MetaDataSourceConfigTest {
 
     @Autowired
     private Environment environment;
@@ -24,8 +28,8 @@ class BizDataSourceConfigTest {
     @DisplayName("배치 테이블 DataSource 설정 조회 테스트")
     @Test
     void testCase1(
-            @Qualifier(value = "bizDataSource") DataSource dataSource,
-            @Value(value = "biz") String target
+            @Qualifier(value = "metaDataSource") DataSource dataSource,
+            @Value(value = "meta") String target
     ) {
         HikariDataSource source = (HikariDataSource) dataSource;
         checkDataSourceSettings(source, target);
