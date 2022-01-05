@@ -14,6 +14,21 @@ buildscript {
     }
 }
 
+
+allprojects {
+
+    apply plugin: 'java'
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'org.springframework.boot'
+
+    group 'kr.seok'
+    version '1.0-SNAPSHOT'
+
+    repositories {
+        mavenCentral()
+    }
+
+}
 subprojects {
 
     apply plugin: 'java'
@@ -24,10 +39,6 @@ subprojects {
     version '1.0-SNAPSHOT'
     sourceCompatibility = '1.8'
 
-    repositories {
-        mavenCentral()
-    }
-
     configurations {
         compileOnly {
             extendsFrom annotationProcessor
@@ -36,27 +47,24 @@ subprojects {
 
     dependencies {
         /* SpringFramework */
-        implementation('org.springframework.boot:spring-boot-starter-batch')
-        implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+        implementation 'org.springframework.boot:spring-boot-starter-batch'
+        implementation "org.springframework.boot:spring-boot-starter-data-jpa"
         implementation "javax.validation:validation-api"
 
         compileOnly 'org.projectlombok:lombok'
         annotationProcessor 'org.projectlombok:lombok'
 
         /* Excel*/
-        implementation("org.apache.poi:poi:4.1.2")          // .xlsx
-        implementation("org.apache.poi:poi-ooxml:4.1.2")    // .xls
+        implementation "org.apache.poi:poi:5.1.0"          // .xlsx
+        implementation "org.apache.poi:poi-ooxml:5.1.0"    // .xls
 
         runtimeOnly 'com.h2database:h2'
-        runtimeOnly('mysql:mysql-connector-java')
+        runtimeOnly 'mysql:mysql-connector-java'
 
-        testImplementation('org.springframework.boot:spring-boot-starter-test') {
-            /* JUnit 5를 사용하는 경우 Junit4 내용을 제거해줘야 함, (이하 버전 사용하려는 경우 주석처리) */
-            exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-        }
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
         testImplementation 'org.springframework.batch:spring-batch-test'
     }
-    /* JUnit5를 사용하는 경우 설정 */
+
     test {
         useJUnitPlatform()
     }
@@ -73,8 +81,8 @@ configure(querydslProjects) {
     apply plugin: "io.spring.dependency-management"
 
     dependencies {
-        compile "com.querydsl:querydsl-jpa"
-        compile "com.querydsl:querydsl-core"
+        compileOnly "com.querydsl:querydsl-jpa"
+        compileOnly "com.querydsl:querydsl-core"
         annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jpa"
         // querydsl JPAAnnotationProcessor 사용 지정
         annotationProcessor "jakarta.persistence:jakarta.persistence-api:2.2.3"
@@ -173,6 +181,11 @@ project(":batch-library-test") {
     }
 }
 project(":batch-real-estate") {
+    dependencies {
+        implementation project(":batch-common")
+    }
+}
+project(":batch-mail-service") {
     dependencies {
         implementation project(":batch-common")
     }

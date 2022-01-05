@@ -1,0 +1,30 @@
+version: '3'
+services:
+  meta_db:
+    image: mysql:8
+    container_name: meta_db
+    restart: always
+    command: --lower_case_table_names=1
+    volumes:
+      - ~/docker/mysql/meta:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=1234
+      - MYSQL_DATABASE=meta_db
+    ports:
+      - "3306:3306"
+    expose:
+      - 3306
+  biz_db:
+    image: mysql:8
+    container_name: biz_db
+    restart: always
+    command: --lower_case_table_names=1
+    volumes:
+      - ~/docker/mysql/biz:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=1234
+      - MYSQL_DATABASE=biz_db
+    ports:
+      - "3307:3306"
+    expose:
+      - 3307
